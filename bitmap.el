@@ -1,15 +1,15 @@
 ;; bitmap.el -- bitmap file handler on MULE.
 
 ;; Copyright (C) 1992 Electrotechnical Laboratory, JAPAN.
-;; Copyright (C) 1996 MORIOKA Tomohiko
+;; Copyright (C) 1996,1997 MORIOKA Tomohiko
 
 ;; Author: Ken'ichi HANDA <handa@etl.go.jp>
 ;;         MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Version:
-;;	$Id: bitmap.el,v 7.15 1996/11/27 13:44:46 morioka Exp $
+;;	$Id: bitmap.el,v 7.16 1997/01/16 13:23:32 morioka Exp $
 ;; Keywords: bitmap, xbm, MULE
 
-;; This file is part of tl (Tiny Library).
+;; This file is part of bitmap-mule.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -36,16 +36,9 @@
 	 "Leading character for BITMAP.8x16.")
        )
       (t
-       (let ((info
-	      ;; [ WIDTH DIRECTION ISO-CLASS ISO-FINAL-CHAR ISO_GRAPHIC_PLANE
-	      ;;   SHORT-NAME LONG-NAME DESCRIPTION ])
-	      [1 0 3 ?0 0 "bitmap" "BITMAP 8x16"
-		 "bitmap 8x16"])
-	     )
-	 (setq charset-bitmap
-	       (get-undefined-private-charset (aref info 2) (aref info 0)))
-	 (define-charset charset-bitmap info)
-	 )
+       (define-charset nil 'bitmap
+	 [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
+       (defconst charset-bitmap 'bitmap)
        ))
 
 (if window-system
@@ -57,6 +50,7 @@
 		))
 	    (fontset-list))
   )
+
 
 ;; Block (all bits set) character
 (defvar bitmap-block (make-character charset-bitmap 32 33))
