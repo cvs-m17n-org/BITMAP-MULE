@@ -13,7 +13,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2001/02/02
+;; Revised: 2001/05/31
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of BITMAP-MULE.
@@ -99,8 +99,9 @@
 ;;		    'x-face-decode-message-header)))
 ;;
 ;;     [BBDB]
-;;	Add the following code in your ~/.emacs, and collect `X-Face':
+;;	Add the following code in your ~/.emacs, to collect `X-Face's.
 ;;
+;;     (put 'face 'field-separator "\n")
 ;;     (setq bbdb-auto-notes-alist
 ;;           (nconc bbdb-auto-notes-alist
 ;;		  (list (list "x-face"
@@ -111,6 +112,9 @@
 ;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?")
 ;;				    'face
 ;;				    "\\1\\3\\5\\7\\9")))))
+;;
+;;      Visit <URL:http://www.NetLaputa.ne.jp/~kose/Emacs/> for related
+;;      informations.
 
 ;; 3. Customization
 ;;

@@ -1,3 +1,10 @@
+2001-05-31  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el: Add a comment that the setting
+	(put 'face 'field-separator "\n")
+	is needed for collecting X-Face fields using BBDB.
+
+
 2001-04-13  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* BITMAP-MULE: Version 8.4 was released.
