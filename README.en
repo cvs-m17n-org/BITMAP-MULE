@@ -11,10 +11,11 @@ What's bitmap-mule?
     - bitmap-bi.el:	functions for Emacs 20.2 or earlier
     - bitmap-ci.el:	functions for Emacs 20.3 or later
     - po.el:		tiny BDF font editor
-    - smiley-mule.el:	smiley-mark encoder/decoder
+    - smiley-mule.el:	smiley faces encoder/decoder
     - x-face-mule.el:	inline X-Face decoder
-    - gnus-bitmap.el:	Gnus/gnus related functions for x-face-mule.el
-    - vm-bitmap.el:	VM related functions for x-face-mule.el
+    - x-face-18.el:	X-Face decoder for Emacs 18
+    - gnus-bitmap.el:	Gnus/gnus related functions
+    - vm-bitmap.el:	VM related functions
 
     - etl8x16-bitmap.bdf: font for BITMAP 8x16
 

@@ -1,3 +1,19 @@
+1999-11-04  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* BITMAP-MULE: Version 8.0 was released.
+
+1999-11-04  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-18.el: Don't use the module `std11'.
+
+	* smiley-mule.el (smiley-toggle-buffer): Allow the optional
+	arguments `buffer', `start' and `end'.
+	(smiley-buffer): Likewise.
+
+1999-11-02  Mikio Nakajima    <minakaji@osaka.email.ne.jp>
+
+	* smiley-mule.el (smiley-face-bitmap-list): Add ">_<".
+
 1999-11-02  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (TopLevel): Don't setup for gnus nor VM under
@@ -47,7 +63,7 @@
 	(vm-bitmap-redefine): Use `defadvice' for replacing the function
 	`vm-energize-headers-and-xfaces'.
 
-	* smiley-mule.el (smiley-encode-buffer): Not to work under TTY;
+	* smiley-mule.el, (smiley-encode-buffer): Not to work under TTY;
 	restore the original text if possible.
 	(smiley-toggle-buffer, smiley-region): Not to work under TTY.
 	(smiley-buffer): Not to work under TTY; save the original text as
