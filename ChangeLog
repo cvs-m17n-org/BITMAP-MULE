@@ -1,3 +1,31 @@
+1999-10-29  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (vm-bitmap-redefine, gnus-bitmap-redefine): Don't
+	use them for TTY.
+	(x-face-mule-highlight-header,
+	x-face-mule-change-highlight-x-face-method-by-alist): Add doc
+	string.
+	(x-face-mule-toggle-x-face-style,
+	x-face-mule-toggle-x-face-position, x-face-decode-message-header,
+	x-face-mule-save-cache-file): Not to work under TTY.
+	(Commentary): Fix usages.
+
+	* vm-bitmap.el (vm-smiley-display): Not to work under TTY.
+	(vm-bitmap-redefine): Use `defadvice' for replacing the function
+	`vm-energize-headers-and-xfaces'.
+
+	* smiley-mule.el (smiley-encode-buffer): Not to work under TTY;
+	restore the original text if possible.
+	(smiley-toggle-buffer, smiley-region): Not to work under TTY.
+	(smiley-buffer): Not to work under TTY; save the original text as
+	an overlay property.
+
+	* gnus-bitmap.el (x-face-mule-gnus-highlight-headers-if-no-mime):
+	Don't check for `window-system'.
+	(gnus-smiley-display, gnus-bitmap-splash,
+	x-face-mule-save-cache-file,
+	x-face-mule-gnus-article-display-x-face): Not to work under TTY.
+
 1999-10-26  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* gnus-bitmap.el (Commentary): Don't use it if `window-system' is
