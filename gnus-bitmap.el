@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 1999/11/01
+;; Revised: 1999/11/11
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -58,18 +58,6 @@
 ;;
 
 (eval-when-compile
-  (defmacro gnus-bitmap-xbm-to-bitmap (file)
-    (` (let* ((cmp (bitmap-decode-xbm (bitmap-read-xbm-file (, file))))
-	      (len (length cmp))
-	      (bitmap (bitmap-compose (aref cmp 0)))
-	      (i 1))
-	 (while (< i len)
-	   (setq bitmap (concat bitmap "\n" (bitmap-compose (aref cmp i)))
-		 i (1+ i)))
-	 bitmap)))
-  )
-
-(eval-when-compile
   (defmacro gnus-bitmap-splash-image-internal ()
     (let ((file (expand-file-name "gnus.xbm"
 				  (if (string-match "/tm/$" default-directory)
@@ -77,8 +65,8 @@
 				    "./"))))
       (if (file-exists-p file)
 	  (progn
-	    (message "  ++ composing internal image for splashing...")
-	    (gnus-bitmap-xbm-to-bitmap file))
+	    (message "  ++ decoding internal image for splashing...")
+	    (bitmap-decode-xbm (bitmap-read-xbm-file file)))
 	(byte-compile-warn "Warning: file \"gnus.xbm\" not found.")
 	nil)))
 
@@ -90,17 +78,27 @@
       (if (file-exists-p file)
 	  (progn
 	    (message
-	     "  ++ composing internal image for modeline identifier...")
-	    (gnus-bitmap-xbm-to-bitmap file))
+	     "  ++ decoding internal image for modeline identifier...")
+	    (bitmap-decode-xbm (bitmap-read-xbm-file file)))
 	(byte-compile-warn "Warning: file \"gnus-pointer.xbm\" not found.")
 	nil)))
+
+  (defmacro gnus-bitmap-xbm-to-bitmap (cmp)
+    (` (let* ((cmp (, cmp))
+	      (len (length cmp))
+	      (bitmap (bitmap-compose (aref cmp 0)))
+	      (i 1))
+	 (while (< i len)
+	   (setq bitmap (concat bitmap "\n" (bitmap-compose (aref cmp i)))
+		 i (1+ i)))
+	 bitmap)))
   )
 
 (defconst gnus-bitmap-splash-image-internal
-  (gnus-bitmap-splash-image-internal))
+  (gnus-bitmap-xbm-to-bitmap (gnus-bitmap-splash-image-internal)))
 
 (defconst gnus-bitmap-modeline-image-internal
-  (gnus-bitmap-modeline-image-internal))
+  (gnus-bitmap-xbm-to-bitmap (gnus-bitmap-modeline-image-internal)))
 
 (defvar gnus-bitmap-splash-image-data nil)
 
