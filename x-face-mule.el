@@ -99,7 +99,7 @@
 ;;		    'x-face-decode-message-header)))
 ;;
 ;;     [BBDB]
-;;	Add the following code in your ~/.emacs, to collect `X-Face's.
+;;	Add the following code in your ~/.emacs, to collect `X-Face's:
 ;;
 ;;     (put 'face 'field-separator "\n")
 ;;     (setq bbdb-auto-notes-alist
