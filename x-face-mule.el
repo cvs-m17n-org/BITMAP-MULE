@@ -10,7 +10,7 @@
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Version: 0.27
 ;; Created: 1997/10/24
-;; Revised: 1999/10/19
+;; Revised: 1999/10/21
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -49,16 +49,18 @@
 ;;	Add the following code in your ~/.emacs:
 ;;
 ;;	(setq wl-highlight-x-face-func
-;;	      'x-face-mule-x-face-decode-message-header)
+;;	      (function
+;;	       (lambda (&rest args)
+;;		 (x-face-decode-message-header))))
 ;;	(require 'x-face-mule)
 ;;
 ;;    [before Mew 1.90]
 ;;	Add the following code in your ~/.emacs:
 ;;
 ;;	(add-hook 'mew-summary-display-message-filter-hook ;; 1.90
-;;		  'x-face-mule-x-face-decode-message-header)
+;;		  'x-face-decode-message-header)
 ;;	(add-hook 'mew-message-hook ;; 1.70 or older
-;;		  'x-face-mule-x-face-decode-message-header)
+;;		  'x-face-decode-message-header)
 ;;	(require 'x-face-mule)
 ;;
 ;;    [Mew 1.92]
@@ -66,7 +68,7 @@
 ;;
 ;;	(setq mew-opt-highlight-x-face t)
 ;;	(setq mew-opt-highlight-x-face-function
-;;	      'x-face-mule-x-face-decode-message-header)
+;;	      'x-face-decode-message-header)
 ;;	(require 'x-face-mule)
 ;;
 ;;    [Mew 1.93 or later]
@@ -74,7 +76,7 @@
 ;;
 ;;	(setq mew-use-highlight-x-face t)
 ;;	(setq mew-use-highlight-x-face-function
-;;	      'x-face-mule-x-face-decode-message-header)
+;;	      'x-face-decode-message-header)
 ;;	(require 'x-face-mule)
 
 ;; 3. Customization
