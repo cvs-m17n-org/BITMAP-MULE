@@ -73,7 +73,7 @@ the same as to `format'.  [XEmacs 21.2.32 emulating function]"
 	    (val (abs value)))
 	(if (> val 100)
 	    (if (zerop (setq val (% val 100)))
-		(setq vall 100)))
+		(setq val 100)))
 	(if (or (not window-system)
 		(< emacs-major-version 20)
 		bitmap-lprogress-display-textual)
