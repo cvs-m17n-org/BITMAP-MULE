@@ -1,3 +1,9 @@
+2001-02-07  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* font/bitmap16.el: Fix the author and the copyright holder.
+	(generate-bitmap-bdf-font): Don't generate space patterns.  It is
+	suggested by Tatsuya Yagi <yagi@is.titech.ac.jp>.
+
 2001-02-02  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* font/bmp16-etl.bdf: Remove.  Instead, the font file for 8x16
