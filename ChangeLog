@@ -1,11 +1,24 @@
 2000-12-14  Katsumi Yamaoka   <yamaoka@jpl.org>
 
+	* x-face-mule.el (x-face-mule-BBDB-one-record): Don't use `mapcar'.
+	(x-face-mule-x-face-decode-message-header): Remove obsolete alias.
+	(x-face-mule-highlight-header): Make overlays evaporatable.
+	(x-face-mule-convert-x-face-to-bitmap): Don't use `mapcar'.
+	(TopLevel): Don't use `mapcar' for adding the function
+	`x-face-mule-save-cache-file' to some hooks.
+	(x-face-mule-load-cache-file): Don't use `mapcar'.
+	(TopLevel): Don't use `mapcar' for binding non-existent functions.
+
+	* bm-utils.el (bitmap-string-to-special-symbols): Use `dolist'
+	instead of `mapcar'.
+	(bitmap-load-average-data): Ditto.
+
 	* bitmap-ci.el (TopLevel): Remove the redundancy in the setting of
 	fontset fonts.
 	* bitmap-bi.el: Ditto.
 
 	* bitmap-ci.el (fontset-pixel-size): No need to redefine it for
-	Emacs 21, Remove.
+	Emacs 21, remove.
 
 2000-12-13  Katsumi Yamaoka   <yamaoka@jpl.org>
 

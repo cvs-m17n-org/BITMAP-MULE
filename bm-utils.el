@@ -5,7 +5,7 @@
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;;         Yoshitsugu Mito <mit@nines.nec.co.jp>
 ;; Created: 2000/03/28
-;; Revised: 2000/10/04
+;; Revised: 2000/12/14
 ;; Keywords: bitmap, progress-feedback-with-label, display-time
 
 ;; This file is part of bitmap-mule.
@@ -30,22 +30,30 @@
 ;; If you would like to use `display-time' with XEmacs style,
 ;; for example, put the following lines in your .emacs file.
 ;;
-;;	(if (and (not (featurep 'xemacs))
-;;		 window-system
-;;		 (>= emacs-major-version 20))
-;;	    (progn
-;;	      (require 'bm-utils)
-;;	      (setq display-time-string-forms
-;;		    '((bitmap-string-to-special-symbols
-;;		       (format-time-string "%H:%M" now))
-;;		      (bitmap-load-average-to-bitmap load)
-;;		      (if mail
-;;			  bitmap-full-mailbox-data
-;;			bitmap-empty-mailbox-data)))
-;;	      (display-time-mode 1)))
+;;(if (and (not (featurep 'xemacs))
+;;	 window-system
+;;	 (>= emacs-major-version 20))
+;;    (progn
+;;      (require 'bm-utils)
+;;      (setq display-time-interval 1)
+;;      (setq display-time-string-forms
+;;	    '((bitmap-string-to-special-symbols
+;;	       (format-time-string "%T" now))
+;;	      (bitmap-load-average-to-bitmap load)
+;;	      ;; If you have another biff, remove the following 3 lines.
+;;	      (if mail
+;;		  bitmap-full-mailbox-data
+;;		bitmap-empty-mailbox-data)
+;;	      ))
+;;      (display-time-mode 1)))
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'cl)
+  ;; `dolist' may be defined in egg.el, we should use the proper one.
+  (if (<= emacs-major-version 20)
+      (load "cl-macs" nil t)))
 (eval-when-compile (require 'static))
 (require 'pcustom)
 (require 'bitmap)
@@ -133,19 +141,21 @@
   (defmacro bitmap-progress-backgrounds ()
     '(if bitmap-progress-feedback-use-clear-bar
 	 bitmap-progress-backgrounds-for-clear-bar
-       bitmap-progress-backgrounds-for-opaque-bar))
-  )
+       bitmap-progress-backgrounds-for-opaque-bar)))
 
 (defvar bitmap-load-average-data
-  (mapcar
-   'bitmap-compose
-   '("00000000000101030307070F0F1F0000007878F8F8F8F8F8F8F8F8F8F8F80000"
-     "00000000000101030307070F001F0000007878F8F8F8F8F8F8F8F8F800F80000"
-     "00000000000101030307000F001F0000007878F8F8F8F8F8F8F800F800F80000"
-     "00000000000101030007000F001F0000007878F8F8F8F8F800F800F800F80000"
-     "00000000000100030007000F001F0000007878F8F8F800F800F800F800F80000"
-     "00000000000100030007000F001F0000007878F800F800F800F800F800F80000"
-     "00000000000100030007000F001F0000007800F800F800F800F800F800F80000"))
+  (let (rest)
+    (dolist
+	(data
+	 '("00000000000101030307070F0F1F0000007878F8F8F8F8F8F8F8F8F8F8F80000"
+	   "00000000000101030307070F001F0000007878F8F8F8F8F8F8F8F8F800F80000"
+	   "00000000000101030307000F001F0000007878F8F8F8F8F8F8F800F800F80000"
+	   "00000000000101030007000F001F0000007878F8F8F8F8F800F800F800F80000"
+	   "00000000000100030007000F001F0000007878F8F8F800F800F800F800F80000"
+	   "00000000000100030007000F001F0000007878F800F800F800F800F800F80000"
+	   "00000000000100030007000F001F0000007800F800F800F800F800F800F80000")
+	 rest)
+      (setq rest (nconc rest (list (bitmap-compose data))))))
   "Bitmaps for load average 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0.")
 
 (defvar bitmap-empty-mailbox-data
@@ -160,13 +170,13 @@
 
 (defun bitmap-string-to-special-symbols (string)
   "Convert STRING to a special symbols."
-  (apply 'concat
-	 (mapcar (function (lambda (char)
-			     (or (cdr (assq char bitmap-special-symbol-alist))
-				 (char-to-string char))))
-		 string)))
+  (let ((rest ""))
+    (dolist (char (append string nil) rest)
+      (setq rest (concat rest (or (cdr (assq char bitmap-special-symbol-alist))
+				  (char-to-string char)))))))
 
-(defun bitmap-progress-feedback-with-label (label fmt &optional value &rest args)
+(defun bitmap-progress-feedback-with-label (label fmt &optional value
+						  &rest args)
   "Print a progress gauge and message in the echo area.
 First argument LABEL is ignored.  The rest of the arguments are
 the same as to `format'.  [XEmacs 21.2.36 emulating function]"

@@ -12,7 +12,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/07/26
+;; Revised: 2000/12/14
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of bitmap-mule.
@@ -38,7 +38,7 @@
 
 ;; 1. Build and install `uncompface' program which is available from:
 ;;
-;;	ftp://ftp.win.ne.jp/pub/misc/compface-1.3.tar.gz
+;;	ftp://ftp.win.ne.jp/pub/misc/compface-1.4.tar.gz
 ;;
 ;;    It is one example of many.
 
@@ -101,16 +101,15 @@
 ;;	Add the following code in your ~/.emacs, and collect `X-Face':
 ;;
 ;;     (setq bbdb-auto-notes-alist
-;;           (append bbdb-auto-notes-alist
-;;                   (list (list "x-face"
-;;                       (list (concat "[ \t\n]*\\([^ \t\n]*\\)"
-;;                                     "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
-;;                                     "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
-;;                                     "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
-;;                                     "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
-;;                                     )
-;;                             'face
-;;                             "\\1\\3\\5\\7\\9")))))
+;;           (nconc bbdb-auto-notes-alist
+;;		  (list (list "x-face"
+;;			      (list (concat "[ \t\n]*\\([^ \t\n]*\\)"
+;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?")
+;;				    'face
+;;				    "\\1\\3\\5\\7\\9")))))
 
 ;; 3. Customization
 ;;
@@ -204,19 +203,16 @@ STRING should be given if the last search was by `string-match' on STRING.
 					(match-end num)))))
 
 ;; Avoid byte compile warnings.
-(defvar gnus-article-buffer)
-(defvar vm-message-pointer)
-
 (eval-when-compile
-  (mapcar
-   (function (lambda (name) (or (fboundp name) (fset name 'ignore))))
-   '(cmail-get-page-number-from-summary
-     cmail-show-contents
-     emh-show
-     mew-summary-display
-     mh-show-msg
-     mime-entity-header-buffer
-     tm-mh-e/show)))
+  (defvar gnus-article-buffer)
+  (defvar vm-message-pointer)
+  (defalias-maybe 'cmail-get-page-number-from-summary 'ignore)
+  (defalias-maybe 'cmail-show-contents 'ignore)
+  (defalias-maybe 'emh-show 'ignore)
+  (defalias-maybe 'mew-summary-display 'ignore)
+  (defalias-maybe 'mh-show-msg 'ignore)
+  (defalias-maybe 'mime-entity-header-buffer 'ignore)
+  (defalias-maybe 'tm-mh-e/show 'ignore))
 
 (defgroup x-face-mule nil
   "Show X-Face inline for Emacs/Mule."
@@ -410,21 +406,23 @@ get hung up with it."
 
 (defun x-face-mule-load-cache-file ()
   "Load X-Face cache file."
-  (when (and (<= emacs-major-version 20)
-	     x-face-mule-use-cache-file
-	     (file-exists-p x-face-mule-cache-file))
-    (setq x-face-mule-x-face-to-rectangle-cache
-	  (mapcar
-	   (function (lambda (data)
-		       (let ((string (car data)))
-			 (set-text-properties 0 (length string) nil string)
-			 (cons string (cdr data)))))
-	   (with-temp-buffer
-	     (insert-file-contents-as-coding-system
-	      x-face-mule-image-file-coding-system x-face-mule-cache-file)
-	     (condition-case nil
-		 (read (current-buffer))
-	       (error nil)))))))
+  (setq x-face-mule-x-face-to-rectangle-cache
+	(when (and (<= emacs-major-version 20)
+		   x-face-mule-use-cache-file
+		   (file-exists-p x-face-mule-cache-file))
+	  (with-temp-buffer
+	    (set-buffer-multibyte t)
+	    (insert-file-contents-as-coding-system
+	     x-face-mule-image-file-coding-system x-face-mule-cache-file)
+	    (condition-case nil
+		(read (current-buffer))
+	      (error nil)))))
+  (let ((index (length x-face-mule-x-face-to-rectangle-cache))
+	string)
+    (while (> index 0)
+      (setq index (1- index)
+	    string (car (nth index x-face-mule-x-face-to-rectangle-cache)))
+      (set-text-properties 0 (length string) nil string))))
 
 (defun x-face-mule-save-cache-file ()
   "Save X-Face cache file."
@@ -463,10 +461,12 @@ get hung up with it."
 
 ;; hooks for saving cache (for Mew, cmail, mh-e, VM, Wanderlust).
 (when (and window-system (>= emacs-major-version 19))
-  (mapcar
-   (function (lambda (hook) (add-hook hook 'x-face-mule-save-cache-file)))
-   '(mew-quit-hook cmail-quit-hook mh-quit-hook
-		   wl-folder-exit-hook wl-exit-hook kill-emacs-hook)))
+  (add-hook 'cmail-quit-hook 'x-face-mule-save-cache-file)
+  (add-hook 'mew-quit-hook 'x-face-mule-save-cache-file)
+  (add-hook 'mh-quit-hook 'x-face-mule-save-cache-file)
+  (add-hook 'wl-exit-hook 'x-face-mule-save-cache-file)
+  (add-hook 'wl-folder-exit-hook 'x-face-mule-save-cache-file)
+  (add-hook 'kill-emacs-hook 'x-face-mule-save-cache-file))
 
 
 ;;; Internal functions for decoding and displaying X-Face.
@@ -519,22 +519,23 @@ get hung up with it."
     (unless (looking-at "#define")
       (error "!! \"%s\" can not generate XBM format directly."
 	     uncompface-program))
-    (let (ret)
-      (mapcar
-       (function (lambda (line)
-		   (setq ret (append ret (list (bitmap-compose line))))))
-       (bitmap-decode-xbm (bitmap-read-xbm-buffer (current-buffer))))
-      ret)))
+    (let ((lines (bitmap-decode-xbm (bitmap-read-xbm-buffer
+				     (current-buffer))))
+	  rest)
+      (while lines
+	(setq rest (nconc rest (list (bitmap-compose (car lines))))
+	      lines (cdr lines)))
+      rest)))
 
 (defun x-face-mule-convert-vector-to-rectangle (vector)
   "Make x-face rectangle from vector."
-  (let ((ret nil) (i 0))
+  (let ((i 0) ret)
     (while (< i 3)
       (let* ((line "") (k (* i 6)) (k+6 (+ k 6)))
 	(while (< k k+6)
 	  (setq line (concat line (bitmap-compose (aref vector k))))
 	  (incf k))
-	(setq ret (append ret (list line))))
+	(setq ret (nconc ret (list line))))
       (incf i))
     ret))
 
@@ -685,7 +686,7 @@ returns the begin-point of the x-face rectangle."
     (goto-char beg)
     (while (re-search-forward
 	    "^X-Face: *\\(.*\\(\n[ \t].*\\)*\\)\n" end t)
-      (setq x-faces (append x-faces (list (match-string-no-properties 0)))))
+      (setq x-faces (nconc x-faces (list (match-string-no-properties 0)))))
     (make-local-variable 'x-face-mule-original-x-face-fields)
     (setq x-face-mule-original-x-face-fields (list x-face-type x-faces))))
 
@@ -720,7 +721,6 @@ just the headers of the article."
     (x-face-mule-save-original-x-face-fields (point-min) (point-max))
     (x-face-mule-save-original-from-field (point-min) (point-max))
     (let* ((inhibit-read-only t)
-	   buffer-read-only
 	   faces faces-s (first t)
 	   (x-face-type (x-face-mule-analyze-x-face-type (point-min)
 							 (point-max)))
@@ -740,7 +740,7 @@ just the headers of the article."
 	    (when (or (eq x-face-mule-delete-x-face-field 'always)
 		      (eq x-face-mule-delete-x-face-field col-type))
 	      (delete-region (match-beginning 0) (match-end 0))))
-	  (setq faces (append faces faces-s))))
+	  (setq faces (nconc faces faces-s))))
       (x-face-mule-change-highlight-x-face-method-by-alist)
       (when faces
 	(while faces
@@ -761,33 +761,30 @@ just the headers of the article."
 
 (defun x-face-mule-highlight-header ()
   "Highlight inline images and hide raw X-Face fields."
-  (let ((inhibit-read-only t) buffer-read-only
-	start (end (point-min)))
-    (while (and (setq start (text-property-any
-			     end (point-max) 'x-face-mule-bitmap-image t))
-		(setq end (text-property-not-all
-			   start (point-max) 'x-face-mule-bitmap-image t)))
-      (overlay-put (make-overlay start end)
-		   'face x-face-mule-highlight-x-face-face))
+  (let (start (end (point-min)))
+    (let (overlay)
+      (while (and (setq start (text-property-any
+			       end (point-max) 'x-face-mule-bitmap-image t))
+		  (setq end (text-property-not-all
+			     start (point-max) 'x-face-mule-bitmap-image t)))
+	(setq overlay (make-overlay start end))
+	(overlay-put overlay 'face x-face-mule-highlight-x-face-face)
+	(overlay-put overlay 'evaporate t)))
     (setq end (point-min))
-    (while (and (setq start (text-property-any
-			     end (point-max) 'x-face-mule-hidden-from t))
-		(setq end (text-property-not-all
-			   start (point-max) 'x-face-mule-hidden-from t)))
-      (add-text-properties start end x-face-mule-hidden-properties))
-    (setq end (point-min))
-    (while (and (setq start (text-property-any
-			     end (point-max) 'x-face-mule-original-from t))
-		(setq end (text-property-not-all
-			   start (point-max) 'x-face-mule-original-from t)))
-      (add-text-properties start
-			   (1+ end);; Include the last newline.
-			   x-face-mule-hidden-properties))))
-
-;; Compatibility.  It will be deleted in the future.
-(define-obsolete-function-alias
-  (function x-face-mule-x-face-decode-message-header)
-  (function x-face-decode-message-header))
+    (let ((inhibit-read-only t))
+      (while (and (setq start (text-property-any
+			       end (point-max) 'x-face-mule-hidden-from t))
+		  (setq end (text-property-not-all
+			     start (point-max) 'x-face-mule-hidden-from t)))
+	(add-text-properties start end x-face-mule-hidden-properties))
+      (setq end (point-min))
+      (while (and (setq start (text-property-any
+			       end (point-max) 'x-face-mule-original-from t))
+		  (setq end (text-property-not-all
+			     start (point-max) 'x-face-mule-original-from t)))
+	(add-text-properties start
+			     (1+ end);; Include the last newline.
+			     x-face-mule-hidden-properties)))))
 
 (defun x-face-decode-message-header (&optional beg end)
   "Decode and show X-Face."
@@ -933,37 +930,42 @@ just the headers of the article."
     (while (not (or (eobp) (bobp) (looking-at "^[^ \t\n]")))
       (forward-line -1))
     (forward-line)
-    (let* ((record (bbdb-current-record))
-	   (sfaces (and record (bbdb-record-getprop record 'face)))
-	   (home (point))
-	   (i 0)
-	   buffer-read-only
-	   xfaces xface pos match-end beg)
-      (when (and sfaces
-		 (re-search-forward "^[ ]+face: " nil t)
-		 (setq beg (match-beginning 0))
-		 (not (get-text-property beg 'invisible))
-		 (re-search-forward "^[ ]+[^:]+: \\|\n\n" nil t)
-		 (not (put-text-property beg (match-beginning 0)
-					 'invisible t)))
+    (let ((sfaces (let ((record (bbdb-current-record)))
+		    (when record
+		      (bbdb-record-getprop record 'face))))
+	  (home (point))
+	  (inhibit-read-only t)
+	  xfaces)
+      (when (let (beg)
+	      (and sfaces
+		   (re-search-forward "^[ ]+face: " nil t)
+		   (setq beg (match-beginning 0))
+		   (not (get-text-property beg 'invisible))
+		   (re-search-forward "^[ ]+[^:]+: \\|\n\n" nil t)
+		   (not (put-text-property beg (match-beginning 0)
+					   'invisible t))))
 	(goto-char home)
-	(while (string-match "[^\n]+\n?" sfaces)
-	  (and (setq xface (x-face-mule-convert-x-face-to-rectangle
-			    (substring sfaces
-				       (match-beginning 0)
-				       (setq match-end (match-end 0)))))
-	       (setq xfaces (append xfaces (list xface))))
-	  (setq sfaces (substring sfaces match-end)))
-	(while (> 3 i)
-	  (mapcar (lambda (x)
-		    (insert " ")
-		    (setq pos (point))
-		    (insert (format "%s" (nth i x)))
-		    (overlay-put (make-overlay pos (point))
-				 'face x-face-mule-highlight-x-face-face))
-		  xfaces)
-	  (insert "\n")
-	  (setq i (+ 1 i)))
+	(let (xface match-end)
+	  (while (string-match "[^\n]+\n?" sfaces)
+	    (and (setq xface (x-face-mule-convert-x-face-to-rectangle
+			      (substring sfaces
+					 (match-beginning 0)
+					 (setq match-end (match-end 0)))))
+		 (setq xfaces (nconc xfaces (list xface))))
+	    (setq sfaces (substring sfaces match-end))))
+	(let ((i 0)
+	      pos overlay)
+	  (while (> 3 i)
+	    (while xfaces
+	      (insert " ")
+	      (setq pos (point))
+	      (insert (format "%s" (nth i (car xfaces))))
+	      (setq overlay (make-overlay pos (point))
+		    xfaces (cdr xfaces))
+	      (overlay-put overlay 'face x-face-mule-highlight-x-face-face)
+	      (overlay-put overlay 'evaporate t))
+	    (insert "\n")
+	    (incf i)))
 	(forward-line)
 	(put-text-property home (point) 'intangible t)))))
 
