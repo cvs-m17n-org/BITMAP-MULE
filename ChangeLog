@@ -1,5 +1,10 @@
 2000-09-21  Katsumi Yamaoka   <yamaoka@jpl.org>
 
+	* bitmap.el (bitmap-recompose): To work with Mule 2.3 or Emacs 21
+	as well.
+
+2000-09-21  Katsumi Yamaoka   <yamaoka@jpl.org>
+
 	* smiley-mule.el (smiley-encode-buffer): Do nothing with text
 	properties.
 	(smiley-buffer): Don't add any text properties.
