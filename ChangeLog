@@ -1,3 +1,15 @@
+1999-10-01  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* gnus-bitmap.el (x-face-mule-gnus-highlight-headers-if-no-mime):
+	Use `x-face-decode-message-header'.
+
+	* x-face-mule.el (x-face-decode-message-header): Rename from
+	`x-face-mule-x-face-decode-message-header'; don't define obsolete
+	alias.
+	(uncompface-program): Rename from `x-face-mule-uncompface-program';
+	default to "uncompface"; don't define obsolete alias.
+	(x-face-mule-convert-x-face-to-icon): Use it.
+
 1999-09-02  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* NEWS: New file.
