@@ -1,37 +1,56 @@
 #
-# $Id: Makefile,v 1.1 1996/11/27 15:38:38 morioka Exp morioka $
+# Makefile for bitmap-mule.
 #
+
+PACKAGE = bitmap-mule
+API	= 7
+RELEASE = 19
+
+TAR	= tar
+RM	= /bin/rm -f
+CP	= /bin/cp -p
 
 EMACS	= emacs
 FLAGS   = -batch -q -no-site-file -l BITMAP-MK
 
-PREFIX =
+PREFIX	= NONE
+LISPDIR = NONE
+VERSION_SPECIFIC_LISPDIR = NONE
 
-BITMAP_FILES =	bitmap-mule/Makefile bitmap-mule/BITMAP-* \
-		bitmap-mule/*.el bitmap-mule/*.bdf bitmap-mule/README.en
+GOMI	= *.elc \
+	  *.cp *.cps *.ky *.kys *.fn *.fns *.vr *.vrs \
+	  *.pg *.pgs *.tp *.tps *.toc *.aux *.log
+FILES	= README.?? Makefile BITMAP-MK BITMAP-CFG BITMAP-ELS *.el \
+	  etl8x16-bitmap.bdf ChangeLog
 
-MU_FILES =	mu/MU-ELS mu/*.el mu/ChangeLog
-
-TL_FILES =	tl/README.en tl/Makefile tl/mk-tl tl/TL-ELS \
-		tl/*.el tl/doc/*.ol tl/doc/*.tex tl/doc/*.texi tl/ChangeLog
-
-EMU_FILES =	emu/EMU-ELS emu/*.el emu/ChangeLog
-
-FILES =		$(BITMAP_FILES) $(MU_FILES) $(TL_FILES) $(EMU_FILES)
-
-TARFILE = bitmap-mule-7.15.tar
-
+VERSION	= $(API).$(RELEASE)
+ARC_DIR = /pub/elisp/bitmap
 
 elc:
-	$(EMACS) $(FLAGS) -f compile-bitmap
+	$(EMACS) $(FLAGS) -f compile-bitmap $(PREFIX) $(LISPDIR) \
+		$(VERSION_SPECIFIC_LISPDIR)
 
 install:	elc
-	$(EMACS) $(FLAGS) -f install-bitmap $(PREFIX)
-
+	$(EMACS) $(FLAGS) -f install-bitmap $(PREFIX) $(LISPDIR) \
+		$(VERSION_SPECIFIC_LISPDIR)
 
 clean:
-	-rm *.elc
-
+	-$(RM) $(GOMI)
 
 tar:
-	cd ..; tar cvf $(TARFILE) $(FILES); gzip -best $(TARFILE)
+	cvs commit
+	sh -c 'cvs tag -RF $(PACKAGE)-`echo $(VERSION) | tr . _`; \
+	cd /tmp; \
+	cvs -d :pserver:anonymous@chamonix.jaist.ac.jp:/hare/cvs/root \
+		export -d $(PACKAGE)-$(VERSION) \
+		-r $(PACKAGE)-`echo $(VERSION) | tr . _` \
+		mu'
+	cd /tmp; $(RM) $(PACKAGE)-$(VERSION)/ftp.in ; \
+		$(TAR) cvzf $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-$(VERSION)
+	cd /tmp; $(RM) -r $(PACKAGE)-$(VERSION)
+	sed "s/VERSION/$(VERSION)/" < ftp.in | sed "s/API/$(API)/" \
+		| sed "s/PACKAGE/$(PACKAGE)/" > ftp
+
+release:
+	-$(RM) $(ARC_DIR)/$(PACKAGE)-$(VERSION).tar.gz
+	mv /tmp/$(PACKAGE)-$(VERSION).tar.gz $(ARC_DIR)
