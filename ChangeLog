@@ -1,3 +1,9 @@
+1999-09-02  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* NEWS: New file.
+
+	* README.en: Reflect the actual state.
+
 1999-08-31  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (x-face-decode-message-header): Make obsolete.
