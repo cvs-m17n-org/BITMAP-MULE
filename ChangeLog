@@ -1,3 +1,9 @@
+2000-09-19  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* smiley-mule.el (smiley-encode-buffer): Check for a text property
+	first.
+	(smiley-buffer): Save the original text as a text property as well.
+
 2000-07-26  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (Commentary): Note that some settings are needed
