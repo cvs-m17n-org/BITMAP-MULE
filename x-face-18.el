@@ -25,21 +25,24 @@
 
 ;; Code:
 
-(require 'std11)
-
 (defun x-face-decode-message-header ()
   (save-restriction
-    (std11-narrow-to-header)
+    (narrow-to-region (goto-char (point-min))
+		      (if (search-forward "\n\n" nil t)
+			  (1+ (match-beginning 0))
+			(point-max)))
     (goto-char (point-min))
     (if (re-search-forward "^X-Face:[ \t]*" nil t)
 	(let ((p (match-beginning 0))
 	      (beg (match-end 0))
-	      (end (std11-field-end))
+	      (end (progn
+		     (while (and (not (eobp))
+				 (progn
+				   (forward-line)
+				   (looking-at "[\t ]"))))
+		     (point)))
 	      (cur-buf (current-buffer))
 	      )
-	  (if (< end (point-max))
-	      (setq end (1+ end))
-	    )
 	  (save-restriction
 	    (narrow-to-region p end)
 	    (delete-region p beg)
