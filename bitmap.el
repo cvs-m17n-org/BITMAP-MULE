@@ -1,15 +1,13 @@
 ;; bitmap.el -- bitmap file handler on MULE.
 
 ;; Copyright (C) 1992 Electrotechnical Laboratory, JAPAN.
-;; Copyright (C) 1996 MORIOKA Tomohiko
+;; Copyright (C) 1996,1997,1998 MORIOKA Tomohiko
 
 ;; Author: Ken'ichi HANDA <handa@etl.go.jp>
 ;;         MORIOKA Tomohiko <morioka@jaist.ac.jp>
-;; Version:
-;;	$Id: bitmap.el,v 7.15 1996/11/27 13:44:46 morioka Exp $
 ;; Keywords: bitmap, xbm, MULE
 
-;; This file is part of tl (Tiny Library).
+;; This file is part of bitmap-mule.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -36,16 +34,9 @@
 	 "Leading character for BITMAP.8x16.")
        )
       (t
-       (let ((info
-	      ;; [ WIDTH DIRECTION ISO-CLASS ISO-FINAL-CHAR ISO_GRAPHIC_PLANE
-	      ;;   SHORT-NAME LONG-NAME DESCRIPTION ])
-	      [1 0 3 ?0 0 "bitmap" "BITMAP 8x16"
-		 "bitmap 8x16"])
-	     )
-	 (setq charset-bitmap
-	       (get-undefined-private-charset (aref info 2) (aref info 0)))
-	 (define-charset charset-bitmap info)
-	 )
+       (define-charset nil 'bitmap
+	 [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
+       (defconst charset-bitmap 'bitmap)
        ))
 
 (if window-system
@@ -58,8 +49,9 @@
 	    (fontset-list))
   )
 
+
 ;; Block (all bits set) character
-(defvar bitmap-block (make-character charset-bitmap 32 33))
+(defvar bitmap-block (make-char charset-bitmap 32 33))
 
 ;; Simple examples:
 ;;	(bitmap-compose "00FF00FF00FF00FF00FF00FF00FF00FF")
@@ -99,20 +91,23 @@ For example the pattern \"0081814242242442111124244242818100\" is
 	    (setq code (+ (* (% i 16) 255) row -1))
 	    (setq c1 (+ (/ code 96) 33)
 		  c2 (+ (% code 96) 32))
-	    (sset buf j (make-character charset-bitmap c1 c2))
+	    (sset buf j (make-char charset-bitmap c1 c2))
 	    (setq j (+ j bytes))))
       (setq i (1+ i))
       (if (or (= (% i 16) 0) (>= i len))
 	  (setq cmpstr
 		(concat cmpstr
 			(cond ((and block-flag (= j 64))
-			       (char-to-string bitmap-block))
+			       (char-to-string bitmap-block)
+			       )
 			      ((= j 0)
 			       " ")
-			      ((= j 1)
-			       (substring buf 0 1))
+			      ((= j 4)
+			       (substring buf 0 4)
+			       )
 			      (t
-			       (compose-string (substring buf 0 j)))))
+			       (compose-string (substring buf 0 j))
+			       )))
 		block-flag t
 		j 0)))
     cmpstr))
