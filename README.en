@@ -4,7 +4,7 @@ by MORIOKA Tomohiko
 
 IMPORTANT notice to Mule-UCS on Emacs 20 users !!
 =================================================
-If you are using Emacs 20 and Mule-UCS version **** or later, you have
+If you are using Emacs 20 and Mule-UCS version 0.84 or later, you have
 to set the value of the variable `bitmap-alterable-charset' explicitly,
 and furthermore, you have to load un-define.elc before bitmap.elc.
 The valid values for the variable `bitmap-alterable-charset' are
