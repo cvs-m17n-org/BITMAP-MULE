@@ -4,7 +4,7 @@
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1999/08/20
-;; Revised: 1999/10/26
+;; Revised: 1999/10/29
 ;; Keywords: bitmap, x-face, vm
 
 ;; This file is part of bitmap-mule.
@@ -47,14 +47,12 @@
       (load "vm/vm-misc" t)))
 
 (defun vm-bitmap-redefine ()
-  "Redifine functions for the use of bitmap-mule."
+  "Redifine function(s) for the use of bitmap-mule."
   (require 'vm-page)
-  ;;  (or (fboundp 'x-face-mule-original-vm-energize-headers-and-xfaces)
-  ;;      (condition-case nil
-  ;;	  (fset 'x-face-mule-original-vm-energize-headers-and-xfaces
-  ;;		(symbol-function 'vm-energize-headers-and-xfaces))
-  ;;	(error nil)))
-  (fset 'vm-energize-headers-and-xfaces 'x-face-mule-highlight-header))
+  (defadvice vm-energize-headers-and-xfaces
+    (around x-face-mule-highlight-header activate)
+    "Replace with `x-face-mule-highlight-header'."
+    (x-face-mule-highlight-header)))
 
 (eval-and-compile (autoload 'smiley-toggle-buffer "smiley-mule"))
 
@@ -62,22 +60,25 @@
   "Display \"smileys\" as small graphical icons.
 With arg, turn displaying on if and only if arg is positive."
   (interactive "P")
-  (save-excursion
-    (vm-select-folder-buffer)
-    (if vm-presentation-buffer
-	(progn
-	  (set-buffer vm-presentation-buffer)
-	  (save-restriction
-	    (widen)
-	    (goto-char (point-min))
-	    (if (search-forward "\n\n" nil t)
-		(progn
-		  (narrow-to-region (point) (point-max))
-		  (let ((modified (buffer-modified-p))
-			(inhibit-read-only t)
-			buffer-read-only)
-		    (smiley-toggle-buffer arg)
-		    (set-buffer-modified-p modified)))))))))
+  (if window-system
+      (save-excursion
+	(vm-select-folder-buffer)
+	(if vm-presentation-buffer
+	    (progn
+	      (set-buffer vm-presentation-buffer)
+	      (save-restriction
+		(widen)
+		(goto-char (point-min))
+		(if (search-forward "\n\n" nil t)
+		    (progn
+		      (narrow-to-region (point) (point-max))
+		      (let ((modified (buffer-modified-p))
+			    (inhibit-read-only t)
+			    buffer-read-only)
+			(smiley-toggle-buffer arg)
+			(set-buffer-modified-p modified))))))))
+    (if (interactive-p)
+	(message "You're not under window system."))))
 
 
 ;;; Setup.
