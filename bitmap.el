@@ -6,7 +6,7 @@
 ;; Author: Ken'ichi HANDA <handa@etl.go.jp>
 ;;         MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Version:
-;;	$Id: bitmap.el,v 7.17 1997/02/10 14:06:19 morioka Exp morioka $
+;;	$Id: bitmap.el,v 7.18 1997/05/22 04:42:16 morioka Exp $
 ;; Keywords: bitmap, xbm, MULE
 
 ;; This file is part of bitmap-mule.

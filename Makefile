@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 2.1 1997/11/13 07:04:40 cvs Exp $
+# $Id: Makefile,v 3.1 1997/11/13 20:00:01 morioka Exp $
 #
 
 VERSION	= 7.18
