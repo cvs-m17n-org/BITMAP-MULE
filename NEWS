@@ -19,9 +19,9 @@ startup (normally .emacs) file:
 We must apologize that the charset used in `bitmap-alterable-charset'
 becomes totally unserviceable to the inconvenience of Indian or Tibetan.
 
-** The font file etl8x16-bitmap.bdf is replaced with bmp16-etl.bdf which
-comes from intlfonts-1.2.  And also font/Makefile generates bmpH-etl.bdf
-instead of etlWxH-bitmap.bdf.
+** The font file etl8x16-bitmap.bdf has been replaced with bmp16-etl.bdf
+which comes from intlfonts-1.2.  And also font/Makefile generates
+bmpH-etl.bdf instead of etlWxH-bitmap.bdf.
 
 ** BITMAP-MULE now supports Emacs 21.
 But using BITMAP-MULE is not the best choice if your Emacs can display
