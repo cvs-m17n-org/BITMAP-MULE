@@ -14,4 +14,13 @@
 			   gnus-bitmap vm-bitmap)
 		  ))))
 
+(setq bitmap-modules-to-compile (copy-sequence bitmap-modules))
+
+(or (module-installed-p 'vm-macro)
+    (module-installed-p 'vm/vm-macro)
+    (module-installed-p 'vm-misc)
+    (module-installed-p 'vm/vm-misc)
+    (delq 'vm-bitmap bitmap-modules-to-compile))
+
+
 ;;; BITMAP-ELS ends here
