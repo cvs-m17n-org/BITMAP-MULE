@@ -4,6 +4,10 @@ Copyright (C) 1999,2000 Free Software Foundation, Inc.
 * Changes in BITMAP-MULE 8.4
 ============================
 
+** The obsolete function `x-face-mule-x-face-decode-message-header' has
+been abolished.  Use `x-face-decode-message-header' without argument from
+now on.
+
 ** Function `bitmap-compose' now has an optional arg `rotation'.
 It can make a different string even if which has the same representation.
 
