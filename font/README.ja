@@ -1,16 +1,18 @@
-これは bitmap-mule に附属の etl8x16-bitmap.bdf を、6x12, 7x14, 12x24 の
-それぞれのサイズに変換したものをまとめたパッケージです。
+このディレクトリには bitmap-mule で使うためのいくつかの bdf フォントが
+含まれています。オリジナルは etl8x16-bitmap.bdf で、それ以外のファイル
+は bdfresize(*1) を使って自動生成したものです。
 
-インストールするには、Makefile の FONTDIR を適当に修正した上で、root に
-なって make install を実行して下さい。
+インストールのやり方
+--------------------
 
-bitmap-mule は次のところから手に入ります。
+1) Makefile の FONTDIR を適当に修正して下さい。
 
-  ftp://ftp.jpl.org/pub/elisp/bitmap/
+2) `su' をタイプして root になって下さい。
 
-フォントの変換には bdfresize を利用しました。
+3) `make install' とタイプして下さい。
 
-  ftp://ftp.cs.titech.ac.jp/pub/X11/contrib/Local/bdfresize-1.4.tar.Z
+   gzip で圧縮された pcf ファイルが使えないシステムでは、代わりに
+   `make install-nogzip' とタイプする必要があります。
 
-etl8x16-bitmap.bdf は GNU GPL のバージョン 2 に基づいて配布されており、
-このパッケージもそれに準じます。
+
+(*1) ftp://ftp.cs.titech.ac.jp/pub/X11/contrib/Local/bdfresize-1.4.tar.Z
