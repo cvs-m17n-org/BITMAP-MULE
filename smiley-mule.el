@@ -7,7 +7,7 @@
 ;;         Katsumi Yamaoka <yamaoka@ga.sony.co.jp>
 ;; Created: 1996/7/26
 ;; Version:
-;;	$Id: smiley-mule.el,v 3.7 1996/09/14 05:07:00 morioka Exp $
+;;	$Id: smiley-mule.el,v 3.6 1996/09/13 04:50:13 morioka Exp morioka $
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
 ;; This file is part of tl (Tiny Library).

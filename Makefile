@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.5 1997/07/01 14:36:08 morioka Exp $
+# $Id: Makefile,v 2.1 1997/11/13 07:04:40 cvs Exp $
 #
 
 VERSION	= 7.18
@@ -11,11 +11,6 @@ PREFIX	= NONE
 LISPDIR = NONE
 
 TAR	= tar
-
-#BITMAP_FILES =	bitmap-mule/Makefile bitmap-mule/BITMAP-* \
-#		bitmap-mule/*.el bitmap-mule/*.bdf bitmap-mule/README.en
-
-#MU_FILES =	mu/MU-ELS mu/*.el mu/ChangeLog
 
 #TL_FILES =	tl/README.en tl/Makefile tl/mk-tl tl/TL-ELS \
 #		tl/*.el tl/doc/*.ol tl/doc/*.tex tl/doc/*.texi tl/ChangeLog
@@ -53,6 +48,6 @@ tar:
 
 release:
 	-$(RM) /pub/GNU/elisp/bitmap-mule/bitmap-mule-$(VERSION).tar.gz
-	cd ..; mv bitmap-mule-$(VERSION).tar.gz /pub/GNU/elisp/bitmap-mule/
+	mv /tmp/bitmap-mule-$(VERSION).tar.gz /pub/GNU/elisp/bitmap-mule/
 	cd /pub/GNU/elisp/mime/alpha/ ; \
 		ln -s ../../bitmap-mule/bitmap-mule-$(VERSION).tar.gz .
