@@ -37,12 +37,6 @@
   (autoload 'fontset-list "fontset");; for Emacs 20
   (autoload 'read-hexa "bitmap"))
 
-(if (> emacs-major-version 20)
-    (defun fontset-pixel-size (fontset)
-      (if (string-match "-\\([0-9]+\\)-" fontset)
-	  (string-to-number (match-string 1 fontset))
-	0)))
-
 (if window-system
     (let ((fontsets (fontset-list))
 	  fontset size)
@@ -59,10 +53,6 @@
 	  (set-fontset-font
 	   fontset 'bitmap
 	   "-etl-fixed-medium-r-*--14-*-100-100-m-*-bitmap.7x14-0"))
-	 ((eq size 16)
-	  (set-fontset-font
-	   fontset 'bitmap
-	   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"))
 	 ((eq size 20)
 	  (set-fontset-font
 	   fontset 'bitmap

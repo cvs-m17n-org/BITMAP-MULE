@@ -68,10 +68,6 @@
 	    (set-fontset-font
 	     fontset lc-bitmap
 	     "-etl-fixed-medium-r-*--14-*-100-100-m-*-bitmap.7x14-0"))
-	   ((eq size 16)
-	    (set-fontset-font
-	     fontset lc-bitmap
-	     "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"))
 	   ((eq size 20)
 	    (set-fontset-font
 	     fontset lc-bitmap

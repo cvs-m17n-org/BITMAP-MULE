@@ -1,3 +1,12 @@
+2000-12-14  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bitmap-ci.el (TopLevel): Remove the redundancy in the setting of
+	fontset fonts.
+	* bitmap-bi.el: Ditto.
+
+	* bitmap-ci.el (fontset-pixel-size): No need to redefine it for
+	Emacs 21, Remove.
+
 2000-12-13  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* smiley-mule.el (smiley-face-bitmap-list): Use `bitmap-compose'
