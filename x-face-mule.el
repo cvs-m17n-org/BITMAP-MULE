@@ -10,8 +10,8 @@
 ;;         OKUNISHI -GTO- Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/01/17
-;; Keywords: X-Face, bitmap, Emacs, MULE
+;; Revised: 2000/03/15
+;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of bitmap-mule.
 
@@ -90,6 +90,21 @@
 ;;	      (setq mew-use-highlight-x-face t)
 ;;	      (setq mew-use-highlight-x-face-function
 ;;		    'x-face-decode-message-header)))
+;;
+;;     [BBDB]
+;;	Add the following code in your ~/.emacs, and collect `X-Face':
+;;      
+;;     (setq bbdb-auto-notes-alist
+;;           (append bbdb-auto-notes-alist
+;;                   (list (list "x-face"
+;;                       (list (concat "[ \t\n]*\\([^ \t\n]*\\)"
+;;                                     "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;                                     "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;                                     "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;                                     "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;                                     )
+;;                             'face
+;;                             "\\1\\3\\5\\7\\9")))))
 
 ;; 3. Customization
 ;;
@@ -873,6 +888,64 @@ just the headers of the article."
   (eval-after-load "vm" '(vm-bitmap-redefine))
   )
 
+
+;;; BBDB 
+;;
+(defvar x-face-mule-BBDB-display (locate-library "bbdb")
+  "*If non-nil, display X-Face")
+
+(defun x-face-mule-BBDB-buffer ()
+  "Display X-Face in *BBDB* buffer."
+  (interactive)
+  (if (and x-face-mule-BBDB-display
+	   (get-buffer bbdb-buffer-name)
+	   (set-buffer bbdb-buffer-name))
+      (while (re-search-forward "^[^ \t\n]" nil t)
+	(x-face-mule-BBDB-one-record))))
+
+(defun x-face-mule-BBDB-one-record ()
+  "Display X-Face in *BBDB* one recode."
+  (interactive)
+  (save-excursion
+    (forward-line)
+    (let (buffer-read-only
+	  (sfaces (bbdb-record-getprop (bbdb-current-record) 'face))
+	  xfaces xface (home (point)))
+      (when (and sfaces
+		 (re-search-forward 
+		  "^[ ]+face: *\\(.*\\(\n[ ]+.*\\)*\\)\n" nil t)
+		 (not (get-text-property (match-beginning 0)
+					 'invisible))
+		 (not (put-text-property (match-beginning 0)
+					 (match-end 0) 'invisible t)))
+	(goto-char home)
+	(while (string-match "[^\n]+" sfaces)
+	  (and (setq xface (x-face-mule-convert-x-face-to-rectangle 
+			    (substring sfaces (match-beginning 0) 
+				       (match-end 0))))
+	       (setq xfaces (append xfaces (list xface))))
+	  (if (< (match-end 0) (string-bytes sfaces))
+	      (setq sfaces (substring sfaces 
+			      (+ 1 (match-end 0)) (string-bytes sfaces)))
+	    (setq sfaces "")))
+	(let ((i 0))
+	  (while (> 3 i)
+	    (mapcar (lambda (x)
+		      (insert (format " %s" (nth i x))))
+		    xfaces)
+	    (insert "\n")
+	    (setq i (+ 1 i))))
+	(forward-line)
+	(put-text-property home (point) 'intangible t)))))
+
+;;; BBDB Setup. 
+;;
+
+(if x-face-mule-BBDB-display
+    (progn
+      (defadvice bbdb-display-records-1 
+	(after x-face-mule-BBDB-buffer activate) (x-face-mule-BBDB-buffer))
+      (add-hook 'bbdb-list-hook 'x-face-mule-BBDB-one-record)))
 
 (provide 'x-face-mule)
 
