@@ -1,6 +1,13 @@
-このディレクトリには bitmap-mule で使うためのいくつかの bdf フォントが
-含まれています。オリジナルは etl8x16-bitmap.bdf で、それ以外のファイル
-は bdfresize(*1) を使って自動生成したものです。
+このディレクトリでは bitmap-mule で使うためのいくつかの bdf フォントを
+作成します。オリジナルは etl8x16-bitmap.bdf で、それ以外のファイルは
+`bdfresize'(*1) を使って自動生成します。
+もし `bdfresize' をお持ちでないなら、既製の以下のフォントを使うことも
+できます。
+
+   ftp://ftp.jpl.org/pub/elisp/bitmap/bitmap-fonts-${VERSION}.tar.gz
+
+なお、これは *この* ディレクトリで展開する必要があります。
+
 
 インストールのやり方
 --------------------

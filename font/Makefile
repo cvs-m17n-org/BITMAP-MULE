@@ -1,7 +1,7 @@
 FONTDIR = /usr/X11R6/lib/X11/fonts/misc
 
 PCFS = etl6x12-bitmap.pcf etl7x14-bitmap.pcf \
-	etl8x16-bitmap.pcf etl12x24-bitmap.pcf
+	etl8x16-bitmap.pcf etl10x20-bitmap.pcf etl12x24-bitmap.pcf
 
 all: bdf $(PCFS)
 
@@ -23,7 +23,9 @@ install-nogzip: all
 	(cd $(FONTDIR); mkfontdir)
 	xset fp rehash
 
-bdf: etl6x12-bitmap.bdf etl7x14-bitmap.bdf etl12x24-bitmap.bdf
+bdf: etl6x12-bitmap.bdf etl7x14-bitmap.bdf \
+	etl10x20-bitmap.bdf etl12x24-bitmap.bdf
+
 
 etl6x12-bitmap.bdf: etl8x16-bitmap.bdf
 	bdfresize -f 12/16 etl8x16-bitmap.bdf \
@@ -32,6 +34,10 @@ etl6x12-bitmap.bdf: etl8x16-bitmap.bdf
 etl7x14-bitmap.bdf: etl8x16-bitmap.bdf
 	bdfresize -f 14/16 etl8x16-bitmap.bdf \
 	  | sed "s/8x16/7x14/g" > etl7x14-bitmap.bdf
+
+etl10x20-bitmap.bdf: etl8x16-bitmap.bdf
+	bdfresize -f 20/16 etl8x16-bitmap.bdf \
+	  | sed "s/8x16/10x20/g" > etl10x20-bitmap.bdf
 
 etl12x24-bitmap.bdf: etl8x16-bitmap.bdf
 	bdfresize -f 24/16 etl8x16-bitmap.bdf \

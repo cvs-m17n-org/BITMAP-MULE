@@ -1,3 +1,23 @@
+2000-04-26  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* font/etl12x24-bitmap.bdf: Remove.
+	* font/etl7x14-bitmap.bdf: Remove.
+	* font/etl6x12-bitmap.bdf: Remove.
+
+	* Makefile (invoice): Output to stdout.
+	(tar): Output invoice to stdout; create separated fonts archive;
+	use max compression; comment out CVS procedures.
+	(MKDIR, BITMAP_FONTS): New variables.
+
+2000-04-22  Jun Sawataishi    <jsawa@attglobal.net>
+
+	* font/Makefile (etl10x20-bitmap.bdf): New entry.
+	(bdf, PCFS): Add etl10x20-bitmap.
+
+	* bitmap-bi.el: Add 10x20 to fontset fonts.
+	* bitmap-ci.el: Ditto.
+
+
 2000-04-18  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* BITMAP-MULE: Version 8.3 was released.
