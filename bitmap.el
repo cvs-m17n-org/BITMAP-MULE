@@ -32,6 +32,10 @@
 ;;	  "FF00FF00FF00FF00FF00FF00FF00FF00AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
 (require 'poe)
+(require 'pcustom)
+
+(defgroup bitmap-mule nil
+  "A package to use bitmap in Emacs/Mule.")
 
 (defun read-hexa (str)
   (let ((result 0) (i 0) (max (length str)))
