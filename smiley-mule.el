@@ -1,10 +1,10 @@
 ;;; smiley-mule.el --- smiley faces decoder for MULE
 
-;; Copyright (C) 1996,1998 MORIOKA Tomohiko
-;; Copyright (C) 1996 Katsumi Yamaoka
+;; Copyright (C) 1996,1998,1999 MORIOKA Tomohiko
+;; Copyright (C) 1996,1999 Katsumi Yamaoka
 
-;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
-;;         Katsumi Yamaoka <yamaoka@ga.sony.co.jp>
+;; Author: MORIOKA Tomohiko <tomo@m17n.org>
+;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
@@ -44,20 +44,15 @@
 ;;; Code:
 
 (require 'bitmap)
+(require 'pcustom)
 
-(defvar smiley-face-background-color "Yellow")
-(defvar smiley-face-foreground-color "Black")
+(defface smiley-face '((t (:background "Yellow" :foreground "Black")))
+  "Face used for displaying smiley faces."
+  :group 'faces)
 
-(make-face 'smiley-face)
-(set-face-background 'smiley-face smiley-face-background-color)
-(set-face-foreground 'smiley-face smiley-face-foreground-color)
-
-(defvar smiley-manga-face-background-color "White")
-(defvar smiley-manga-face-foreground-color "Black")
-
-(make-face 'smiley-manga-face)
-(set-face-background 'smiley-manga-face smiley-manga-face-background-color)
-(set-face-foreground 'smiley-manga-face smiley-manga-face-foreground-color)
+(defface smiley-manga-face '((t (:background "White" :foreground "Black")))
+  "Face used for displaying smiley manga faces."
+  :group 'faces)
 
 (defvar smiley-bitmap-for-smile
   (bitmap-decode-xbm
