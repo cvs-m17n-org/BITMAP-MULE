@@ -1,3 +1,7 @@
+2001-02-16  Tatsuya Yagi <yagi@is.titech.ac.jp>
+
+	* gnus-pointer.xbm: "gnus-pointer" -> "gnus_pointer".
+
 2001-02-15  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bitmap-ci.el: Remove elements from `global-fontset-alist' whose
