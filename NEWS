@@ -1,6 +1,13 @@
 BITMAP-MULE NEWS -- history of major-changes.
 Copyright (C) 1999,2000 Free Software Foundation, Inc.
 
+* Changes in BITMAP-MULE 8.3
+============================
+
+** BBDB(Big Brother Database) is supported.
+Display the `X-Face' images, In *BBDB* mode.
+
+
 * Changes in BITMAP-MULE 8.2
 ============================
 
