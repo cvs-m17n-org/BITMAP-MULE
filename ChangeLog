@@ -1,3 +1,8 @@
+2000-10-05  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bm-utils.el (bitmap-progress-backgrounds): Remove variable.
+	(bitmap-progress-data): Ditto.
+
 2000-10-04  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bitmap.el: Autoload "bm-utils" for `progress-feedback-with-label'

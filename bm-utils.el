@@ -124,9 +124,6 @@
 	     nil)))
   :group 'bitmap-mule)
 
-(defvar bitmap-progress-data nil)
-(defvar bitmap-progress-backgrounds nil)
-
 (eval-when-compile
   (defmacro bitmap-progress-data ()
     '(if bitmap-progress-feedback-use-clear-bar
