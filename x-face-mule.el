@@ -7,9 +7,10 @@
 
 ;; Author: KORIYAMA Naohiro <kory@ba2.so-net.ne.jp>
 ;;         Katsumi Yamaoka <yamaoka@jpl.org>
+;;         OKUNISHI -GTO- Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 1999/11/15
+;; Revised: 1999/12/24
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -38,6 +39,10 @@
 ;;	ftp://ftp.win.ne.jp/pub/misc/compface-1.2.tar.gz
 ;;
 ;;    It is one example of many.
+;;
+;; NOTE: This version of compface has a bug.  Please apply the patch
+;; named "compface-1.2.patch", which is included in the BITMAP-MULE
+;; distribution, before installing it.
 
 ;; 2. Setting up
 ;;
@@ -199,9 +204,21 @@ STRING should be given if the last search was by `string-match' on STRING.
   :group 'mail)
 
 (defcustom uncompface-program "uncompface"
-  "Program for decoding X-Face string to UNIX Icon."
+  "Program for decoding X-Face string to UNIX icon or possibly XBM data."
   :group 'x-face-mule
   :type 'string)
+
+(defcustom uncompface-program-can-generate-xbm
+  (with-temp-buffer
+    (insert ",\\m{?h\\)X")
+    (call-process-region (point-min) (point-max)
+			 uncompface-program t t nil "-X")
+    (goto-char (point-min))
+    (looking-at "#define"))
+  "Non-nil declares \"uncompface\" can generate XBM format directly with
+the option \"-X\"."
+  :group 'x-face-mule
+  :type 'boolean)
 
 (defcustom x-face-mule-highlight-x-face-position 'from
   "This variable says where X-Face is shown.
@@ -446,8 +463,10 @@ get hung up with it."
       (setq data
 	    (cons
 	     string
-	     (x-face-mule-convert-icon-to-rectangle
-	      (x-face-mule-convert-x-face-to-icon string))))
+	     (if uncompface-program-can-generate-xbm
+		 (x-face-mule-convert-x-face-to-bitmap string)
+	       (x-face-mule-convert-icon-to-rectangle
+		(x-face-mule-convert-x-face-to-icon string)))))
       (setq x-face-mule-cache-modified-p t)
       (setq x-face-mule-x-face-to-rectangle-cache
 	    (cons data x-face-mule-x-face-to-rectangle-cache)))
@@ -461,6 +480,19 @@ get hung up with it."
      (call-process-region (point-min) (point-max)
 			  uncompface-program t t nil))
     (buffer-string)))
+
+(defun x-face-mule-convert-x-face-to-bitmap (string)
+  "Decode x-face string to X11 bitmap."
+  (with-temp-buffer
+    (insert string)
+    (call-process-region (point-min) (point-max)
+			 uncompface-program t t nil "-X")
+    (let (ret)
+      (mapcar
+       (function (lambda (line)
+		   (setq ret (append ret (list (bitmap-compose line))))))
+       (bitmap-decode-xbm (bitmap-read-xbm-buffer (current-buffer))))
+      ret)))
 
 (defun x-face-mule-convert-vector-to-rectangle (vector)
   "Make x-face rectangle from vector."
