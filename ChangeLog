@@ -1,3 +1,27 @@
+2000-10-04  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bitmap.el: Autoload "bm-utils" for `progress-feedback-with-label'
+	as well as `lprogress-display'; make obsolete the old one.
+
+	* bm-utils.el (lprogress-display): Make obsolete.
+	(bitmap-progress-feedback-with-label): Rename from
+	`bitmap-lprogress-display'
+	(bitmap-progress-backgrounds): Rename from
+	`bitmap-lprogress-backgrounds'
+	(bitmap-progress-data): Rename from `bitmap-lprogress-data'.
+	(bitmap-progress-feedback-use-clear-bar): Rename from
+	`bitmap-lprogress-diaplay-use-clear-bar'.
+	(bitmap-progress-backgrounds-for-opaque-bar): Rename from
+	`bitmap-lprogress-backgrounds-for-opaque-bar'.
+	(bitmap-progress-data-for-opaque-bar): Rename from
+	`bitmap-lprogress-data-for-opaque-bar'.
+	(bitmap-progress-backgrounds-for-clear-bar): Rename from
+	`bitmap-lprogress-backgrounds-for-clear-bar'.
+	(bitmap-progress-data-for-clear-bar): Rename from
+	`bitmap-lprogress-data-for-clear-bar'.
+	(bitmap-progress-feedback-textual): Rename from
+	`bitmap-lprogress-display-textual'.
+
 2000-09-21  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bitmap.el (bitmap-recompose): To work with Mule 2.3 or Emacs 21

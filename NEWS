@@ -4,6 +4,9 @@ Copyright (C) 1999,2000 Free Software Foundation, Inc.
 * Changes in BITMAP-MULE 8.4
 ============================
 
+** Rename `lprogress-display' to `progress-feedback-with-label'.
+It has been done in XEmacs 21.2.36.  The old function is now obsolete.
+
 ** New function `bitmap-recompose'.
 It can make a different string even if which has the same representation.
 
