@@ -6,7 +6,7 @@
 ;; Author: MORIOKA Tomohiko <tomo@m17n.org>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
-;; Revised: 1999/10/25
+;; Revised: 1999/10/26
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
 ;; This file is part of bitmap-mule.
@@ -753,11 +753,11 @@ MMMMMMMMMMMMMMMM
 	   'smiley-face)
    (vector ":-P"
 	   (bitmap-compose (aref smiley-bitmap-FaceYukky 0))
-	   'smiley-face)
-   "List of smiley face data.  Each element looks like [TEXT BITMAP FACE],
+	   'smiley-face))
+  "List of smiley face data.  Each element looks like [TEXT BITMAP FACE],
 where TEXT is a smiley face represented by the ordinary text, BITMAP is a
 string consists of composite bitmap characters and FACE is a face used for
-highlighting the inline image."))
+highlighting the inline image.")
 
 ;;;###autoload
 (defun smiley-buffer ()
@@ -788,6 +788,26 @@ highlighting the inline image."))
     (narrow-to-region beg end)
     (smiley-buffer)
     ))
+
+;;;###autoload
+(defun smiley-toggle-buffer (&optional arg)
+  "Toggle displaying smiley faces.
+With arg, turn displaying on if and only if arg is positive."
+  (interactive "P")
+  (save-excursion
+    (goto-char (point-min))
+    (if (and (not (and (numberp arg) (< arg 0)))
+	     (or (and (numberp arg) (> arg 0))
+		 (let (case-fold-search)
+		   (re-search-forward
+		    (mapconcat
+		     (function
+		      (lambda (cell)
+			(regexp-quote (aref cell 0))))
+		     smiley-face-bitmap-list "\\|")
+		    nil t))))
+	(smiley-buffer)
+      (smiley-encode-buffer))))
 
 ;;;###autoload
 (defun smiley-encode-buffer ()
