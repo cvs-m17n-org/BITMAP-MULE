@@ -4,7 +4,7 @@
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1999/08/20
-;; Revised:
+;; Revised: 1999/10/26
 ;; Keywords: bitmap, x-face, vm
 
 ;; This file is part of bitmap-mule.
@@ -35,6 +35,7 @@
 
 ;; Avoid byte compile warnings.
 (defvar vm-mail-buffer)
+(defvar vm-presentation-buffer)
 (eval-when-compile (autoload 'vm-preview-current-message "vm-page"))
 
 ;; Attempt to pickup the macro `vm-select-folder-buffer'.
@@ -54,6 +55,29 @@
   ;;		(symbol-function 'vm-energize-headers-and-xfaces))
   ;;	(error nil)))
   (fset 'vm-energize-headers-and-xfaces 'x-face-mule-highlight-header))
+
+(eval-and-compile (autoload 'smiley-toggle-buffer "smiley-mule"))
+
+(defun vm-smiley-display (&optional arg)
+  "Display \"smileys\" as small graphical icons.
+With arg, turn displaying on if and only if arg is positive."
+  (interactive "P")
+  (save-excursion
+    (vm-select-folder-buffer)
+    (if vm-presentation-buffer
+	(progn
+	  (set-buffer vm-presentation-buffer)
+	  (save-restriction
+	    (widen)
+	    (goto-char (point-min))
+	    (if (search-forward "\n\n" nil t)
+		(progn
+		  (narrow-to-region (point) (point-max))
+		  (let ((modified (buffer-modified-p))
+			(inhibit-read-only t)
+			buffer-read-only)
+		    (smiley-toggle-buffer arg)
+		    (set-buffer-modified-p modified)))))))))
 
 
 ;;; Setup.
