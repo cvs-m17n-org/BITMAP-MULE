@@ -29,21 +29,21 @@
 (require 'emu)
 
 (cond ((boundp 'MULE)
-       (defvar charset-bitmap
+       (defvar lc-bitmap
 	 (new-private-character-set 2 1 3 0 ?0 0 "BITMAP 8x16" "bitmap")
 	 "Leading character for BITMAP.8x16.")
        )
       (t
        (define-charset nil 'bitmap
 	 [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
-       (defconst charset-bitmap 'bitmap)
+       (defconst lc-bitmap 'bitmap)
        ))
 
 (if window-system
     (mapcar (lambda (fontset)
 	      (if (= (fontset-pixel-size fontset) 16)
 		  (set-fontset-font
-		   fontset charset-bitmap
+		   fontset lc-bitmap
 		   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")
 		))
 	    (fontset-list))
@@ -51,7 +51,7 @@
 
 
 ;; Block (all bits set) character
-(defvar bitmap-block (make-char charset-bitmap 32 33))
+(defvar bitmap-block (make-char lc-bitmap 32 33))
 
 ;; Simple examples:
 ;;	(bitmap-compose "00FF00FF00FF00FF00FF00FF00FF00FF")
@@ -77,7 +77,7 @@ BITMAP-PATTERN is a string of hexa decimal for 8x16 dot-pattern.
 For example the pattern \"0081814242242442111124244242818100\" is
  for a bitmap of shape something like 'X' character."
   (let* ((len (/ (length hex) 2))
-	 (bytes (charset-bytes charset-bitmap))
+	 (bytes (charset-bytes lc-bitmap))
 	 (cmpstr "")
 	 (buf (make-string 64 0))
 	 block-flag i j row code c1 c2)
@@ -91,7 +91,7 @@ For example the pattern \"0081814242242442111124244242818100\" is
 	    (setq code (+ (* (% i 16) 255) row -1))
 	    (setq c1 (+ (/ code 96) 33)
 		  c2 (+ (% code 96) 32))
-	    (sset buf j (make-char charset-bitmap c1 c2))
+	    (sset buf j (make-char lc-bitmap c1 c2))
 	    (setq j (+ j bytes))))
       (setq i (1+ i))
       (if (or (= (% i 16) 0) (>= i len))
