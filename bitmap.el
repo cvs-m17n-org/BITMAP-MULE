@@ -44,15 +44,16 @@
 	(setq i (1+ i))))
     result))
 
-(cond ((and (fboundp 'set-buffer-multibyte)
-	    (subrp (symbol-function 'set-buffer-multibyte)))
-       ;; for Emacs 20.3 or later
-       (require 'bitmap-ci)
-       )
-      (t
-       ;; for MULE 1.*, MULE 2.*, Emacs 20.1 and 20.2
-       (require 'bitmap-bi)
-       ))
+(eval-and-compile
+  (cond ((and (fboundp 'set-buffer-multibyte)
+	      (subrp (symbol-function 'set-buffer-multibyte)))
+	 ;; for Emacs 20.3 or later
+	 (require 'bitmap-ci)
+	 )
+	(t
+	 ;; for MULE 1.*, MULE 2.*, Emacs 20.1 and 20.2
+	 (require 'bitmap-bi)
+	 )))
 
 
 ;;; @ BDF
