@@ -3,8 +3,9 @@
 ;; Copyright (C) 2000 Free Software Foundation, Inc.
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
+;;         Yoshitsugu Mito <mit@nines.nec.co.jp>
 ;; Created: 2000/03/28
-;; Revised: 2000/04/17
+;; Revised: 2000/04/18
 ;; Keywords: bitmap, lprogress-display, display-time
 
 ;; This file is part of bitmap-mule.
@@ -45,39 +46,102 @@
 
 ;;; Code:
 
+(eval-when-compile (require 'static))
+(require 'pcustom)
 (require 'bitmap)
 
-(defvar bitmap-lprogress-display-textual nil
-  "*If it is non-nil, progress display will be textual.")
+(eval-and-compile;; For old mule.
+  (defcustom bitmap-lprogress-display-textual nil
+    "If it is non-nil, progress display will be textual."
+    :type 'boolean
+    :group 'bitmap-mule)
 
-(defvar bitmap-special-symbol-alist
-  (list '(?  . " ")
-	(cons ?% (bitmap-compose "00000000007A4A4C4C781E3232525E00"))
-	(cons ?- (bitmap-compose "000000000000003C7800000000000000"))
-	(cons ?0 (bitmap-compose "007CBAC6C6C6C2800286C6C6C6BA7C00"))
-	(cons ?1 (bitmap-compose "00000206060602000206060606020000"))
-	(cons ?2 (bitmap-compose "007C3A060606023C7880C0C0C0B87C00"))
-	(cons ?3 (bitmap-compose "007C3A060606023C7A060606063A7C00"))
-	(cons ?4 (bitmap-compose "000082C6C6C6C2BC7A06060606020000"))
-	(cons ?5 (bitmap-compose "007CB8C0C0C0C0BC7A060606063A7C00"))
-	(cons ?6 (bitmap-compose "007CB8C0C0C0C0BC7A86C6C6C6BA7C00"))
-	(cons ?7 (bitmap-compose "007CBAC6C6C6C2800206060606020000"))
-	(cons ?8 (bitmap-compose "007CBAC6C6C6C2BC7A86C6C6C6BA7C00"))
-	(cons ?9 (bitmap-compose "007CBAC6C6C6C2BC7A060606063A7C00")))
-  "Alist of char and special symbol bitmap.")
+  (defvar bitmap-special-symbol-alist
+    (list '(?  . " ")
+	  (cons ?% (bitmap-compose "00000000007A4A4C4C781E3232525E00"))
+	  (cons ?- (bitmap-compose "000000000000003C7800000000000000"))
+	  (cons ?0 (bitmap-compose "007CBAC6C6C6C2800286C6C6C6BA7C00"))
+	  (cons ?1 (bitmap-compose "00000206060602000206060606020000"))
+	  (cons ?2 (bitmap-compose "007C3A060606023C7880C0C0C0B87C00"))
+	  (cons ?3 (bitmap-compose "007C3A060606023C7A060606063A7C00"))
+	  (cons ?4 (bitmap-compose "000082C6C6C6C2BC7A06060606020000"))
+	  (cons ?5 (bitmap-compose "007CB8C0C0C0C0BC7A060606063A7C00"))
+	  (cons ?6 (bitmap-compose "007CB8C0C0C0C0BC7A86C6C6C6BA7C00"))
+	  (cons ?7 (bitmap-compose "007CBAC6C6C6C2800206060606020000"))
+	  (cons ?8 (bitmap-compose "007CBAC6C6C6C2BC7A86C6C6C6BA7C00"))
+	  (cons ?9 (bitmap-compose "007CBAC6C6C6C2BC7A060606063A7C00")))
+    "Alist of char and special symbol bitmap.")
 
-(defvar bitmap-lprogress-data
-  (list (bitmap-compose "55AA552A152A152A152A152A15AA55AA")
-	(bitmap-compose "55AA550A050A050A050A050A05AA55AA")
-	(bitmap-compose "55AA5502010201020102010201AA55AA"))
-  "Bitmaps for progress guage.")
+  (defvar bitmap-lprogress-data-for-clear-bar
+    (list (bitmap-compose "55AA552A152A152A152A152A15AA55AA")
+	  (bitmap-compose "55AA550A050A050A050A050A05AA55AA")
+	  (bitmap-compose "55AA5502010201020102010201AA55AA"))
+    "Bitmaps for progress guage with clear bar.")
 
-(defvar bitmap-lprogress-backgrounds
-  (list (bitmap-compose "05020502050205020502050205020502")
-	(string-to-char (bitmap-compose "55AA5500000000000000000000AA55AA"))
-	(string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
-	(bitmap-compose "40A040A040A040A040A040A040A040A0"))
-  "Bitmaps for progress guage background.")
+  (defvar bitmap-lprogress-backgrounds-for-clear-bar
+    (list (bitmap-compose "05020502050205020502050205020502")
+	  (string-to-char (bitmap-compose "55AA5500000000000000000000AA55AA"))
+	  (string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
+	  (bitmap-compose "40A040A040A040A040A040A040A040A0"))
+    "Bitmaps for progress guage background with clear bar.")
+
+  (defvar bitmap-lprogress-data-for-opaque-bar
+    (list (bitmap-compose "55AA55EAF5EAF5EAF5EAF5EAF5AA55AA")
+	  (bitmap-compose "55AA55FAF5FAF5FAF5FAF5FAF5AA55AA")
+	  (bitmap-compose "55AA55FEFDFEFDFEFDFEFDFEFDAA55AA"))
+    "Bitmaps for progress guage with opaque bar.")
+
+  (defvar bitmap-lprogress-backgrounds-for-opaque-bar
+    (list (bitmap-compose "05020502050205020502050205020502")
+	  (string-to-char (bitmap-compose "55AA55FFFFFFFFFFFFFFFFFFFFAA55AA"))
+	  (string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
+	  (bitmap-compose "40A040A040A040A040A040A040A040A0"))
+    "Bitmaps for progress guage background with opaque bar.")
+
+  (defcustom bitmap-lprogress-diaplay-use-clear-bar t
+    "Non-nil means progress bar will be displayed clearly, otherwise opaquely."
+    :type (` (radio
+	      (const
+	       :format
+	       ( ,(concat
+		   "%{"
+		   (car bitmap-lprogress-backgrounds-for-clear-bar)
+		   (make-string
+		    20 (nth 1 bitmap-lprogress-backgrounds-for-clear-bar))
+		   (make-string
+		    5 (nth 2 bitmap-lprogress-backgrounds-for-clear-bar))
+		   (nth 3 bitmap-lprogress-backgrounds-for-clear-bar)
+		   "%}  "))
+	       t)
+	      (const
+	       :tag
+	       ( ,(concat
+		   (car bitmap-lprogress-backgrounds-for-opaque-bar)
+		   (make-string
+		    20 (nth 1 bitmap-lprogress-backgrounds-for-opaque-bar))
+		   (make-string
+		    5 (nth 2 bitmap-lprogress-backgrounds-for-opaque-bar))
+		   (nth 3 bitmap-lprogress-backgrounds-for-opaque-bar)
+		   nil)))))
+    :group 'bitmap-mule)
+  );; eval-and-compile
+
+(defvar bitmap-lprogress-data nil)
+(defvar bitmap-lprogress-backgrounds nil)
+
+(eval-when-compile
+  (defmacro bitmap-lprogress-data ()
+    '(or bitmap-lprogress-data
+	 (if bitmap-lprogress-diaplay-use-clear-bar
+	     bitmap-lprogress-data-for-clear-bar
+	   bitmap-lprogress-data-for-opaque-bar)))
+
+  (defmacro bitmap-lprogress-backgrounds ()
+    '(or bitmap-lprogress-backgrounds
+	 (if bitmap-lprogress-diaplay-use-clear-bar
+	     bitmap-lprogress-backgrounds-for-clear-bar
+	   bitmap-lprogress-backgrounds-for-opaque-bar)))
+  )
 
 (defvar bitmap-load-average-data
   (mapcar
@@ -135,16 +199,20 @@ the same as to `format'.  [XEmacs 21.2.32 emulating function]"
 		   ((> (string-width msg) msgmax)
 		    (if (<= msgmax 3)
 			""
-		      (concat (truncate-string msg (- msgmax 3)) "...")))
+		      (concat
+		       (static-if (fboundp 'truncate-string-to-width)
+			   (truncate-string-to-width msg (- msgmax 3))
+			 (truncate-string msg (- msgmax 3)))
+		       "...")))
 		   (t msg))
-	     (car bitmap-lprogress-backgrounds)
-	     (make-string (/ val 4) (nth 1 bitmap-lprogress-backgrounds))
+	     (car (bitmap-lprogress-backgrounds))
+	     (make-string (/ val 4) (nth 1 (bitmap-lprogress-backgrounds)))
 	     (if (zerop (% val 4))
 		 ""
-	       (nth (1- (% val 4)) bitmap-lprogress-data))
+	       (nth (1- (% val 4)) (bitmap-lprogress-data)))
 	     (make-string (- 25 (/ (+ 3 val) 4))
-			  (nth 2 bitmap-lprogress-backgrounds))
-	     (nth 3 bitmap-lprogress-backgrounds)
+			  (nth 2 (bitmap-lprogress-backgrounds)))
+	     (nth 3 (bitmap-lprogress-backgrounds))
 	     (bitmap-string-to-special-symbols (format "%3d%%" value))))))
     (message "")))
 
