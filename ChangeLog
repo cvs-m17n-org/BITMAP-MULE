@@ -1,3 +1,13 @@
+1999-11-10  Jun'ichi Shiono  <jun@fsas.fujitsu.co.jp>
+
+	* smiley-mule.el: '(T_T' face change to 'T_T' because of fit into
+	other faces.
+
+1999-11-04  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* BITMAP-CFG: Don't add "flim" to `load-path'.
+
+
 1999-11-04  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* BITMAP-MULE: Version 8.0 was released.
