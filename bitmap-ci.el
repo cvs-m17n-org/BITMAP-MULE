@@ -53,7 +53,8 @@ and `tibetan-1-column'.")
 	       (aset info 13 "8x16 bitmap elements");; description
 	       (aset info 14 nil);; plist
 	       (put 'bitmap 'charset info))
-	     (put bitmap-alterable-charset 'charset nil))
+	     (put bitmap-alterable-charset 'charset nil)
+	     (declare-equiv-charset 2 96 ?0 'bitmap))
 	 (error "%s" (car (cdr code)))))))
 
 ;; Avoid byte compile warning
