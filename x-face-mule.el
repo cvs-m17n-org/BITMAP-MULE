@@ -12,7 +12,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/12/14
+;; Revised: 2000/12/15
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of bitmap-mule.
@@ -519,12 +519,14 @@ get hung up with it."
     (unless (looking-at "#define")
       (error "!! \"%s\" can not generate XBM format directly."
 	     uncompface-program))
-    (let ((lines (bitmap-decode-xbm (bitmap-read-xbm-buffer
-				     (current-buffer))))
-	  rest)
-      (while lines
-	(setq rest (nconc rest (list (bitmap-compose (car lines))))
-	      lines (cdr lines)))
+    (let* ((lines (bitmap-decode-xbm (bitmap-read-xbm-buffer
+				      (current-buffer))))
+	   (len (length lines))
+	   (i 0)
+	   rest)
+      (while (> len i)
+	(setq rest (nconc rest (list (bitmap-compose (aref lines i))))
+	      i (1+ i)))
       rest)))
 
 (defun x-face-mule-convert-vector-to-rectangle (vector)
