@@ -10,7 +10,7 @@
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Version: 0.27
 ;; Created: 1997/10/24
-;; Revised: 1999/10/21
+;; Revised: 1999/10/29
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -36,7 +36,7 @@
 
 ;; 1. Build and install `uncompface' program which is available from:
 ;;
-;;	ftp://ftp.xemacs.org/pub/xemacs/aux/compface.tar.gz
+;;	ftp://ftp.win.ne.jp/pub/misc/compface-1.2.tar.gz
 ;;
 ;;    It is one example of many.
 
@@ -48,36 +48,44 @@
 ;;    [Wanderlust]
 ;;	Add the following code in your ~/.emacs:
 ;;
-;;	(setq wl-highlight-x-face-func
-;;	      (function
-;;	       (lambda (&rest args)
-;;		 (x-face-decode-message-header))))
-;;	(require 'x-face-mule)
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'x-face-decode-message-header "x-face-mule")
+;;	      (setq wl-highlight-x-face-func
+;;		    (function
+;;		     (lambda (&rest args)
+;;		       (x-face-decode-message-header))))))
 ;;
 ;;    [before Mew 1.90]
 ;;	Add the following code in your ~/.emacs:
 ;;
-;;	(add-hook 'mew-summary-display-message-filter-hook ;; 1.90
-;;		  'x-face-decode-message-header)
-;;	(add-hook 'mew-message-hook ;; 1.70 or older
-;;		  'x-face-decode-message-header)
-;;	(require 'x-face-mule)
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'x-face-decode-message-header "x-face-mule")
+;;	      (add-hook 'mew-summary-display-message-filter-hook ;; 1.90
+;;			'x-face-decode-message-header)
+;;	      (add-hook 'mew-message-hook ;; 1.70 or older
+;;			'x-face-decode-message-header)))
 ;;
 ;;    [Mew 1.92]
 ;;	Add the following code in your ~/.emacs:
 ;;
-;;	(setq mew-opt-highlight-x-face t)
-;;	(setq mew-opt-highlight-x-face-function
-;;	      'x-face-decode-message-header)
-;;	(require 'x-face-mule)
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'x-face-decode-message-header "x-face-mule")
+;;	      (setq mew-opt-highlight-x-face t)
+;;	      (setq mew-opt-highlight-x-face-function
+;;		    'x-face-decode-message-header)))
 ;;
 ;;    [Mew 1.93 or later]
 ;;	Add the following code in your ~/.emacs:
 ;;
-;;	(setq mew-use-highlight-x-face t)
-;;	(setq mew-use-highlight-x-face-function
-;;	      'x-face-decode-message-header)
-;;	(require 'x-face-mule)
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'x-face-decode-message-header "x-face-mule")
+;;	      (setq mew-use-highlight-x-face t)
+;;	      (setq mew-use-highlight-x-face-function
+;;		    'x-face-decode-message-header)))
 
 ;; 3. Customization
 ;;
@@ -429,10 +437,11 @@ get hung up with it."
     (message "")))
 
 ;; hooks for saving cache (for Mew, cmail, mh-e, VM, Wanderlust).
-(mapcar
- (function (lambda (hook) (add-hook hook 'x-face-mule-save-cache-file)))
- '(mew-quit-hook cmail-quit-hook mh-quit-hook
-		 wl-folder-exit-hook wl-exit-hook kill-emacs-hook))
+(when window-system
+  (mapcar
+   (function (lambda (hook) (add-hook hook 'x-face-mule-save-cache-file)))
+   '(mew-quit-hook cmail-quit-hook mh-quit-hook
+		   wl-folder-exit-hook wl-exit-hook kill-emacs-hook)))
 
 
 ;;; Internal functions for decoding and displaying X-Face.
@@ -579,6 +588,9 @@ returns the begin-point of the x-face rectangle."
 	  (put-text-property beg (point) 'mime-view-entity mime-entity))))))))
 
 (defun x-face-mule-change-highlight-x-face-method-by-alist ()
+  "Modify displaying position or style by the following variables:
+ `x-face-mule-highlight-x-face-position-alist'
+ `x-face-mule-highlight-x-face-style-alist'"
   (when x-face-mule-highlight-x-face-position-alist
     (let ((position (cdr
 		     (assq major-mode
@@ -695,6 +707,7 @@ just the headers of the article."
 	))))
 
 (defun x-face-mule-highlight-header ()
+  "Highlight inline images and hide raw X-Face fields."
   (let ((inhibit-read-only t) buffer-read-only
 	start (end (point-min)))
     (while (and (setq start (text-property-any
@@ -725,20 +738,21 @@ just the headers of the article."
 
 (defun x-face-decode-message-header (&optional beg end)
   "Decode and show X-Face."
-  (save-restriction
-    (narrow-to-region (goto-char (or beg (point-min)))
-		      (or end (if (search-forward "\n\n" nil t)
-				  (point)
-				(point-max))))
-    (x-face-mule-x-face-decode-message-header-1)
-    (unless (or (and (boundp 'gnus-article-buffer)
-		     (eq (get-buffer gnus-article-buffer) (current-buffer)))
-		(and (boundp 'vm-message-pointer)
-		     (fboundp
-		      'x-face-mule-original-vm-energize-headers-and-xfaces)
-		     vm-message-pointer)
-		)
-      (x-face-mule-highlight-header))))
+  (when window-system
+    (save-restriction
+      (narrow-to-region (goto-char (or beg (point-min)))
+			(or end (if (search-forward "\n\n" nil t)
+				    (point)
+				  (point-max))))
+      (x-face-mule-x-face-decode-message-header-1)
+      (unless (or (and (boundp 'gnus-article-buffer)
+		       (eq (get-buffer gnus-article-buffer) (current-buffer)))
+		  (and (boundp 'vm-message-pointer)
+		       (fboundp
+			'x-face-mule-original-vm-energize-headers-and-xfaces)
+		       vm-message-pointer)
+		  )
+	(x-face-mule-highlight-header)))))
 
 
 ;;; Commands.
@@ -754,68 +768,74 @@ just the headers of the article."
 (defun x-face-mule-toggle-x-face-position (&optional arg)
   "Toggle position of showing X-Face."
   (interactive "P")
-  (let ((pos (cond ((eq x-face-mule-highlight-x-face-position 'from)
-		    'x-face)
-		   ((eq x-face-mule-highlight-x-face-position 'x-face)
-		    'off)
-		   (t 'from)))
-	(table '(("From:" . from) ("X-Face:" . x-face) ("Off" . off)))
-	(method (cdr
-		 (assq major-mode
-		       x-face-mule-highlight-x-face-refresh-method-alist)))
-	msg)
-    (setq x-face-mule-highlight-x-face-position
-	  (if arg
-	      (cdr (assoc (completing-read
-			   "Show X-Face at> " table nil t
-			   (concat (capitalize (symbol-name pos))
-				   (and (memq pos '(from x-face)) ":")))
-			  table))
-	    pos))
+  (if window-system
+      (let ((pos (cond ((eq x-face-mule-highlight-x-face-position 'from)
+			'x-face)
+		       ((eq x-face-mule-highlight-x-face-position 'x-face)
+			'off)
+		       (t 'from)))
+	    (table '(("From:" . from) ("X-Face:" . x-face) ("Off" . off)))
+	    (method (cdr
+		     (assq major-mode
+			   x-face-mule-highlight-x-face-refresh-method-alist)))
+	    msg)
+	(setq x-face-mule-highlight-x-face-position
+	      (if arg
+		  (cdr (assoc (completing-read
+			       "Show X-Face at> " table nil t
+			       (concat (capitalize (symbol-name pos))
+				       (and (memq pos '(from x-face)) ":")))
+			      table))
+		pos))
+	(when (interactive-p)
+	  (setq msg (cond
+		     ((eq x-face-mule-highlight-x-face-position 'from)
+		      "Show X-Face at From:")
+		     ((eq x-face-mule-highlight-x-face-position 'x-face)
+		      "Show X-Face at X-Face-Img:")
+		     (t "Don't Show X-Face")))
+	  (message "%s..." msg))
+	(when method
+	  (funcall method))
+	(when (interactive-p)
+	  (message "%s...done" msg)))
     (when (interactive-p)
-      (setq msg (cond
-		 ((eq x-face-mule-highlight-x-face-position 'from)
-		  "Show X-Face at From:")
-		 ((eq x-face-mule-highlight-x-face-position 'x-face)
-		  "Show X-Face at X-Face-Img:")
-		 (t "Don't Show X-Face")))
-      (message "%s..." msg))
-    (when method
-      (funcall method))
-    (when (interactive-p)
-      (message "%s...done" msg))))
+      (message "You're not under window system."))))
 
 ;;;###autoload
 (defun x-face-mule-toggle-x-face-style (&optional arg)
   "Toggle style of showing X-Face."
   (interactive "P")
-  (let ((style (cond ((eq x-face-mule-highlight-x-face-style 'default)
-		      'xmas)
+  (if window-system
+      (let ((style (cond ((eq x-face-mule-highlight-x-face-style 'default)
+			  'xmas)
+			 ((eq x-face-mule-highlight-x-face-style 'xmas)
+			  'default)))
+	    (table '(("Xmas" . xmas) ("Default" . default)))
+	    (method (cdr
+		     (assq major-mode
+			   x-face-mule-highlight-x-face-refresh-method-alist)))
+	    msg)
+	(setq x-face-mule-highlight-x-face-style
+	      (if arg
+		  (cdr (assoc (completing-read
+			       "Show X-Face style> " table nil t
+			       (capitalize (symbol-name style)))
+			      table))
+		style))
+	(when (interactive-p)
+	  (setq msg (cond
 		     ((eq x-face-mule-highlight-x-face-style 'xmas)
-		      'default)))
-	(table '(("Xmas" . xmas) ("Default" . default)))
-	(method (cdr
-		 (assq major-mode
-		       x-face-mule-highlight-x-face-refresh-method-alist)))
-	msg)
-    (setq x-face-mule-highlight-x-face-style
-	  (if arg
-	      (cdr (assoc (completing-read
-			   "Show X-Face style> " table nil t
-			   (capitalize (symbol-name style)))
-			  table))
-	    style))
+		      "Show X-Face in XEmacs style")
+		     ((eq x-face-mule-highlight-x-face-style 'default)
+		      "Show X-Face in default style")))
+	  (message "%s..." msg))
+	(when method
+	  (funcall method))
+	(when (interactive-p)
+	  (message "%s...done" msg)))
     (when (interactive-p)
-      (setq msg (cond
-		 ((eq x-face-mule-highlight-x-face-style 'xmas)
-		  "Show X-Face in XEmacs style")
-		 ((eq x-face-mule-highlight-x-face-style 'default)
-		  "Show X-Face in default style")))
-      (message "%s..." msg))
-    (when method
-      (funcall method))
-    (when (interactive-p)
-      (message "%s...done" msg))))
+      (message "You're not under window system."))))
 
 
 ;;; MUA dependencies.
@@ -823,14 +843,18 @@ just the headers of the article."
 
 ;; gnus
 (autoload 'x-face-mule-gnus-article-display-x-face "gnus-bitmap")
-(unless (boundp 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)
+(when (and
+       window-system
+       (not (boundp
+	     'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)))
   (autoload 'gnus-bitmap-redefine "gnus-bitmap")
   (eval-after-load "gnus" '(gnus-bitmap-redefine))
   (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))
 
 ;; VM
 (autoload 'vm-bitmap-redefine "vm-bitmap")
-(eval-after-load "vm" '(vm-bitmap-redefine))
+(when window-system
+  (eval-after-load "vm" '(vm-bitmap-redefine)))
 
 
 (provide 'x-face-mule)
