@@ -10,6 +10,7 @@ What's bitmap-mule?
     - bitmap.el:	kernel of bitmap-mule
     - bitmap-bi.el:	functions for Emacs 20.2 or earlier
     - bitmap-ci.el:	functions for Emacs 20.3 or later
+    - bm-utils.el:	utility functions.
     - po.el:		tiny BDF font editor
     - smiley-mule.el:	smiley faces encoder/decoder
     - x-face-mule.el:	inline X-Face decoder

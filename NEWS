@@ -4,6 +4,9 @@ Copyright (C) 1999,2000 Free Software Foundation, Inc.
 * Changes in BITMAP-MULE 8.3
 ============================
 
+** New function `lprogress-display'.
+Emulates the function which comes from XEmacs 21.2.32.
+
 ** BBDB(Big Brother Database) is supported.
 Display the `X-Face' images, In *BBDB* mode.
 

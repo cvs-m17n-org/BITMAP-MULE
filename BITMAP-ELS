@@ -10,7 +10,7 @@
 			     (subrp (symbol-function 'set-buffer-multibyte)))
 			'(bitmap-ci)
 		      '(bitmap-bi))
-		    '(bitmap x-face-mule smiley-mule po)
+		    '(bitmap bm-utils x-face-mule smiley-mule po)
 		    (if (>= emacs-major-version 19)
 			'(gnus-bitmap vm-bitmap)
 		      '(x-face-18))))))

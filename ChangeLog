@@ -1,3 +1,11 @@
+2000-03-28  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* BITMAP-ELS (bitmap-modules): Add `bm-utils'.
+
+	* bitmap.el: Autoload "bm-utils" for `lprogress-display'.
+
+	* bm-utils.el: New file.
+
 2000-03-15  KOSEKI Yoshinori  <kose@yk.NetLaputa.ne.jp>
 
 	* x-face-mule.el (x-face-mule-BBDB-display): New user option.

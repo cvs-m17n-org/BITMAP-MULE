@@ -201,6 +201,12 @@ of difinition of a character glyph in bdf file."
     ))
 
 
+;;; @ utilities
+;;;
+
+(autoload 'lprogress-display "bm-utils")
+
+
 ;;; @ end
 ;;;
 
