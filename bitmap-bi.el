@@ -26,7 +26,7 @@
 
 ;; Code:
 
-(require 'emu)
+(require 'poem)
 (eval-when-compile (require 'static))
 
 (static-cond

@@ -26,7 +26,7 @@
 
 ;; Code:
 
-(require 'emu)
+(require 'poem)
 
 (defvar bitmap-alterable-charset nil
   "*A symbol of a charset which will be used to a substitute for `bitmap'

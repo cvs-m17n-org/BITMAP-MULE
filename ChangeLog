@@ -1,3 +1,8 @@
+2001-02-23  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bitmap-ci.el: Require `poem' instead of `emu'.
+	* bitmap-bi.el: Ditto.
+
 2001-02-16  Tatsuya Yagi <yagi@is.titech.ac.jp>
 
 	* gnus-pointer.xbm: "gnus-pointer" -> "gnus_pointer".
