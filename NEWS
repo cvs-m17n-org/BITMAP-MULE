@@ -4,6 +4,10 @@ Copyright (C) 1999, 2000, 2001 Free Software Foundation, Inc.
 * Changes in BITMAP-MULE 8.5
 ============================
 
+** X-Face-Mule now supports a cache file also for Emacs 21.
+In addition, you can browse the cached X-Face images using the new
+command `x-face-mule-view-cache'.
+
 ** A patch for the released version of Emacs 21.1 is now available.
 It is included in the BITMAP-MULE distribution, named:
 

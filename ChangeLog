@@ -1,3 +1,11 @@
+2001-12-19  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (x-face-mule-view-cache): New command.
+	(x-face-mule-save-cache-file): Don't inhibit to work with Emacs 21;
+	don't use `prin1-to-string' for X-Face images.
+	(x-face-mule-load-cache-file): Make it can load a cache file using
+	Emacs 21 as well.
+
 2001-12-18  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bitmap-ci.el (defining the charset `bitmap'): Set the preferred
