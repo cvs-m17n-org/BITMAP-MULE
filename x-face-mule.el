@@ -12,7 +12,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/05/18
+;; Revised: 2000/05/31
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of bitmap-mule.
@@ -218,13 +218,7 @@ STRING should be given if the last search was by `string-match' on STRING.
   :group 'x-face-mule
   :type 'string)
 
-(defcustom uncompface-program-can-generate-xbm
-  (with-temp-buffer
-    (insert ",\\m{?h\\)X")
-    (call-process-region (point-min) (point-max)
-			 uncompface-program t t nil "-X")
-    (goto-char (point-min))
-    (looking-at "#define"))
+(defcustom uncompface-program-can-generate-xbm t
   "Non-nil declares \"uncompface\" can generate XBM format directly with
 the option \"-X\"."
   :group 'x-face-mule
@@ -474,7 +468,16 @@ get hung up with it."
 	    (cons
 	     string
 	     (if uncompface-program-can-generate-xbm
-		 (x-face-mule-convert-x-face-to-bitmap string)
+		 ;; Attempt to generate XBM format directly.
+		 (condition-case err
+		     (x-face-mule-convert-x-face-to-bitmap string)
+		   (error
+		    ;; Oops.
+		    (prog1
+			(x-face-mule-convert-icon-to-rectangle
+			 (x-face-mule-convert-x-face-to-icon string))
+		      (setq uncompface-program-can-generate-xbm nil)
+		      (message "%s" (cadr err)))))
 	       (x-face-mule-convert-icon-to-rectangle
 		(x-face-mule-convert-x-face-to-icon string)))))
       (setq x-face-mule-cache-modified-p t)
@@ -497,6 +500,10 @@ get hung up with it."
     (insert string)
     (call-process-region (point-min) (point-max)
 			 uncompface-program t t nil "-X")
+    (goto-char (point-min))
+    (unless (looking-at "#define")
+      (error "!! \"%s\" can not generate XBM format directly."
+	     uncompface-program))
     (let (ret)
       (mapcar
        (function (lambda (line)

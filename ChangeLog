@@ -1,3 +1,10 @@
+2000-05-31  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (x-face-mule-convert-x-face-to-rectangle): Set
+	`uncompface-program-can-generate-xbm' to nil and retry the
+	traditional way when `x-face-mule-convert-x-face-to-bitmap' failed.
+	(uncompface-program-can-generate-xbm): Default to t.
+
 2000-05-25  Tanaka Akira      <akr@m17n.org>
 
 	* README.en: Update for CVS via SSH.
