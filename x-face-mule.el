@@ -10,7 +10,7 @@
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Version: 0.27
 ;; Created: 1997/10/24
-;; Revised: 1999/08/24
+;; Revised: 1999/08/31
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -19,118 +19,108 @@
 ;; it under the terms of the GNU General Public License as published by
 ;; the Free Software Foundation; either version 2, or (at your option)
 ;; any later version.
-;;
+
 ;; This program is distributed in the hope that it will be useful,
 ;; but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;; GNU General Public License for more details.
-;;
+
 ;; You should have received a copy of the GNU General Public License
 ;; along with GNU Emacs; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;; [USAGE]
-;; 1. "bitmap-mule" package and related packages or
-;;    "bitmap.tar.gz" (etl version bitmap.el) are required.
-;;    also "compface.tar.gz" (uncompface) is required.
+;;; Usage.
 ;;
-;; 2. Setting
-;;    [SEMI-MUA, tm-MUA] i.e. Gnus, VM, cmail, mh-e
-;;    Add the following code in your ~/.emacs:
-;;
-;;    (require 'x-face-mule)
-;;
-;;    If you don't use mime-setup.el, semi-setup.el or tm-setup.el,
-;;    add also the following code in your ~/.emacs:
-;;
-;;    ;; tm user
-;;    (if window-system
-;;      (if (featurep 'tm-view)
-;;          (require 'tm-image)
-;;        (add-hook 'tm-view-load-hook (lambda () (require 'tm-image)))))
-;;    ;; SEMI user
-;;    (if window-system
-;;      (if (featurep 'mime-view)
-;;          (require 'mime-image)
-;;        (add-hook 'mime-view-load-hook (lambda () (require 'mime-image)))))
-;;
-;;    [before Mew 1.90]
-;;    Add the following code in your ~/.emacs:
-;;
-;;    (add-hook 'mew-summary-display-message-filter-hook ;; 1.90
-;;               'x-face-mule-x-face-decode-message-header)
-;;    (add-hook 'mew-message-hook ;; 1.70 or older
-;;              'x-face-mule-x-face-decode-message-header)
-;;    (require 'x-face-mule)
-;;
-;;    [Mew 1.92]
-;;    Add the following code in your ~/.emacs:
-;;
-;;    (setq mew-opt-highlight-x-face t)
-;;    (setq mew-opt-highlight-x-face-function
-;;          'x-face-mule-x-face-decode-message-header)
-;;    (require 'x-face-mule)
-;;
-;;    [Mew 1.93 or later]
-;;    Add the following code in your ~/.emacs:
-;;
-;;    (setq mew-use-highlight-x-face t)
-;;    (setq mew-use-highlight-x-face-function
-;;          'x-face-mule-x-face-decode-message-header)
-;;    (require 'x-face-mule)
-;;
+
+;; 1. Build and install `uncompface' program which is available from:
+
+;;	ftp://ftp.xemacs.org/pub/xemacs/aux/compface.tar.gz
+
+;;    It is one example of many.
+
+;; 2. Setting up
+
+;;    [SEMI-MUA, tm-MUA] i.e. cmail, gnus, mh-e, VM, etc.
+;;	There is nothing to be done.
+
 ;;    [Wanderlust]
-;;    Add the following code in your ~/.emacs:
+;;	Add the following code in your ~/.emacs:
+
+;;	(setq wl-highlight-x-face-func
+;;	      'x-face-mule-x-face-decode-message-header)
+;;	(require 'x-face-mule)
+
+;;    [before Mew 1.90]
+;;	Add the following code in your ~/.emacs:
+
+;;	(add-hook 'mew-summary-display-message-filter-hook ;; 1.90
+;;		  'x-face-mule-x-face-decode-message-header)
+;;	(add-hook 'mew-message-hook ;; 1.70 or older
+;;		  'x-face-mule-x-face-decode-message-header)
+;;	(require 'x-face-mule)
+
+;;    [Mew 1.92]
+;;	Add the following code in your ~/.emacs:
+
+;;	(setq mew-opt-highlight-x-face t)
+;;	(setq mew-opt-highlight-x-face-function
+;;	      'x-face-mule-x-face-decode-message-header)
+;;	(require 'x-face-mule)
+
+;;    [Mew 1.93 or later]
+;;	Add the following code in your ~/.emacs:
+
+;;	(setq mew-use-highlight-x-face t)
+;;	(setq mew-use-highlight-x-face-function
+;;	      'x-face-mule-x-face-decode-message-header)
+;;	(require 'x-face-mule)
+
+;; 3. Customization
+
+;;    * If you don't want to show X-Face at "From:" field,
+;;	add the following code in your ~/.emacs:
+
+;;	(setq x-face-mule-highlight-x-face-position 'x-face)
+
+;;	and you can show X-Face at "X-Face:" field.
+
+;;    * If you want to show X-Face like XEmacs style,
+;;	add the following code in ~/.eamcs:
+
+;;	(setq x-face-mule-highlight-x-face-style 'xmas)
+
+;;	But, this feature won't work well on some MUA...
 ;;
-;;    (setq wl-highlight-x-face-func
-;;          'x-face-mule-x-face-decode-message-header)
-;;    (require 'x-face-mule)
-;;
-;; 3. That's all!
-;;
-;; [CUSTOMIZATION]
-;; 1. If you don't want to show X-Face at "From:" field,
-;;    add the following code in your ~/.emacs
-;;    (setq x-face-mule-highlight-x-face-position 'x-face)
-;;    and you can show X-Face at "X-Face:" field.
-;;
-;; 2. If you want to show X-Face like XEmacs style,
-;;    add the following code in ~/.eamcs.
-;;    (setq x-face-mule-highlight-x-face-style 'xmas)
-;;
-;;    But, this feature won't work well on some MUA...
-;;
-;; 3. Other features, please read this file...
-;;
-;; [USER FUNCTION]
-;; (x-face-mule-toggle-x-face-position) toggle show position.
-;;                                    from->x-face->nil->from...
-;; (x-face-mule-toggle-x-face-style) toggle show style.
-;;                                    default->xmas->default->...
-;;
-;; [KNOWN BUGS & TODO]
-;; 1. same x-face saved in cache file.
-;;
-;; [THANKS TO]
-;; OKUNISHI Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
-;; Yuuichi Teranishi <teranisi@gohome.org>
-;; TSUMURA Tomoaki <tsumura@kuis.kyoto-u.ac.jp>
-;; Shiono@FSC <jun@fsc.fsas.fujitsu.co.jp>
-;; Kazuhiro Ohta <ohta@ele.cst.nihon-u.ac.jp>
-;; Tatsuya Ichikawa <ichikawa@erc.epson.com>
+;;    * Other features, please read this file...
+
+;; 4. User commands
+
+;; `x-face-mule-toggle-x-face-position'
+;;	toggle show position.  from->x-face->nil->from...
+
+;; `x-face-mule-toggle-x-face-style'
+;;	toggle show style.  default->xmas->default->...
+
+;; 5. Known bugs & todo
+
+;;    * same x-face saved in cache file.
+
+;; 6. Thanks to the following people have contributed many patches
+;;    and suggestions:
+
+;; OKUNISHI Fujikazu   <fuji0924@mbox.kyoto-inet.or.jp>
+;; Yuuichi Teranishi   <teranisi@gohome.org>
+;; TSUMURA Tomoaki     <tsumura@kuis.kyoto-u.ac.jp>
+;; Shiono@FSC          <jun@fsc.fsas.fujitsu.co.jp>
+;; Kazuhiro Ohta       <ohta@ele.cst.nihon-u.ac.jp>
+;; Tatsuya Ichikawa    <ichikawa@erc.epson.com>
 ;; Shigeyuki FUKUSHIMA <shige@kuis.kyoto-u.ac.jp>
-;; Hideyuki SHIRAI <Shirai@rdmg.mgcs.mei.co.jp>
-;; Koichiro Ohba <Koichiro.Ohba@nf-system.co.jp>
+;; Hideyuki SHIRAI     <Shirai@rdmg.mgcs.mei.co.jp>
+;; Koichiro Ohba       <Koichiro.Ohba@nf-system.co.jp>
+
 
 ;;; Code:
-(eval-and-compile
-  ;; XEmacs check.
-  (if (featurep 'xemacs)
-      (error "X-Face-Mule does not support XEmacs!"))
-  ;; Mule feature check.
-  (or (featurep 'mule)
-      (error "X-Face-Mule only supports Emasen with Mule feature!")))
 
 (defconst x-face-mule-version-number "0.27")
 (defconst x-face-mule-version
@@ -194,11 +184,10 @@ STRING should be given if the last search was by `string-match' on STRING.
      mew-summary-display
      mh-show-msg
      mime-entity-header-buffer
-     mime-view-mode
      tm-mh-e/show)))
 
 (defgroup x-face-mule nil
-  "show X-Face inline for Emacs/Mule."
+  "Show X-Face inline for Emacs/Mule."
   :prefix 'x-face-mule
   :group 'news
   :group 'mail)
@@ -210,6 +199,10 @@ STRING should be given if the last search was by `string-match' on STRING.
   :group 'x-face-mule
   :type 'string)
 
+;; Compatibility.
+(defvar uncompface-program (symbol-value 'x-face-mule-uncompface-program))
+(make-obsolete-variable 'uncompface-program 'x-face-mule-uncompface-program)
+
 (defcustom x-face-mule-highlight-x-face-position 'from
   "This variable says where X-Face is shown.
 `from' at From: field, `x-face' at X-Face: field, `off' don't show."
@@ -219,7 +212,7 @@ STRING should be given if the last search was by `string-match' on STRING.
 		(const off)))
 
 (defcustom x-face-mule-highlight-x-face-style 'default
-  "Variable used for setting style for howing X-Face.
+  "Variable used for setting style for showing X-Face.
 When `default' is set, show like this:
 From:xxxxxx
      xxxxxx
@@ -243,14 +236,14 @@ From:xxxxxx Foo Bar <foobar@someware.org>"
 A format is like this:
 
 \(setq x-face-mule-highlight-x-face-position-alist
-      '((mew-message-mode . from)
-	(mime-view-mode . x-face)))"
+      '((gnus-article-mode . from)
+	(gnus-original-article-mode . off)))"
   :group 'x-face-mule
   :type '(repeat (cons :format "%v" (symbol :tag "MAJOR-MODE")
 		       (radio :format "POSITION: %v "
 			      (const :format "%v " from)
 			      (const :format "%v " x-face)
-			      (variable-item off)))))
+			      (const off)))))
 
 (defcustom x-face-mule-highlight-x-face-style-alist nil
   "If non-nil, x-face-style is changed by major-mode.
@@ -258,7 +251,7 @@ A format is like this:
 
 \(setq x-face-mule-highlight-x-face-style-alist
       '((mew-message-mode . xmas)
-	(mime-view-mode . default)))"
+	(gnus-article-mode . default)))"
   :group 'x-face-mule
   :type '(repeat (cons :format "%v" (symbol :tag "MAJOR-MODE")
 		       (radio :format "STYLE: %v"
@@ -267,6 +260,11 @@ A format is like this:
 
 (defcustom x-face-mule-highlight-x-face-refresh-method-alist
   (list
+   (cons 'cmail-summary-mode	(function
+				 (lambda ()
+				   (cmail-show-contents
+				    (cmail-get-page-number-from-summary)))))
+   (cons 'wl-summary-mode	(function wl-summary-redisplay))
    (cons 'mew-summary-mode	(function
 				 (lambda ()
 				   (condition-case nil
@@ -283,10 +281,6 @@ A format is like this:
 				     (wrong-number-of-arguments
 				      ;; 1.94b20 or later.
 				      (mew-summary-display t))))))
-   (cons 'cmail-summary-mode	(function
-				 (lambda ()
-				   (cmail-show-contents
-				    (cmail-get-page-number-from-summary)))))
    (cons 'mh-folder-mode	(function
 				 (lambda ()
 				   (cond ((fboundp (quote emh-show))
@@ -294,19 +288,6 @@ A format is like this:
 					 ((fboundp (quote tm-mh-e/show))
 					  (tm-mh-e/show))
 					 (t (mh-show-msg nil))))))
-   (cons 'mime-view-mode	(function
-				 (lambda ()
-				   (let ((name (buffer-name))
-					 (buffer (mime-entity-header-buffer
-						  (get-text-property
-						   (point-min)
-						   'mime-view-entity))))
-				     (when buffer
-				       (set-buffer buffer)
-				       (mime-view-mode
-					nil nil nil (buffer-name)
-					name (current-local-map)))))))
-   '(wl-summary-mode . wl-summary-redisplay)
    )
   "Alist for refreshing message-buffer.
 Format:
@@ -357,7 +338,8 @@ get hung up with it."
   :group 'x-face-mule
   :type 'sexp)
 
-(defcustom x-face-mule-highlight-x-face-face 'x-face-mule-highlight-x-face-face
+(defcustom x-face-mule-highlight-x-face-face
+  'x-face-mule-highlight-x-face-face
   "Face used for highlighting X-Face in the article buffer."
   :group 'x-face-mule
   :type 'face)
@@ -374,7 +356,8 @@ get hung up with it."
   "X-Face face."
   :group 'x-face-mule)
 
-(unless (face-foreground 'x-face-mule-highlight-x-face-face)
+(unless (or (face-foreground 'x-face-mule-highlight-x-face-face)
+	    (face-background 'x-face-mule-highlight-x-face-face))
   (set-face-foreground 'x-face-mule-highlight-x-face-face "Black")
   (set-face-background 'x-face-mule-highlight-x-face-face "White"))
 
@@ -400,28 +383,53 @@ get hung up with it."
   "Load X-Face cache file."
   (when (and x-face-mule-use-cache-file
 	     (file-exists-p x-face-mule-cache-file))
-    (with-temp-buffer
-      (let ((coding-system-for-read x-face-mule-image-file-coding-system)
-	    (file-coding-system-for-read x-face-mule-image-file-coding-system)
-	    (input-coding-system x-face-mule-image-file-coding-system))
-	(insert-file-contents x-face-mule-cache-file))
-      (setq x-face-mule-x-face-to-rectangle-cache (read (current-buffer))))))
+    (setq x-face-mule-x-face-to-rectangle-cache
+	  (mapcar
+	   (function (lambda (data)
+		       (let ((string (car data)))
+			 (set-text-properties 0 (length string) nil string)
+			 (cons string (cdr data)))))
+	   (with-temp-buffer
+	     (insert-file-contents-as-coding-system
+	      x-face-mule-image-file-coding-system x-face-mule-cache-file)
+	     (condition-case nil
+		 (read (current-buffer))
+	       (error nil)))))))
 
 (defun x-face-mule-save-cache-file ()
   "Save X-Face cache file."
-  (when (and x-face-mule-use-cache-file
-	     x-face-mule-cache-file
-	     x-face-mule-x-face-to-rectangle-cache)
-    (with-temp-buffer
-      (set-buffer-file-coding-system x-face-mule-image-file-coding-system)
-      (prin1 x-face-mule-x-face-to-rectangle-cache (current-buffer))
-      (when (and x-face-mule-cache-modified-p
-		 (or x-face-mule-force-save-cache-file
-		     (prog1
-			 (y-or-n-p "Save X-Face cache now? ")
-		       (message " "))))
-	(write-file x-face-mule-cache-file)
-	(setq x-face-mule-cache-modified-p nil)))))
+  (if (and x-face-mule-cache-modified-p
+	   x-face-mule-x-face-to-rectangle-cache
+	   x-face-mule-use-cache-file
+	   x-face-mule-cache-file
+	   (or x-face-mule-force-save-cache-file
+	       (y-or-n-p "Save X-Face cache now? ")))
+      (let ((name (file-name-nondirectory x-face-mule-cache-file))
+	    (cache x-face-mule-x-face-to-rectangle-cache)
+	    eol data)
+	(with-temp-buffer
+	  (insert ";; This file is generated automatically by X-Face-Mule "
+		  x-face-mule-version-number ".")
+	  (setq eol (current-column))
+	  (goto-char (point-min))
+	  (insert ";; " name)
+	  (insert-char ?\  (max 1 (- eol 29 (current-column))))
+	  (insert "-*- coding: iso-2022-7bit -*-\n")
+	  (goto-char (point-max))
+	  (insert "\n\n(\n ")
+	  (while (setq data (pop cache))
+	    (insert "(" (prin1-to-string (car data)) "\n")
+	    (while (setq data (cdr data))
+	      (insert "  " (prin1-to-string (car data))
+		      (if (> (length data) 1)
+			  "\n"
+			")\n "))))
+	  (insert ")\n\n;; " name " ends here\n")
+	  (write-region-as-coding-system x-face-mule-image-file-coding-system
+					 (point-min) (point-max)
+					 x-face-mule-cache-file)
+	  (setq x-face-mule-cache-modified-p nil)))
+    (message "")))
 
 ;; hooks for saving cache (for Mew, cmail, mh-e, VM, Wanderlust).
 (mapcar
@@ -434,7 +442,7 @@ get hung up with it."
 ;;
 
 (defun x-face-mule-convert-x-face-to-rectangle (string)
-  "convert x-face string to rectangle using cache."
+  "Convert x-face string to rectangle using cache."
   (unless x-face-mule-cache-file-loaded-p
     (x-face-mule-load-cache-file)
     (setq x-face-mule-cache-file-loaded-p t))
@@ -451,15 +459,16 @@ get hung up with it."
     (cdr data)))
 
 (defun x-face-mule-convert-x-face-to-icon (string)
-  "decode x-face string to UNIX ICON."
+  "Decode x-face string to UNIX ICON."
   (with-temp-buffer
     (insert string)
-    (call-process-region (point-min) (point-max)
-			 x-face-mule-uncompface-program t t nil)
-    (buffer-substring (point-min) (point-max))))
+    (as-binary-process
+     (call-process-region (point-min) (point-max)
+			  x-face-mule-uncompface-program t t nil))
+    (buffer-string)))
 
 (defun x-face-mule-convert-vector-to-rectangle (vector)
-  "make x-face rectangle from vector."
+  "Make x-face rectangle from vector."
   (let ((ret nil) (i 0))
     (while (< i 3)
       (let* ((line "") (k (* i 6)) (k+6 (+ k 6)))
@@ -471,7 +480,7 @@ get hung up with it."
     ret))
 
 (defun x-face-mule-convert-icon-to-rectangle (icon)
-  "decode UNIX ICON to rectangle."
+  "Decode UNIX ICON to rectangle."
   (let ((i 0) (cmp (make-vector 18 nil)))
     (with-temp-buffer
       (insert icon)
@@ -516,7 +525,7 @@ get hung up with it."
   (insert "     "))
 
 (defun x-face-mule-x-face-allocate-lines (beg end height)
-  "allocate new lines according to x-face-mule-highlight-x-face-position.
+  "Allocate new lines according to x-face-mule-highlight-x-face-position.
 returns the begin-point of the x-face rectangle."
   (let ((n 1)
 	from
@@ -712,6 +721,11 @@ just the headers of the article."
 			   (1+ end);; Include the last newline.
 			   x-face-mule-hidden-properties))))
 
+;; Compatibility.
+(define-obsolete-function-alias
+  (function x-face-decode-message-header)
+  (function x-face-mule-x-face-decode-message-header))
+
 (defun x-face-mule-x-face-decode-message-header (&optional beg end)
   "Decode and show X-Face."
   (save-restriction
@@ -728,13 +742,6 @@ just the headers of the article."
 		     vm-message-pointer)
 		)
       (x-face-mule-highlight-header))))
-
-
-;;; Compatibility.
-;;
-
-(fset 'x-face-mule:x-face-decode-message-header
-      (symbol-function 'x-face-mule-x-face-decode-message-header))
 
 
 ;;; Commands.
@@ -826,12 +833,6 @@ just the headers of the article."
 ;; VM
 (autoload 'vm-bitmap-redefine "vm-bitmap")
 (eval-after-load "vm" '(vm-bitmap-redefine))
-
-
-;; emulate `bitmap-mule/x-face-mule.el'.
-(defvar uncompface-program (symbol-value 'x-face-mule-uncompface-program))
-(fset 'x-face-decode-message-header
-      (symbol-function 'x-face-mule-x-face-decode-message-header))
 
 
 (provide 'x-face-mule)
