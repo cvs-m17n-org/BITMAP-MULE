@@ -15,6 +15,19 @@ startup (normally .emacs) file:
    (setq bitmap-alterable-charset 'tibetan-1-column)
    (require 'bitmap)
 
+Otherwise, you can load "bitmap" before "un-define" by setting the
+variable `bitmap-use-alterable-charset-anyway' to non-nil as follows:
+
+   (setq bitmap-alterable-charset 'indian-1-column)
+   (setq bitmap-use-alterable-charset-anyway t)
+   (require 'bitmap)
+   (require 'un-define)
+
+Note that the variable `bitmap-alterable-charset' did not exist in
+BITMAP-MULE versions earlier than 8.4, and the variable
+`bitmap-use-alterable-charset-anyway' did not exist in BITMAP-MULE
+versions prior to 8.5.
+
 
 What's BITMAP-MULE?
 ===================

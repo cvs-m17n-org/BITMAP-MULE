@@ -1,3 +1,11 @@
+2001-09-10  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (bbdb-display-records-1): Don't call
+	`x-face-mule-BBDB-one-record'.
+	(x-face-mule-BBDB-one-record): Rewrite to make it work with BBDB
+	v2.33 and later.
+	(x-face-mule-BBDB-buffer): Ditto.
+
 2001-08-31  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bitmap-ci.el (TopLevel): Don't use `dolist'.

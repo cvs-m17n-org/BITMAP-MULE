@@ -13,7 +13,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2001/06/25
+;; Revised: 2001/09/10
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of BITMAP-MULE.
@@ -924,59 +924,95 @@ just the headers of the article."
 ;;; BBDB
 ;;
 (defvar x-face-mule-BBDB-display (locate-library "bbdb")
-  "*If non-nil, display X-Face")
+  "*If non-nil, display X-Faces in *BBDB* buffer.")
 
 (eval-and-compile
   (autoload 'bbdb-current-record "bbdb-com")
-  (autoload 'bbdb-record-getprop "bbdb"))
+  (autoload 'bbdb-record-getprop "bbdb")
+  (autoload 'bbdb-record-name "bbdb"))
 
 ;; Byte-compiler warning.
 (defvar bbdb-buffer-name)
 
 (defun x-face-mule-BBDB-buffer ()
-  "Display X-Face in *BBDB* buffer."
-  (interactive)
-  (if (and x-face-mule-BBDB-display
-	   (get-buffer bbdb-buffer-name)
-	   (set-buffer bbdb-buffer-name))
-      (save-excursion
-	(while (re-search-forward "^[^ \t\n]" nil t)
-	  (x-face-mule-BBDB-one-record)))))
+  "Display X-Faces in *BBDB* buffer."
+  (when (and x-face-mule-BBDB-display
+	     (get-buffer bbdb-buffer-name))
+    (save-excursion
+      (let ((inhibit-point-motion-hooks t))
+	(set-buffer bbdb-buffer-name)
+	(goto-char (point-min))
+	(while
+	    (progn
+	      (while (and (not (eobp))
+			  (or (get-text-property (point) 'intangible)
+			      (get-text-property (point)
+						 'x-face-mule-processed-mark)
+			      (memq (following-char) '(?\t ?\n ?\ ))))
+		(forward-line 1))
+	      (not (eobp)))
+	  (x-face-mule-BBDB-one-record t)
+	  (forward-line 1))))))
 
-(defun x-face-mule-BBDB-one-record ()
-  "Display X-Face in *BBDB* one recode."
-  (interactive)
-  (save-excursion
-    (beginning-of-line)
-    (while (not (or (eobp) (bobp) (looking-at "^[^ \t\n]")))
-      (forward-line -1))
-    (forward-line)
-    (let ((sfaces (let ((record (bbdb-current-record)))
-		    (when record
-		      (bbdb-record-getprop record 'face))))
-	  (home (point))
+(defun x-face-mule-BBDB-one-record (&optional beginning-of-record)
+  "Display X-Face in *BBDB* one recode.  Optional BEGINNING-OF-RECORD
+means that the current position is the beginning of a record."
+  (when x-face-mule-BBDB-display
+    (unless beginning-of-record
+      (beginning-of-line)
+      (if (looking-at "[\t\n ]*$")
+	  (while (and (not (eobp))
+		      (memq (following-char) '(?\t ?\n ?\ )))
+	    (forward-line 1))
+	(while (and (not (bobp))
+		    (memq (following-char) '(?\t ?\n ?\ )))
+	  (forward-line -1))))
+    (let ((home (point))
+	  (record (bbdb-current-record))
 	  (inhibit-read-only t)
-	  xfaces)
-      (when (let (beg)
-	      (and sfaces
-		   (re-search-forward "^[ ]+face: " nil t)
-		   (setq beg (match-beginning 0))
-		   (not (get-text-property beg 'invisible))
-		   (re-search-forward "^[ ]+[^:]+: \\|\n\n" nil t)
-		   (not (put-text-property beg (match-beginning 0)
-					   'invisible t))))
+	  start sfaces xface xfaces)
+      (when (and record
+		 (setq sfaces (bbdb-record-getprop record 'face)))
+	(message "Extracting X-Face(s) for %s..." (bbdb-record-name record))
+	(while (not (looking-at "[\t ]+face:"))
+	  (forward-line 1))
+	(unless (get-text-property (point) 'invisible)
+	  (setq start (point))
+	  (while (progn
+		   (forward-line 1)
+		   (not (or (looking-at "\
+\[^\t\n ]\\|[\t ]+[^\t\n :]+:\\([\t ]\\|[\t ]*$\\)")
+			    (eobp)))))
+	  (put-text-property start (point) 'invisible t))
+	(setq start 0)
+	(while (string-match "\\([^\t\n\v\f\r ]+\\)[\t\n\v\f\r ]*"
+			     sfaces start)
+	  (when (setq start (match-end 0)
+		      xface (x-face-mule-convert-x-face-to-rectangle
+			     (substring sfaces
+					(match-beginning 1) (match-end 1))))
+	    (setq xfaces (nconc xfaces (list xface)))))
 	(goto-char home)
-	(let (xface match-end)
-	  (while (string-match "[^\n]+\n?" sfaces)
-	    (and (setq xface (x-face-mule-convert-x-face-to-rectangle
-			      (substring sfaces
-					 (match-beginning 0)
-					 (setq match-end (match-end 0)))))
-		 (setq xfaces (nconc xfaces (list xface))))
-	    (setq sfaces (substring sfaces match-end))))
 	(let ((len (length xfaces))
 	      (i 0)
-	      j pos overlay)
+	      j pos overlays overlay)
+	  (if (bobp)
+	      (progn
+		(insert "\n")
+		(backward-char 1)
+		(setq overlays (overlays-at (point)))
+		(while overlays
+		  (setq overlay (car overlays)
+			overlays (cdr overlays))
+		  (move-overlay overlay
+				(1+ (overlay-start overlay))
+				(overlay-end overlay))))
+	    (backward-char 1)
+	    (when (prog1
+		      (get-text-property (point) 'invisible)
+		    (insert "\n"))
+	      (put-text-property (1- (point)) (point) 'invisible t)
+	      (put-text-property (point) (1+ (point)) 'invisible nil)))
 	  (while (> 3 i)
 	    (setq j 0)
 	    (while (> len j)
@@ -987,19 +1023,35 @@ just the headers of the article."
 	      (overlay-put overlay 'face x-face-mule-highlight-x-face-face)
 	      (overlay-put overlay 'evaporate t)
 	      (incf j))
-	    (insert "\n")
-	    (incf i)))
-	(forward-line)
-	(put-text-property home (point) 'intangible t)))))
+	    (incf i)
+	    (when (> 3 i)
+	      (insert "\n"))))
+	(forward-line 1)
+	(put-text-property home (point) 'intangible t)
+	(put-text-property (point) (1+ (point))
+			   'x-face-mule-processed-mark t)))))
 
 ;;; BBDB Setup.
 ;;
 
-(if x-face-mule-BBDB-display
-    (progn
-      (defadvice bbdb-display-records-1
-	(after x-face-mule-BBDB-buffer activate) (x-face-mule-BBDB-buffer))
-      (add-hook 'bbdb-list-hook 'x-face-mule-BBDB-one-record)))
+(let (current-load-list)
+  (defadvice bbdb-display-records-1 (around x-face-mule-BBDB-buffer activate)
+    "Display X-Faces in *BBDB* buffer."
+    (let ((silent (or (and (boundp 'bbdb-gag-messages)
+			   (symbol-value 'bbdb-gag-messages))
+		      (and (boundp 'bbdb-silent-running)
+			   (symbol-value 'bbdb-silent-running)))))
+      (unless silent
+	(message "Formatting..."))
+      (let ((bbdb-silent-running t)
+	    (bbdb-list-hook bbdb-list-hook))
+	(remove-hook 'bbdb-list-hook 'x-face-mule-BBDB-one-record)
+	ad-do-it)
+      (x-face-mule-BBDB-buffer)
+      (unless silent
+	(message "Formatting...done")))))
+
+(add-hook 'bbdb-list-hook 'x-face-mule-BBDB-one-record)
 
 (provide 'x-face-mule)
 
