@@ -209,7 +209,9 @@ of difinition of a character glyph in bdf file."
 ;;; @ utilities
 ;;;
 
+(autoload 'progress-feedback-with-label "bm-utils")
 (autoload 'lprogress-display "bm-utils")
+(make-obsolete 'lprogress-display 'progress-feedback-with-label)
 
 (defun bitmap-recompose (string rotation)
   "Return a recomposed string of composite characters.  Each characters will
