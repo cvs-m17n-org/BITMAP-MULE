@@ -3,8 +3,8 @@
 #
 
 PACKAGE = bitmap-mule
-API	= 7
-RELEASE = 19
+API	= 8
+RELEASE = 0
 
 TAR	= tar
 RM	= /bin/rm -f

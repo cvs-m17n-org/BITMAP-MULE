@@ -1,3 +1,13 @@
+1999-11-01  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (x-face-mule-version, x-face-mule-version-number):
+	Remove variables and function.
+
+	* po.el: Remove RCS magic cookie.
+
+	* gnus-bitmap.el: Change directory to "../bitmap-mule/" when
+	compiling in tm-8 package.
+
 1999-10-29  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (vm-bitmap-redefine, gnus-bitmap-redefine): Don't
