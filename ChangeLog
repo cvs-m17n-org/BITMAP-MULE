@@ -1,3 +1,20 @@
+1999-12-24  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (x-face-mule-convert-x-face-to-rectangle): Use
+	`x-face-mule-convert-x-face-to-bitmap' if the value of
+	`uncompface-program-can-generate-xbm' is non-nil, otherwise as in
+	the past.
+	(uncompface-program-can-generate-xbm): New user option.
+
+	* compface-1.2.patch: New file for fixing a bug in compface-1.2.
+
+1999-12-22  OKUNISHI -GTO- Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+
+	* x-face-mule.el (x-face-mule-convert-x-face-to-bitmap): New
+	function using "uncompface" program with the option "-X".
+	(x-face-mule-convert-x-face-to-rectangle): Use it.
+
+
 1999-12-16  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* BITMAP-MULE: Version 8.1 was released.
