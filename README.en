@@ -1,6 +1,6 @@
 [README for bitmap-mule (English Version)]
 by MORIOKA Tomohiko <morioka@jaist.ac.jp>
-$Id: README.en,v 1.2 1997-07-01 14:32:13 morioka Exp $
+$Id: README.en,v 1.3 1998-03-08 22:43:19 shuhei-k Exp $
 
 What's bitmap-mule?
 -------------------
@@ -66,10 +66,7 @@ Bug reports
 
   Via the tm ML, you can report tm bugs, obtain the latest release of
   tm, and discuss future enhancements to tm. To join the tm ML, send
-  e-mail to
+  an empty e-mail to
 
-	tm-ja-admin@chamonix.jaist.ac.jp	(Japanese)
-	tm-en-admin@chamonix.jaist.ac.jp	(English)
-
-  Since the user registration is done manually, please write the mail
-  body in human-recognizable language (^_^).
+	tm-en-help@chamonix.jaist.ac.jp	(English)
+	tm-ja-help@chamonix.jaist.ac.jp	(Japanese)
