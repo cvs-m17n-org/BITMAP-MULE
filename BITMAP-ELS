@@ -1,7 +1,6 @@
 ;;; -*-Emacs-Lisp-*-
-;;;
-;;; $Id: BITMAP-ELS,v 1.2 1998-04-17 14:08:56 morioka Exp $
-;;;
+
+;; BITMAP-ELS: list of bitmap-mule modules to install
 
 (setq bitmap-modules
       (if (featurep 'mule)
