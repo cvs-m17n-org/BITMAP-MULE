@@ -4,7 +4,7 @@
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 2000/03/28
-;; Revised: 2000/03/29
+;; Revised: 2000/03/30
 ;; Keywords: bitmap, lprogress-display
 
 ;; This file is part of bitmap-mule.
@@ -32,7 +32,9 @@
   "*If it is non-nil, progress display will be textual.")
 
 (defvar bitmap-special-symbol-alist
-  (list (cons ?- (bitmap-compose "000000000000003C7800000000000000"))
+  (list '(?  . " ")
+	(cons ?% (bitmap-compose "00000000007A4A4C4C781E3232525E00"))
+	(cons ?- (bitmap-compose "000000000000003C7800000000000000"))
 	(cons ?0 (bitmap-compose "007CBAC6C6C6C2800286C6C6C6BA7C00"))
 	(cons ?1 (bitmap-compose "00000206060602000206060606020000"))
 	(cons ?2 (bitmap-compose "007C3A060606023C7880C0C0C0B87C00"))
@@ -66,52 +68,50 @@
   "Print a progress gauge and message in the echo area.
 First argument LABEL is ignored.  The rest of the arguments are
 the same as to `format'.  [XEmacs 21.2.32 emulating function]"
-  (if (or (not (and (natnump value) (<= value 100)))
-	  (and (null fmt) (null args)))
-      (message "")
-    (let ((msg (apply 'format fmt args)))
-      (if (or (not window-system)
-	      (< emacs-major-version 20)
-	      bitmap-lprogress-display-textual)
-	  (message "%s%s%s"
-		   msg (make-string (/ value 5) ?.)
-		   (if (eq 100 value) "done" ""))
-	(let ((msgmax (- (window-width (minibuffer-window)) 35)))
-	  (cond ((< msgmax 0)
-		 (setq msg (make-string (max 0 (+ 3 msgmax)) ? )))
-		((> (string-width msg) msgmax)
-		 (setq msg (truncate-string msg msgmax)
-		       msg (concat
-			    msg "..."
-			    (make-string (- msgmax (string-width msg)) ? ))))
-		(t
-		 (setq msg (concat
-			    msg
-			    (make-string (+ 3 (- msgmax (string-width msg)))
-					 ? ))))))
-	(let ((cursor-in-echo-area t))
-	  (message "%s%s%s%s%s%s%s"
-		   msg
-		   (car bitmap-lprogress-backgrounds)
-		   (make-string (/ value 4)
-				(nth 1 bitmap-lprogress-backgrounds))
-		   (if (zerop (% value 4))
-		       ""
-		     (nth (1- (% value 4)) bitmap-lprogress-data))
-		   (make-string (- 25 (/ (+ 3 value) 4))
-				(nth 2 bitmap-lprogress-backgrounds))
-		   (nth 3 bitmap-lprogress-backgrounds)
-		   (bitmap-string-to-special-symbols
-		    (format "%3d%%" value))))))))
+  (if (and (integerp value) fmt)
+      (let ((msg (apply 'format fmt args))
+	    (val (abs value)))
+	(if (> val 100)
+	    (if (zerop (setq val (% val 100)))
+		(setq vall 100)))
+	(if (or (not window-system)
+		(< emacs-major-version 20)
+		bitmap-lprogress-display-textual)
+	    (message "%s%s%s"
+		     msg (make-string (/ val 5) ?.)
+		     (if (eq 100 value) "done" ""))
+	  (let ((msgmax
+		 (max 0
+		      (- (window-width (minibuffer-window))
+			 29 (max 3 (string-width (number-to-string value))))))
+		(cursor-in-echo-area t))
+	    (message
+	     (concat "%-" (number-to-string msgmax) "s%s%s%s%s%s%s")
+	     (cond ((zerop msgmax) "")
+		   ((> (string-width msg) msgmax)
+		    (if (<= msgmax 3)
+			""
+		      (concat (truncate-string msg (- msgmax 3)) "...")))
+		   (t msg))
+	     (car bitmap-lprogress-backgrounds)
+	     (make-string (/ val 4) (nth 1 bitmap-lprogress-backgrounds))
+	     (if (zerop (% val 4))
+		 ""
+	       (nth (1- (% val 4)) bitmap-lprogress-data))
+	     (make-string (- 25 (/ (+ 3 val) 4))
+			  (nth 2 bitmap-lprogress-backgrounds))
+	     (nth 3 bitmap-lprogress-backgrounds)
+	     (bitmap-string-to-special-symbols (format "%3d%%" value))))))
+    (message "")))
 
 (defalias 'lprogress-display 'bitmap-lprogress-display)
 
 ;;(defun lprogress-display-test ()
 ;;  (interactive)
-;;  (let ((bitmap-lprogress-display-textual)
-;;	(n 0)
+;;  (let ((bitmap-lprogress-display-textual nil)
+;;	(n -20)
 ;;	(textual (not (and window-system (>= emacs-major-version 20)))))
-;;    (while (< n 100)
+;;    (while (< n 120)
 ;;      (if textual
 ;;	  (lprogress-display nil "Processing" n)
 ;;	(lprogress-display nil "Processing..." n))

@@ -1,3 +1,8 @@
+2000-03-30  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bm-utils.el (bitmap-lprogress-display): Allow all integers.
+	(bitmap-special-symbol-alist): Add " " and "%".
+
 2000-03-29  Yuuichi Teranishi  <teranisi@gohome.org>
 
 	* x-face-mule.el (x-face-mule-BBDB-one-record):
