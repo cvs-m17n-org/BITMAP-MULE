@@ -1,45 +1,46 @@
 ;; x-face-mule.el -- X-Face decoder for MULE.
 
-;; Copyright (C) 1996 UENO Hiroshi
-;; Copyright (C) 1996 MORIOKA Tomohiko
+;; Copyright (C) 1996 Free Software Foundation, Inc.
 
 ;; Author: Hiroshi Ueno <jl07715@yamato.ibm.co.jp>
 ;;	   MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Version:
-;;	$Id: x-face-mule.el,v 1.3 1996-08-01 06:35:59 morioka Exp $
+;;	$Id: x-face-mule.el,v 1.4 1996-08-28 13:18:18 morioka Exp $
 ;; Keywords: X-Face, bitmap, MULE
 
 ;; This file is part of tl (Tiny Library).
 
-;; This program is free software; you can redistribute it and/or modify
-;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2, or (at
+;; your option) any later version.
 
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
 
 ;; You should have received a copy of the GNU General Public License
-;; along with this program; if not, write to the Free Software
-;; Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+;; along with this program; see the file COPYING.  If not, write to
+;; the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+;; Boston, MA 02111-1307, USA.
 
 ;; Code:
 
-(require 'tl-822)
+(require 'std11)
 (require 'bitmap)
 
-(defvar uncompface-program "uncompface")
+(defvar uncompface-program "uncompface"
+  "*Program to decode X-Face. [x-face-mule.el]")
 
 (defun x-face-decode-message-header ()
   (save-restriction
-    (rfc822/narrow-to-header)
+    (std11-narrow-to-header)
     (goto-char (point-min))
     (if (re-search-forward "^X-Face:[ \t]*" nil t)
 	(let ((p (match-beginning 0))
 	      (beg (match-end 0))
-	      (end (rfc822/field-end))
+	      (end (std11-field-end))
 	      (cur-buf (current-buffer))
 	      )
 	  (if (< end (point-max))
