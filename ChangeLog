@@ -1,3 +1,13 @@
+2000-03-31  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bm-utils.el (bitmap-load-average-to-bitmap): New function.
+	(bitmap-full-mailbox-data): New variable.
+	(bitmap-empty-mailbox-data): New variable.
+	(bitmap-load-average-data): New variable.
+	(bitmap-lprogress-data): Don't use `mapcar'.
+	(bitmap-special-symbol-alist): Add a head crest to "7".
+	(Commentary): Add how to use `display-time' with XEmacs style.
+
 2000-03-30  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bm-utils.el (bitmap-lprogress-display): Allow all integers.

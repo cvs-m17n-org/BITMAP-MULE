@@ -4,8 +4,8 @@
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 2000/03/28
-;; Revised: 2000/03/30
-;; Keywords: bitmap, lprogress-display
+;; Revised: 2000/03/31
+;; Keywords: bitmap, lprogress-display, display-time
 
 ;; This file is part of bitmap-mule.
 
@@ -23,6 +23,25 @@
 ;; along with this program; see the file COPYING.  If not, write to the
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
+
+;;; Commentary:
+
+;; If you would like to use `display-time' with XEmacs style,
+;; for example, put the following lines in your .emacs file.
+;;
+;;	(if (and (not (featurep 'xemacs))
+;;		 window-system
+;;		 (>= emacs-major-version 20))
+;;	    (progn
+;;	      (require 'bm-utils)
+;;	      (setq display-time-string-forms
+;;		    '((bitmap-string-to-special-symbols
+;;		       (format-time-string "%H:%M" now))
+;;		      (bitmap-load-average-to-bitmap load)
+;;		      (if mail
+;;			  bitmap-full-mailbox-data
+;;			bitmap-empty-mailbox-data)))
+;;	      (display-time-mode 1)))
 
 ;;; Code:
 
@@ -42,20 +61,47 @@
 	(cons ?4 (bitmap-compose "000082C6C6C6C2BC7A06060606020000"))
 	(cons ?5 (bitmap-compose "007CB8C0C0C0C0BC7A060606063A7C00"))
 	(cons ?6 (bitmap-compose "007CB8C0C0C0C0BC7A86C6C6C6BA7C00"))
-	(cons ?7 (bitmap-compose "007C3A06060602000206060606020000"))
+	(cons ?7 (bitmap-compose "007CBAC6C6C6C2800206060606020000"))
 	(cons ?8 (bitmap-compose "007CBAC6C6C6C2BC7A86C6C6C6BA7C00"))
-	(cons ?9 (bitmap-compose "007CBAC6C6C6C2BC7A060606063A7C00"))))
+	(cons ?9 (bitmap-compose "007CBAC6C6C6C2BC7A060606063A7C00")))
+  "Alist of char and special symbol bitmap.")
 
 (defvar bitmap-lprogress-data
-  (mapcar 'bitmap-compose '("55AA552A152A152A152A152A15AA55AA"
-			    "55AA550A050A050A050A050A05AA55AA"
-			    "55AA5502010201020102010201AA55AA")))
+  (list (bitmap-compose "55AA552A152A152A152A152A15AA55AA")
+	(bitmap-compose "55AA550A050A050A050A050A05AA55AA")
+	(bitmap-compose "55AA5502010201020102010201AA55AA"))
+  "Bitmaps for progress guage.")
 
 (defvar bitmap-lprogress-backgrounds
   (list (bitmap-compose "05020502050205020502050205020502")
 	(string-to-char (bitmap-compose "55AA5500000000000000000000AA55AA"))
 	(string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
-	(bitmap-compose "40A040A040A040A040A040A040A040A0")))
+	(bitmap-compose "40A040A040A040A040A040A040A040A0"))
+  "Bitmaps for progress guage background.")
+
+(defvar bitmap-load-average-data
+  (mapcar
+   (function (lambda (bits)
+	       (concat (bitmap-compose (car bits))
+		       (bitmap-compose (car (cdr bits))))))
+   '(("00000000000101030307070F0F1F0000" "007878F8F8F8F8F8F8F8F8F8F8F80000")
+     ("00000000000101030307070F001F0000" "007878F8F8F8F8F8F8F8F8F800F80000")
+     ("00000000000101030307000F001F0000" "007878F8F8F8F8F8F8F800F800F80000")
+     ("00000000000101030007000F001F0000" "007878F8F8F8F8F800F800F800F80000")
+     ("00000000000100030007000F001F0000" "007878F8F8F800F800F800F800F80000")
+     ("00000000000100030007000F001F0000" "007878F800F800F800F800F800F80000")
+     ("00000000000100030007000F001F0000" "007800F800F800F800F800F800F80000")))
+  "Bitmaps for load average 0.0, 0.5, 1.0, 1.5, 2.0, 2.5, 3.0.")
+
+(defvar bitmap-empty-mailbox-data
+  (concat (bitmap-compose "000000003F202824222528203F0000000")
+	  (bitmap-compose "00000000FE020A1222528A02FE000000"))
+  "Bitmap for empty mailbox.")
+
+(defvar bitmap-full-mailbox-data
+  (concat (bitmap-compose "000000003F2F373B3D3A372F3F000000")
+	  (bitmap-compose "00000000FEFAF6EEDEAE76FAFE000000"))
+  "Bitmap for full mailbox.")
 
 (defun bitmap-string-to-special-symbols (string)
   "Convert STRING to a special symbols."
@@ -120,6 +166,11 @@ the same as to `format'.  [XEmacs 21.2.32 emulating function]"
 ;;    (if textual
 ;;	(lprogress-display nil "Processing" n)
 ;;      (lprogress-display nil "Processing...done" n))))
+
+(defun bitmap-load-average-to-bitmap (load)
+  "Convert load average data to bitmap."
+  (nth (min 6 (round (* 2 (string-to-number load))))
+       bitmap-load-average-data))
 
 (provide 'bm-utils)
 
