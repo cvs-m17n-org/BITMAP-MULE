@@ -1,12 +1,12 @@
 ;;; smiley-mule.el --- smiley faces decoder for MULE
 
 ;; Copyright (C) 1996,1998,1999 MORIOKA Tomohiko
-;; Copyright (C) 1996,1999 Katsumi Yamaoka
+;; Copyright (C) 1996,1999,2000 Katsumi Yamaoka
 
 ;; Author: MORIOKA Tomohiko <tomo@m17n.org>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
-;; Revised: 1999/11/04
+;; Revised: 2000/04/17
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
 ;; This file is part of bitmap-mule.
@@ -57,10 +57,12 @@
 
 (defface smiley-face '((t (:background "Yellow" :foreground "Black")))
   "Face used for displaying smiley faces."
+  :group 'bitmap-mule
   :group 'faces)
 
 (defface smiley-manga-face '((t (:background "White" :foreground "Black")))
   "Face used for displaying smiley manga faces."
+  :group 'bitmap-mule
   :group 'faces)
 
 (defvar smiley-bitmap-for-smile
