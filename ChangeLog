@@ -1,5 +1,10 @@
 1999-10-26  Katsumi Yamaoka   <yamaoka@jpl.org>
 
+	* gnus-bitmap.el (Commentary): Don't use it if `window-system' is
+	nil.
+
+1999-10-26  Katsumi Yamaoka   <yamaoka@jpl.org>
+
 	* vm-bitmap.el (vm-smiley-display): New function.
 	(TopLevel): Autoload "smiley-mule" for `smiley-toggle-buffer'.
 

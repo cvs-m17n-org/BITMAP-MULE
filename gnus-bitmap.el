@@ -32,8 +32,10 @@
 ;;   If you would like to splash the startup screen with bitmap image,
 ;;   put the following lines in your .emacs file before gnus is loaded.
 ;;
-;;	(autoload 'gnus-bitmap-splash "gnus-bitmap")
-;;	(add-hook 'gnus-load-hook 'gnus-bitmap-splash)
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'gnus-bitmap-splash "gnus-bitmap")
+;;	      (add-hook 'gnus-load-hook 'gnus-bitmap-splash)))
 ;;
 ;;   Or you can inhibit the use of bitmap images (except for X-Face) as
 ;;   follows.
