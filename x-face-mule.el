@@ -1,6 +1,6 @@
 ;; x-face-mule.el --  X-Face decoder for MULE.
 
-;; Copyright (C) 1997,1998,1999 Free Software Foundation, Inc.
+;; Copyright (C) 1997,1998,1999,2000 Free Software Foundation, Inc.
 
 ;; Honorary-Author: Hiroshi Ueno <jl07715@yamato.ibm.co.jp>
 ;;                  MORIOKA Tomohiko <morioka@jaist.ac.jp>
@@ -10,7 +10,7 @@
 ;;         OKUNISHI -GTO- Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 1999/12/24
+;; Revised: 2000/01/17
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -861,21 +861,16 @@ just the headers of the article."
 ;;; MUA dependencies.
 ;;
 
-(when (>= emacs-major-version 19)
+(when (and (>= emacs-major-version 19) window-system)
   ;; gnus
   (autoload 'x-face-mule-gnus-article-display-x-face "gnus-bitmap")
-  (when (and
-	 window-system
-	 (not (boundp
-	       'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)))
+  (unless (assq 'gnus-bitmap-redefine (cdr (assoc "gnus" after-load-alist)))
     (autoload 'gnus-bitmap-redefine "gnus-bitmap")
-    (eval-after-load "gnus" '(gnus-bitmap-redefine))
-    (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))
+    (eval-after-load "gnus" '(gnus-bitmap-redefine)))
 
   ;; VM
   (autoload 'vm-bitmap-redefine "vm-bitmap")
-  (when window-system
-    (eval-after-load "vm" '(vm-bitmap-redefine)))
+  (eval-after-load "vm" '(vm-bitmap-redefine))
   )
 
 
