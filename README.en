@@ -1,28 +1,68 @@
 [README for bitmap-mule (English Version)]
-by MORIOKA Tomohiko <morioka@jaist.ac.jp>
-$Id: README.en,v 1.3 1998-03-08 22:43:19 shuhei-k Exp $
+by MORIOKA Tomohiko
 
 What's bitmap-mule?
--------------------
+===================
 
   bitmap-mule is a package to use bitmap in MULE or Emacs/mule.
-bitmap-mule has following modules:
+  bitmap-mule has following modules:
 
-	- bitmap.el:	kernel of bitmap-mule
-	- po.el:	tiny BDF font editor
-	- smiley-mule.el: smiley-mark encoder/decoder
-	- x-face-mule.el: inline X-Face decoder
+    - bitmap.el:	kernel of bitmap-mule
+    - bitmap-bi.el:	functions for Emacs 20.2 or earlier
+    - bitmap-ci.el:	functions for Emacs 20.3 or later
+    - po.el:		tiny BDF font editor
+    - smiley-mule.el:	smiley-mark encoder/decoder
+    - x-face-mule.el:	inline X-Face decoder
+    - gnus-bitmap.el:	Gnus/gnus related functions for x-face-mule.el
+    - vm-bitmap.el:	VM related functions for x-face-mule.el
+
+    - etl8x16-bitmap.bdf: font for BITMAP 8x16
+
+  The following image files will be integrated into gnus-bitmap.el at
+  the complile time.
+
+    - gnus.xbm:		big gnu for splashing the startup screen
+    - gnus-pointer.xbm:	small gnu for the modeline identification
 
 
 Installation
-------------
+============
 
-	% cd bitmap-mule
+(0) before installing it, please install APEL (9.20 or later) package,
+    font for BITMAP 8x16 and uncompface program.
+
+  APEL package is available from:
+
+	ftp://ftp.m17n.org/pub/mule/apel/
+
+  Font for BITMAP 8x16 is included in this package.
+
+  uncompface program is included in compface package which is available
+  from:
+	ftp://ftp.xemacs.org/pub/xemacs/aux/compface.tar.gz
+
+(1-a) run in expanded place
+
+  If you don't want to install other directories, please do only
+  following:
+
+	% make
+
+  You can specify the emacs command name, for example
+
+	% make EMACS=emacs-20.4
+
+  If `EMACS=...' is omitted, EMACS=emacs is used.
+
+(1-b) make install
+
+  If you want to install other directories, please do following:
+
 	% make install
 
   You can specify the emacs command name, for example
 
-	% make install EMACS=emacs-mule
+	% make install EMACS=emacs-20.4
 
   If `EMACS=...' is omitted, EMACS=emacs is used.
 
@@ -35,11 +75,8 @@ Installation
   specified emacs command is used (perhaps /usr/local).
 
   For example, if PREFIX=/usr/local is specified, it will create the
-  following directory tree:
+  following directory:
 
-	/usr/local/share/emacs/19.33/site-lisp/	 --- emu
-	/usr/local/share/emacs/site-lisp/	 --- tl
-	/usr/local/share/emacs/site-lisp/mu/	 --- MU
 	/usr/local/share/emacs/site-lisp/bitmap/ --- bitmap-mule
 
   You can specify site-lisp directory, for example
@@ -47,16 +84,28 @@ Installation
 	% make install LISPDIR=~/share/emacs/lisp
 
   If `LISPDIR=...' is omitted, site-lisp directory of the specified
-  emacs command is used (perhaps /usr/local/share/emacs/site-lisp or
-  /usr/local/lib/xemacs/site-lisp).
+  emacs command is used (perhaps /usr/local/share/emacs/site-lisp).
+
+  If the emu modules (included in APEL package) have been installed in
+  the non-standard directory, you should specify where they will be
+  found, for example:
+
+	% make install VERSION_SPECIFIC_LISPDIR=~/elisp
 
   You can specify other optional settings by editing the file
   bitmap-mule/BITMAP-CFG.  Please read comments in
   bitmap-mule/BITMAP-CFG.
 
+(2) More useful informations can be found at the following web sites:
+
+	http://www02.u-page.so-net.or.jp/ba2/kory/emacs/meadow.html
+	http://www.shiojiri.ne.jp/~t-ichi/meadow.html
+	http://www.NetLaputa.ne.jp/~kose/
+	http://web.kyoto-inet.or.jp/people/fuji0924/x-face.html
+
 
 Bug reports
------------
+===========
 
   If you write bug-reports and/or suggestions for improvement, please
   send them to the tm Mailing List:
