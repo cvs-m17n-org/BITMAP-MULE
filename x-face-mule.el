@@ -13,7 +13,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2001/05/31
+;; Revised: 2001/06/25
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of BITMAP-MULE.
@@ -37,18 +37,22 @@
 
 ;; - How to use
 
-;; 1. Build and install `uncompface' program which is available from:
+;; 1. Use of this module and the BITMAP-MULE package is not recommended
+;;    if you're using Emacs 21 and your Emacs can display images inline.
+;;    For example, you can use the following file to show X-Face images:
+;;
+;;	ftp://ftp.jpl.org/pub/elisp/x-face-e21.el.gz
+
+;; 2. Build and install `uncompface' program which is available from:
 ;;
 ;;	ftp://ftp.win.ne.jp/pub/misc/compface-1.4.tar.gz
 ;;
 ;;    It is one example of many.
 
-;; 2. Setting up
+;; 3. Setting up
 ;;
-;;    [SEMI-MUA, tm-MUA] i.e. cmail, gnus, mh-e, VM, etc.
-;;	There is nothing to be done if you are using tm or SEMI/WEMI
-;;	1.13 and earlier.  For the recent EMY, EMIKO or REMI, you may
-;;	have need of the following lines in your ~/.emacs file:
+;;    [SEMI 1.14 and later] i.e. cmail, gnus, mh-e, VM, etc.
+;;      You have need to put the following lines in your ~/.emacs file:
 ;;
 ;;	(if window-system
 ;;	    (progn
@@ -56,11 +60,20 @@
 ;;	      (add-hook 'mime-display-header-hook
 ;;			'x-face-decode-message-header)))
 ;;
+;;    [SEMI 1.13 and earlier, tm-MUA] i.e. cmail, gnus, mh-e, VM, etc.
+;;      There is nothing to be done.
+;;
 ;;    [T-gnus 6.13.3 and later]
-;;	There is nothing to be done.
+;;      There is nothing to be done.
+;;
+;;    [Gnus 5.7]
+;;      Try to put the following line in your ~/.emacs file if X-Face
+;;      images aren't displayed.
+;;
+;;	(setq x-face-mule-gnus-force-decode-headers t)
 ;;
 ;;    [Wanderlust]
-;;	Add the following code in your ~/.wl file:
+;;      Add the following code in your ~/.wl file:
 ;;
 ;;	(if window-system
 ;;	    (progn
@@ -68,7 +81,7 @@
 ;;	      (setq wl-highlight-x-face-func 'x-face-decode-message-header)))
 ;;
 ;;    [before Mew 1.90]
-;;	Add the following code in your ~/.emacs:
+;;      Add the following code in your ~/.emacs:
 ;;
 ;;	(if window-system
 ;;	    (progn
@@ -79,7 +92,7 @@
 ;;			'x-face-decode-message-header)))
 ;;
 ;;    [Mew 1.92]
-;;	Add the following code in your ~/.emacs:
+;;      Add the following code in your ~/.emacs:
 ;;
 ;;	(if window-system
 ;;	    (progn
@@ -89,7 +102,7 @@
 ;;		    'x-face-decode-message-header)))
 ;;
 ;;    [Mew 1.93 or later]
-;;	Add the following code in your ~/.emacs:
+;;      Add the following code in your ~/.emacs:
 ;;
 ;;	(if window-system
 ;;	    (progn
@@ -99,56 +112,57 @@
 ;;		    'x-face-decode-message-header)))
 ;;
 ;;     [BBDB]
-;;	Add the following code in your ~/.emacs, to collect `X-Face's:
+;;      Add the following code in your ~/.emacs, to collect `X-Face's:
 ;;
-;;     (put 'face 'field-separator "\n")
-;;     (setq bbdb-auto-notes-alist
-;;           (nconc bbdb-auto-notes-alist
-;;		  (list (list "x-face"
-;;			      (list (concat "[ \t\n]*\\([^ \t\n]*\\)"
-;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
-;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
-;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
-;;					    "\\([ \t\n]+\\([^ \t\n]+\\)\\)?")
-;;				    'face
-;;				    "\\1\\3\\5\\7\\9")))))
+;;	(put 'face 'field-separator "\n")
+;;	(setq bbdb-auto-notes-alist
+;;	      (nconc bbdb-auto-notes-alist
+;;		     (list (list "x-face"
+;;				 (list (concat
+;;					"[ \t\n]*\\([^ \t\n]*\\)"
+;;					"\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;					"\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;					"\\([ \t\n]+\\([^ \t\n]+\\)\\)?"
+;;					"\\([ \t\n]+\\([^ \t\n]+\\)\\)?")
+;;				       'face
+;;				       "\\1\\3\\5\\7\\9")))))
 ;;
 ;;      Visit <URL:http://www.NetLaputa.ne.jp/~kose/Emacs/> for related
 ;;      informations.
 
-;; 3. Customization
+;; 4. Customization
 ;;
 ;;    * If you don't want to show X-Face at "From:" field,
-;;	add the following code in your ~/.emacs:
+;;      add the following code in your ~/.emacs:
 ;;
 ;;	(setq x-face-mule-highlight-x-face-position 'x-face)
 ;;
-;;	and you can show X-Face at "X-Face:" field.
+;;      and you can show X-Face at "X-Face:" field.
 ;;
 ;;    * If you want to show X-Face like XEmacs style,
-;;	add the following code in ~/.eamcs:
+;;      add the following code in ~/.eamcs:
 ;;
 ;;	(setq x-face-mule-highlight-x-face-style 'xmas)
 ;;
-;;	But, this feature won't work well on some MUA...
+;;      But, this feature won't work well on some MUA...
 ;;
 ;;    * Other features, please read this file...
 
-;; 4. User commands
+;; 5. User commands
 ;;
 ;; `x-face-mule-toggle-x-face-position'
-;;	toggle show position.  from->x-face->nil->from...
+;;      toggle show position.  from->x-face->nil->from...
 ;;
 ;; `x-face-mule-toggle-x-face-style'
-;;	toggle show style.  default->xmas->default->...
+;;      toggle show style.  default->xmas->default->...
 
-;; 5. Known bugs & todo
+;; 6. Known bugs & todo
 ;;
 ;;    * cache file generated by Emacs versions of 20 and under is
 ;;      not usable with 21+.
 ;;    * same x-face saved in cache file.
 
-;; 6. Thanks to the following people have contributed many patches
+;; 7. Thanks to the following people have contributed many patches
 ;;    and suggestions:
 ;;
 ;; OKUNISHI Fujikazu   <fuji0924@mbox.kyoto-inet.or.jp>
@@ -301,7 +315,7 @@ A format is like this:
    (cons 'mew-summary-mode	(function
 				 (lambda ()
 				   (condition-case nil
-				       ;; 1.94b19 or eralier.
+				       ;; 1.94b19 or earlier.
 				       (mew-summary-display)
 				     (wrong-number-of-arguments
 				      ;; 1.94b20 or later.
@@ -309,7 +323,7 @@ A format is like this:
    (cons 'mew-virtual-mode	(function
 				 (lambda ()
 				   (condition-case nil
-				       ;; 1.94b19 or eralier.
+				       ;; 1.94b19 or earlier.
 				       (mew-summary-display)
 				     (wrong-number-of-arguments
 				      ;; 1.94b20 or later.
@@ -334,7 +348,7 @@ Format:
   :type 'hook)
 
 (defcustom x-face-mule-delete-x-face-field 'always
-  "A Valiable says When delete X-Face field. (for NOT Gnus or Mew...)
+  "A Variable says When delete X-Face field. (for NOT Gnus or Mew...)
 `always' delete always, `color' delete when color X-Face comes, `mono'
 delete when monochrome X-Face comes, `never' never delete."
   :group 'x-face-mule
