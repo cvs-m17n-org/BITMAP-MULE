@@ -1,3 +1,10 @@
+2003-08-25  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* gnus-bitmap.el (gnus-treat-display-x-face): Bind it when
+	compiling.
+	(gnus-bitmap-redefine): Modify the value for the
+	`gnus-treat-display-x-face' variable as well as `g-t-d-xface'.
+
 2002-11-10  TAKAHASHI Kaoru  <kaoru@kaisei.org>
 
 	* x-face-mule.el (Commentary): Add setting for Wanderlust 2.7.0

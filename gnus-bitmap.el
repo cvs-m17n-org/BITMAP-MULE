@@ -201,6 +201,7 @@ is not used."
 (defvar gnus-mule-bitmap-image-file)
 (defvar gnus-simple-splash)
 (defvar gnus-strict-mime)
+(defvar gnus-treat-display-x-face)
 (defvar gnus-treat-display-xface)
 (defvar gnus-treat-hide-headers)
 (defvar gnus-version)
@@ -353,19 +354,28 @@ and splashing the startup screen with a bitmap image."
 	   (setq gnus-ignored-headers
 		 (delete "^X-Face-Img:" gnus-ignored-headers)))))
 
-  (when (boundp 'gnus-treat-display-xface)
-    (if (not (stringp gnus-article-x-face-command))
-	;; Don't touch any user options.
-	nil
-      ;; Pterodactyl Gnus, T-gnus 6.10.064 or later.
-      (setq
-       gnus-treat-display-xface
-       (if (and (featurep 'running-pterodactyl-gnus-0_73-or-later); T-gnus
-		(not x-face-mule-gnus-force-decode-headers))
-	   '(and mime head)
-	 'head)
-       gnus-treat-hide-headers 'head
-       gnus-article-x-face-command 'x-face-mule-gnus-article-display-x-face)))
+  (cond ((boundp 'gnus-treat-display-x-face)
+	 ;; Gnus v5.10.3, T-gnus 6.16.3 or later.
+	 (setq
+	  gnus-treat-display-x-face
+	  (if (and (featurep 'running-pterodactyl-gnus-0_73-or-later); T-gnus
+		   (not x-face-mule-gnus-force-decode-headers))
+	      '(and mime head)
+	    'head)
+	  gnus-treat-hide-headers 'head
+	  gnus-article-x-face-command
+	  'x-face-mule-gnus-article-display-x-face))
+	((boundp 'gnus-treat-display-xface)
+	 ;; Pterodactyl Gnus, T-gnus 6.10.064 or later.
+	 (setq
+	  gnus-treat-display-xface
+	  (if (and (featurep 'running-pterodactyl-gnus-0_73-or-later); T-gnus
+		   (not x-face-mule-gnus-force-decode-headers))
+	      '(and mime head)
+	    'head)
+	  gnus-treat-hide-headers 'head
+	  gnus-article-x-face-command
+	  'x-face-mule-gnus-article-display-x-face)))
 
   ;; Advise the hiding function.
   (defadvice article-hide-headers (after x-face-mule-highlight-header
