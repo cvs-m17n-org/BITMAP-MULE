@@ -29,6 +29,15 @@ BITMAP-MULE versions earlier than 8.4, and the variable
 versions prior to 8.5.
 
 
+Notice to Emacs 21.1 users
+==========================
+The released version of Emacs 21.1 has a bug in decoding composite
+chars.  It might come out when reading a file which contains composite
+chars (encoded with `iso-2022-7bit', etc.).  You can fix this by
+applying the patch and rebuilding Emacs.  The patch is included in the
+BITMAP-MULE distribution.
+
+
 What's BITMAP-MULE?
 ===================
 
