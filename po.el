@@ -3,7 +3,6 @@
 ;; Copyright (C) 1996 MORIOKA Tomohiko
 
 ;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
-;; Version: $Id: po.el,v 1.3 1999-08-23 05:15:07 yamaoka Exp $
 ;; Keywords: bitmap, bdf, MULE
 
 ;; This file is part of bitmap-mule.
