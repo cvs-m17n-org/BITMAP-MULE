@@ -1,12 +1,12 @@
 ;;; -*-Emacs-Lisp-*-
 ;;;
-;;; $Id: BITMAP-CFG,v 1.2 1996-11-27 15:06:43 morioka Exp $
+;;; $Id: BITMAP-CFG,v 1.3 1997-01-01 06:53:41 morioka Exp $
 ;;;
 
 (setq load-path (append
 		 (mapcar (function
 			  (lambda (path)
-			    (expand-file-name path (getenv "PWD"))
+			    (expand-file-name path default-directory)
 			    ))
 			 '("." "../emu" "../tl" "../mu")
 			 )
