@@ -4,6 +4,17 @@ Copyright (C) 1999, 2000, 2001 Free Software Foundation, Inc.
 * Changes in BITMAP-MULE 8.5
 ============================
 
+** A patch for the released version of Emacs 21.1 is now available.
+It is included in the BITMAP-MULE distribution, named:
+
+   emacs-21.1-composite.patch
+
+It makes Emacs 21.1 can load bitmap images from a file or save bitmap
+images to a file with automatic code conversion correctly.
+
+** The preferred coding-system for the charset `bitmap' is now set to
+`iso-2022-7bit'.
+
 ** New variable `bitmap-use-alterable-charset-anyway' now controls
 whether to substitute `indian-1-column' or `tibetan-1-column' for the
 new private charset `bitmap' unconditionally.  You can load "bitmap"

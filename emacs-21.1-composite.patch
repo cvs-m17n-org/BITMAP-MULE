@@ -1,0 +1,34 @@
+--- emacs-21.1/src/charset.c~	Fri Jul 13 09:30:42 2001
++++ emacs-21.1/src/charset.c	Mon Dec 17 15:33:12 2001
+@@ -710,6 +710,7 @@
+   Fput (charset_symbol, Qcharset, CHARSET_TABLE_ENTRY (XINT (charset_id)));
+   CHARSET_SYMBOL (XINT (charset_id)) = charset_symbol;
+   Vcharset_list = Fcons (charset_symbol, Vcharset_list);
++  Fupdate_coding_systems_internal ();
+   return Qnil;
+ }
+ 
+--- emacs-21.1/src/coding.c~	Mon Jul 23 09:26:46 2001
++++ emacs-21.1/src/coding.c	Mon Dec 17 15:33:12 2001
+@@ -1665,7 +1665,7 @@
+ 
+ #define DECODE_COMPOSITION_END(c1)					\
+   do {									\
+-    if (coding->composing == COMPOSITION_DISABLED)			\
++    if (! COMPOSING_P (coding))						\
+       {									\
+ 	*dst++ = ISO_CODE_ESC;						\
+ 	*dst++ = c1;							\
+@@ -5518,7 +5518,11 @@
+       if (encodep)
+ 	result = encode_coding (coding, src, dst, len_byte, 0);
+       else
+-	result = decode_coding (coding, src, dst, len_byte, 0);
++	{
++	  if (coding->composing != COMPOSITION_DISABLED)
++	    coding->cmp_data->char_offset = from + inserted;
++	  result = decode_coding (coding, src, dst, len_byte, 0);
++	}
+ 
+       /* The buffer memory is now:
+ 	 +--------+-------converted-text----+--+------original-text----+---+

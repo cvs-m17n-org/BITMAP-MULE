@@ -1,3 +1,17 @@
+2001-12-18  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bitmap-ci.el (defining the charset `bitmap'): Set the preferred
+	coding-system of `bitmap' to `iso-2022-7bit';
+	advise the functions `find-charset-string' and
+	`find-charset-region' to replace the altered charset to `bitmap'
+	in the return value if the altered charset is used;
+	don't invalidate the altered charset;
+	call `update-coding-systems-internal' after defining the charset
+	`bitmap' for the existing Emacs 21.1;
+	ignore `bitmap-alterable-charset' when Emacs 21+ is running.
+
+	* emacs-21.1-composite.patch: New file.
+
 2001-09-20  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (bbdb-change-records-state-and-redisplay): Advice

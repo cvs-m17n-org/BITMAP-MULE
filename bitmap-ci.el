@@ -40,44 +40,66 @@ this variable before loading the BITMAP-MULE library.")
 the charset `bitmap' unconditionally.  You should set the value of
 this variable before loading the BITMAP-MULE library.")
 
+;; Defining the charset `bitmap'.
 (if (charsetp 'bitmap)
     nil
-  (let ((alterable (and (charsetp bitmap-alterable-charset)
-			(eq 2 (charset-dimension bitmap-alterable-charset))
-			(eq 1 (charset-width bitmap-alterable-charset)))))
-    (if (or
-	 (and alterable
-	      bitmap-use-alterable-charset-anyway)
-	 (condition-case code
-	     (progn
-	       (define-charset nil 'bitmap
-		 [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
-	       nil)
-	   (error
-	    (or alterable
-		(error "%s" (error-message-string code))))))
-	(progn
-	  (setcar (memq bitmap-alterable-charset charset-list) 'bitmap)
-	  (let ((info (charset-info bitmap-alterable-charset)))
-	    (aset info 3 96);; chars
-	    (aset info 8 ?0);; iso-final-char
-	    (aset info 11 "BITMAP");; short-name
-	    (aset info 12 "BITMAP.8x16");; long-name
-	    (aset info 13 "8x16 bitmap elements");; description
-	    (aset info 14 nil);; plist
-	    (put 'bitmap 'charset info))
-	  (put bitmap-alterable-charset 'charset nil)
-	  (declare-equiv-charset 2 96 ?0 'bitmap)
-	  (if (and window-system
-		   (boundp 'global-fontset-alist))
-	      (let ((fontsets (symbol-value 'global-fontset-alist))
-		    fontset)
-		(while fontsets
-		  (setq fontset (car fontsets)
-			fontsets (cdr fontsets))
-		  (setcdr fontset (delq (assq bitmap-alterable-charset
-					      (cdr fontset))
-					(cdr fontset))))))))))
+  (if (>= emacs-major-version 21)
+      (progn
+	(define-charset nil 'bitmap
+	  [2 96 1 0 ?0 0
+	     "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
+	;; `define-charset' won't call `update-coding-systems-internal'
+	;; if the released version of Emacs 21.1 is running.
+	(update-coding-systems-internal))
+    (let ((alterable (and (charsetp bitmap-alterable-charset)
+			  (eq 2 (charset-dimension bitmap-alterable-charset))
+			  (eq 1 (charset-width bitmap-alterable-charset)))))
+      (if (or (and alterable
+		   bitmap-use-alterable-charset-anyway)
+	      (condition-case code
+		  (progn
+		    (define-charset nil 'bitmap
+		      [2 96 1 0 ?0 0
+			 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
+		    nil)
+		(error
+		 (or alterable
+		     (error "%s" (error-message-string code))))))
+	  (progn
+	    (setcar (memq bitmap-alterable-charset charset-list) 'bitmap)
+	    (let ((info (charset-info bitmap-alterable-charset)))
+	      (aset info 3 96);; chars
+	      (aset info 8 ?0);; iso-final-char
+	      (aset info 11 "BITMAP");; short-name
+	      (aset info 12 "BITMAP.8x16");; long-name
+	      (aset info 13 "8x16 bitmap elements");; description
+	      (aset info 14 nil);; plist
+	      (put 'bitmap 'charset info))
+	    (declare-equiv-charset 2 96 ?0 'bitmap)
+	    (if (and window-system
+		     (boundp 'global-fontset-alist))
+		(let ((fontsets (symbol-value 'global-fontset-alist))
+		      fontset)
+		  (while fontsets
+		    (setq fontset (car fontsets)
+			  fontsets (cdr fontsets))
+		    (setcdr fontset (delq (assq bitmap-alterable-charset
+						(cdr fontset))
+					  (cdr fontset))))))
+	    (let ((name (intern (format "replace-%s-to-bitmap"
+					bitmap-alterable-charset)))
+		  (doc-string (format "Advised by BITMAP-MULE.
+Replace `%s' to `bitmap' in the return value of this function."
+				bitmap-alterable-charset))
+		  (form `(setcar (or (memq (quote ,bitmap-alterable-charset)
+					   ad-return-value)
+				     '(nil))
+				 'bitmap)))
+	      (eval `(defadvice find-charset-string (after ,name activate)
+		       ,doc-string ,form))
+	      (eval `(defadvice find-charset-region (after ,name activate)
+		       ,doc-string ,form)))))))
+  (put-charset-property 'bitmap 'preferred-coding-system 'iso-2022-7bit))
 
 ;; Avoid byte compile warning
 (eval-when-compile
