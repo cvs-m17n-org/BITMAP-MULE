@@ -22,9 +22,6 @@ What's bitmap-mule?
     - vm-bitmap.el:	VM related functions
 
     - font/etl8x16-bitmap.bdf:	font for BITMAP 8x16
-    - font/etl6x12-bitmap.bdf:	font for 6x12
-    - font/etl7x14-bitmap.bdf:	font for 7x14
-    - font/etl12x24-bitmap.bdf:	font for 12x24
 
   The following image files will be integrated into gnus-bitmap.el at
   the complile time.
@@ -38,7 +35,11 @@ Installation
 
 (0) Before installing it, please install APEL (9.22 or later) package,
     font for BITMAP 8x16 and uncompface program.  If you would like to
-    use 6x12, 7x14 or 12x24 size fonts, please install them as well.
+    use 6x12, 7x14, 10x20 or 12x24 size fonts, please install them as
+    well.  They can be generated with running `make' in the font/
+    directory, or you can get the ready-made fonts from the same place
+    of the BITMAP-MULE distribution.  See font/README.{en,ja} for more
+    information.
 
   APEL package is available from:
 
