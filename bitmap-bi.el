@@ -30,6 +30,11 @@
 (eval-when-compile (require 'static))
 
 (static-cond
+ ((and (boundp 'MULE) (<= emacs-major-version 18))
+  (defvar lc-bitmap
+    (new-private-character-set 2 1 3 0 ?0 0 "BITMAP 8x16")
+    "Leading character for BITMAP.8x16.")
+  )
  ((boundp 'MULE)
   (defvar lc-bitmap
     (new-private-character-set 2 1 3 0 ?0 0 "BITMAP 8x16" "bitmap")
@@ -48,14 +53,19 @@
   )
 
 (if window-system
-    (mapcar (lambda (fontset)
-	      (if (= (fontset-pixel-size fontset) 16)
-		  (set-fontset-font
-		   fontset lc-bitmap
-		   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")
-		))
-	    (fontset-list))
-  )
+    (static-if (<= emacs-major-version 18)
+	(x-set-font "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"
+		    lc-bitmap 0)
+      (mapcar
+       (function
+	(lambda (fontset)
+	  (if (= (fontset-pixel-size fontset) 16)
+	      (set-fontset-font
+	       fontset lc-bitmap
+	       "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")
+	    )))
+       (fontset-list))
+      ))
 
 ;; Block (all bits set) character
 (defvar bitmap-block (make-char lc-bitmap 32 33))
