@@ -72,13 +72,22 @@
 ;;
 ;;	(setq x-face-mule-gnus-force-decode-headers t)
 ;;
-;;    [Wanderlust]
+;;    [before Wanderlust 2.6.1]
 ;;      Add the following code in your ~/.wl file:
 ;;
 ;;	(if window-system
 ;;	    (progn
 ;;	      (autoload 'x-face-decode-message-header "x-face-mule")
 ;;	      (setq wl-highlight-x-face-func 'x-face-decode-message-header)))
+;;
+;;    [Wanderlust 2.7.0 and later]
+;;      Add the following code in your ~/.wl file:
+;;
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'x-face-decode-message-header "x-face-mule")
+;;	      (setq wl-highlight-x-face-function
+;;		    'x-face-decode-message-header)))
 ;;
 ;;    [before Mew 1.90]
 ;;      Add the following code in your ~/.emacs:

@@ -1,3 +1,8 @@
+2002-11-10  TAKAHASHI Kaoru  <kaoru@kaisei.org>
+
+	* x-face-mule.el (Commentary): Add setting for Wanderlust 2.7.0
+	and later.
+
 2001-12-21  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* BITMAP-MULE: Version 8.5 was released.
