@@ -39,10 +39,24 @@
 
 (if window-system
     (mapcar (lambda (fontset)
-	      (if (= (fontset-pixel-size fontset) 16)
+	      (let ((size (fontset-pixel-size fontset)))
+		(cond
+		 ((= size 12)
 		  (set-fontset-font
 		   fontset 'bitmap
-		   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")
+		   "-etl-fixed-medium-r-*--12-*-100-100-m-*-bitmap.6x12-0"))
+		 ((= size 14)
+		  (set-fontset-font
+		   fontset 'bitmap
+		   "-etl-fixed-medium-r-*--14-*-100-100-m-*-bitmap.7x14-0"))
+		 ((= size 16)
+		  (set-fontset-font
+		   fontset 'bitmap
+		   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"))
+		 ((= size 24)
+		  (set-fontset-font
+		   fontset 'bitmap
+		   "-etl-fixed-medium-r-*--24-*-100-100-m-*-bitmap.12x24-0")))
 		))
 	    (fontset-list))
   )
