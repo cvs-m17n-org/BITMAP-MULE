@@ -1,0 +1,67 @@
+[README for bitmap-mule (English Version)]
+by MORIOKA Tomohiko <morioka@jaist.ac.jp>
+$Id: README.en,v 1.1 1996-11-27 15:35:25 morioka Exp $
+
+What's bitmap-mule?
+-------------------
+
+  bitmap-mule is a package to use bitmap in MULE or Emacs/mule.
+bitmap-mule has following modules:
+
+	- bitmap.el:	kernel of bitmap-mule
+	- po.el:	tiny BDF font editor
+	- smiley-mule.el: smiley-mark encoder/decoder
+	- x-face-mule.el: inline X-Face decoder
+
+
+Installation
+------------
+
+	% cd bitmap-mule
+	% make install
+
+  You can specify the emacs command name, for example
+
+	% make install EMACS=emacs-mule
+
+  If `EMACS=...' is omitted, EMACS=emacs is used.
+
+  You can specify the prefix of the directory tree for Emacs Lisp
+  programs and shell scripts, for example:
+
+	% make install PREFIX=~/
+
+  If `PREFIX=...' is omitted, the prefix of the directory tree of the
+  specified emacs command is used (perhaps /usr/local).
+
+  For example, if PREFIX=/usr/local is specified, it will create the
+  following directory tree:
+
+	/usr/local/share/emacs/19.33/site-lisp/	 --- emu
+	/usr/local/share/emacs/site-lisp/	 --- tl
+	/usr/local/share/emacs/site-lisp/mu/	 --- MU
+	/usr/local/share/emacs/site-lisp/bitmap/ --- bitmap-mule
+
+  You can specify other optional settings by editing the file
+  bitmap-mule/BITMAP-CFG.  Please read comments in
+  bitmap-mule/BITMAP-CFG.
+
+
+Bug reports
+-----------
+
+  If you write bug-reports and/or suggestions for improvement, please
+  send them to the tm Mailing List:
+
+	bug-tm-en@chamonix.jaist.ac.jp	(English)
+	bug-tm-ja@chamonix.jaist.ac.jp	(Japanese)
+
+  Via the tm ML, you can report tm bugs, obtain the latest release of
+  tm, and discuss future enhancements to tm. To join the tm ML, send
+  e-mail to
+
+	tm-ja-admin@chamonix.jaist.ac.jp	(Japanese)
+	tm-en-admin@chamonix.jaist.ac.jp	(English)
+
+  Since the user registration is done manually, please write the mail
+  body in human-recognizable language (^_^).
