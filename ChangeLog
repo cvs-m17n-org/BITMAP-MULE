@@ -1,5 +1,29 @@
 1999-08-24  Katsumi Yamaoka   <yamaoka@jpl.org>
 
+	* gnus-bitmap.el (gnus-bitmap-splash): Do nothing if the feature
+	`gnus' is provided; modify the way to arrange `after-load-alist'.
+
+	* bitmap.el (TopLevel): Require `bitmap-ci' or `bitmap-bi' at the
+	compile time as well.
+
+	* bitmap-ci.el (TopLevel): Autoload "bitmap" and "fontset" for
+	avoiding byte compile warnings.
+
+	* bitmap-bi.el (TopLevel): Autoload "bitmap" and "fontset" for
+	avoiding byte compile warnings.
+	(TopLevel): Use `static-cond' instead of `cond' for defining
+	`lc-bitmap'.
+	(TopLevel): Require `static'.
+
+	* BITMAP-MK (compile-bitmap): Use `bitmap-modules-to-compile'
+	instead of `bitmap-modules'.
+
+	* BITMAP-ELS (bitmap-modules-to-compile): New variable.  Delete
+	`vm-bitmap' from its value if neither `vm-macro' nor `vm-misc' is
+	not installed.
+
+1999-08-24  Katsumi Yamaoka   <yamaoka@jpl.org>
+
 	* x-face-mule..el (TopLevel): Don't add `gnus-bitmap-redefine' to
 	`after-load-alist' if the variable
 	`gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded' is
