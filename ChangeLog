@@ -1,12 +1,26 @@
+1999-12-16  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* BITMAP-MULE: Version 8.1 was released.
+
+1999-12-16  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* font/README.ja: Sync up with font/README.en.
+
+1999-12-16  Keisuke Nishida   <kxn30@po.cwru.edu>
+
+	* font/README.en: New file.
+
+	* font/Makefile (install-nogzip): New target.
+
 1999-12-15  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* README.en, NEWS: Update for multi-size fonts.
 
-	* bitmap-bi.el: Set fontset fonts for 6x16, 7x14 and 12x24.
+	* bitmap-bi.el: Set fontset fonts for 6x12, 7x14 and 12x24.
 
 1999-12-15  Keisuke Nishida   <kxn30@po.cwru.edu>
 
-	* bitmap-ci.el: Set fontset fonts for 6x16, 7x14 and 12x24.
+	* bitmap-ci.el: Set fontset fonts for 6x12, 7x14 and 12x24.
 
 	* font/etl6x12-bitmap.bdf
 	* font/etl7x14-bitmap.bdf
