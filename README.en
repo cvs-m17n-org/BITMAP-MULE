@@ -131,3 +131,20 @@ Bug reports
   Via Elips ML, you can report BITMAP-MULE related bugs, obtain the
   latest release of BITMAP-MULE, and discuss future enhancements to
   BITMAP-MULE.
+
+
+CVS based development
+=====================
+
+  If you would like to join CVS based development, please send mail to
+
+	cvs@cvs.m17n.org
+
+  with your account name and your public key for ssh.  cvsroot is
+  :ext:cvs@cvs.m17n.org:/cvs/root.
+
+  If you cannot use ssh, please send UNIX /etc/passwd style crypted
+  password.  you can commit with the cvsroot
+  :pserver:<accountname>@cvs.m17n.org:/cvs/root.
+
+  We hope you will join the open development.
