@@ -6,10 +6,10 @@
 ;; Author: MORIOKA Tomohiko <tomo@m17n.org>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
-;; Revised: 2001/01/31
+;; Revised: 2001/02/02
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
-;; This file is part of bitmap-mule.
+;; This file is part of BITMAP-MULE.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as

@@ -1,7 +1,9 @@
 FONTDIR = /usr/X11R6/lib/X11/fonts/misc
 
-PCFS = bmp12-etl.pcf bmp14-etl.pcf \
-	bmp16-etl.pcf bmp20-etl.pcf bmp24-etl.pcf
+EMACS = emacs
+
+PCFS = bitmap12.pcf bitmap14.pcf \
+	bitmap16.pcf bitmap20.pcf bitmap24.pcf
 
 all: bdf $(PCFS)
 
@@ -23,25 +25,23 @@ install-nogzip: all
 	(cd $(FONTDIR); mkfontdir)
 	xset fp rehash
 
-bdf: bmp12-etl.bdf bmp14-etl.bdf \
-	bmp20-etl.bdf bmp24-etl.bdf
+bdf: bitmap16.bdf bitmap12.bdf bitmap14.bdf bitmap20.bdf bitmap24.bdf
 
+bitmap16.bdf:
+	$(EMACS) -batch -q -no-site-file \
+	  -l bitmap16.el -f generate-bitmap-bdf-font
 
-bmp12-etl.bdf: bmp16-etl.bdf
-	bdfresize -f 12/16 bmp16-etl.bdf \
-	  | sed "s/8x16/6x12/g" > bmp12-etl.bdf
+bitmap12.bdf: bitmap16.bdf
+	bdfresize -f 12/16 bitmap16.bdf | sed "s/8x16/6x12/g" > bitmap12.bdf
 
-bmp14-etl.bdf: bmp16-etl.bdf
-	bdfresize -f 14/16 bmp16-etl.bdf \
-	  | sed "s/8x16/7x14/g" > bmp14-etl.bdf
+bitmap14.bdf: bitmap16.bdf
+	bdfresize -f 14/16 bitmap16.bdf | sed "s/8x16/7x14/g" > bitmap14.bdf
 
-bmp20-etl.bdf: bmp16-etl.bdf
-	bdfresize -f 20/16 bmp16-etl.bdf \
-	  | sed "s/8x16/10x20/g" > bmp20-etl.bdf
+bitmap20.bdf: bitmap16.bdf
+	bdfresize -f 20/16 bitmap16.bdf | sed "s/8x16/10x20/g" > bitmap20.bdf
 
-bmp24-etl.bdf: bmp16-etl.bdf
-	bdfresize -f 24/16 bmp16-etl.bdf \
-	  | sed "s/8x16/12x24/g" > bmp24-etl.bdf
+bitmap24.bdf: bitmap16.bdf
+	bdfresize -f 24/16 bitmap16.bdf | sed "s/8x16/12x24/g" > bitmap24.bdf
 
 %.pcf: %.bdf
 	bdftopcf $< > $@

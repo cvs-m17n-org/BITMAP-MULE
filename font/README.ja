@@ -1,6 +1,6 @@
-このディレクトリでは bitmap-mule で使うためのいくつかの bdf フォントを
-作成します。オリジナルは bmp16-etl.bdf (*1) で、それ以外のファイルは
-`bdfresize'(*2) を使って自動生成します。
+このディレクトリでは BITMAP-MULE で使うためのいくつかの bdf フォントを
+作成します。最初に bitmap16.bdf が作られ、他のファイルは `bdfresize'(*1)
+を使って自動生成します。
 もし `bdfresize' をお持ちでないなら、既製の以下のフォントを使うことも
 できます。
 
@@ -12,19 +12,27 @@
 インストールのやり方
 --------------------
 
-1) Makefile の FONTDIR を適当に修正して下さい。
+1) フォントファイルがインストールされるディレクトリと、bitmap16.bdf を
+   作るために使う Emacs が何であるかを確認して下さい。デフォルトは
+
+	FONTDIR=/usr/X11R6/lib/X11/fonts/misc
+	EMACS=emacs
+
+   です。
 
 2) `su' をタイプして root になって下さい。
 
-3) `make install' とタイプして下さい。
+3) make します。
 
-   gzip で圧縮された pcf ファイルが使えないシステムでは、代わりに
-   `make install-nogzip' とタイプする必要があります。
+	make install
+
+   以下のように FONTDIR や EMACS を指定することもできます。
+
+	make install FONTDIR=/usr/local/lib/X11/fonts/misc EMACS=mule
+
+   gzip で圧縮された pcf ファイルが使えないシステムでは、`install' の
+   代わりに `install-nogzip' とタイプする必要があります。
 
 
-(*1) bmp16-etl.bdf は
-     ftp://ftp.m17n.org/pub/mule/intlfonts-1.2-split/Misc.tar.gz に
-     含まれています。
-
-(*2) ftp://ftp.jaist.ac.jp/.arc10/linux/kondara/Jirai/SOURCES/bdfresize-1.5.tar.gz
+(*1) ftp://ftp.kondara.org/pub/Jirai/SOURCES/bdfresize-1.5.tar.gz
      ftp://ftp.cs.titech.ac.jp/pub/X11/contrib/Local/bdfresize-1.4.tar.Z

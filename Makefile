@@ -1,5 +1,5 @@
 #
-# Makefile for bitmap-mule.
+# Makefile for BITMAP-MULE.
 #
 
 PACKAGE	= bitmap-mule

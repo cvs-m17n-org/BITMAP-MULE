@@ -7,7 +7,7 @@
 ;;         MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Keywords: bitmap, xbm, MULE
 
-;; This file is part of bitmap-mule.
+;; This file is part of BITMAP-MULE.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as

@@ -1,14 +1,14 @@
-;; bm-utils.el -- utility functions using bitmap-mule.
+;; bm-utils.el -- utility functions on BITMAP-MULE.
 
 ;; Copyright (C) 2000, 2001 Free Software Foundation, Inc.
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;;         Yoshitsugu Mito <mit@nines.nec.co.jp>
 ;; Created: 2000/03/28
-;; Revised: 2000/12/14
+;; Revised: 2001/02/02
 ;; Keywords: bitmap, progress-feedback-with-label, display-time
 
-;; This file is part of bitmap-mule.
+;; This file is part of BITMAP-MULE.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by

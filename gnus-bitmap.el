@@ -6,10 +6,10 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 2000/07/05
+;; Revised: 2001/02/02
 ;; Keywords: bitmap, x-face, splash, gnus
 
-;; This file is part of bitmap-mule.
+;; This file is part of BITMAP-MULE.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -305,7 +305,7 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
   (add-hook 'gnus-exit-gnus-hook 'x-face-mule-save-cache-file))
 
 (defun gnus-bitmap-redefine (&optional splash)
-  "Redifine variables and functions for the use of bitmap-mule.  If SPLASH
+  "Redifine variables and functions for the use of BITMAP-MULE.  If SPLASH
 is non-nil, the function `gnus-group-startup-message' is also redefined
 and splashing the startup screen with a bitmap image."
   (require 'gnus-art)

@@ -4,10 +4,10 @@
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1999/08/20
-;; Revised: 1999/10/29
+;; Revised: 2001/02/02
 ;; Keywords: bitmap, x-face, vm
 
-;; This file is part of bitmap-mule.
+;; This file is part of BITMAP-MULE.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -47,7 +47,7 @@
       (load "vm/vm-misc" t)))
 
 (defun vm-bitmap-redefine ()
-  "Redifine function(s) for the use of bitmap-mule."
+  "Redifine function(s) for the use of BITMAP-MULE."
   (require 'vm-page)
   (defadvice vm-energize-headers-and-xfaces
     (around x-face-mule-highlight-header activate)

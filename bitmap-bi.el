@@ -7,7 +7,7 @@
 ;;         MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Keywords: bitmap, xbm, MULE
 
-;; This file is part of bitmap-mule.
+;; This file is part of BITMAP-MULE.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
@@ -51,7 +51,7 @@
 
 (if window-system
     (static-if (<= emacs-major-version 18)
-	(x-set-font "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"
+	(x-set-font "-*-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"
 		    lc-bitmap 0)
       (let ((fontsets (fontset-list))
 	    fontset size)
@@ -63,23 +63,23 @@
 	   ((eq size 12)
 	    (set-fontset-font
 	     fontset lc-bitmap
-	     "-etl-fixed-medium-r-*--12-*-100-100-m-*-bitmap.6x12-0"))
+	     "-*-fixed-medium-r-*--12-*-100-100-m-*-bitmap.6x12-0"))
 	   ((eq size 14)
 	    (set-fontset-font
 	     fontset lc-bitmap
-	     "-etl-fixed-medium-r-*--14-*-100-100-m-*-bitmap.7x14-0"))
+	     "-*-fixed-medium-r-*--14-*-100-100-m-*-bitmap.7x14-0"))
 	   ((eq size 20)
 	    (set-fontset-font
 	     fontset lc-bitmap
-	     "-etl-fixed-medium-r-*--20-*-100-100-m-*-bitmap.10x20-0"))
+	     "-*-fixed-medium-r-*--20-*-100-100-m-*-bitmap.10x20-0"))
 	   ((eq size 24)
 	    (set-fontset-font
 	     fontset lc-bitmap
-	     "-etl-fixed-medium-r-*--24-*-100-100-m-*-bitmap.12x24-0"))
+	     "-*-fixed-medium-r-*--24-*-100-100-m-*-bitmap.12x24-0"))
 	   (t
 	    (set-fontset-font
 	     fontset lc-bitmap
-	     "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")))))))
+	     "-*-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")))))))
 
 ;; Block (all bits set) character
 (defvar bitmap-block (make-char lc-bitmap 32 33))

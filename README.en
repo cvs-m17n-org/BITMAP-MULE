@@ -1,4 +1,4 @@
-[README for bitmap-mule (English Version)]
+[README for BITMAP-MULE (English Version)]
 by MORIOKA Tomohiko
    and Katsumi YAMAOKA
 
@@ -16,14 +16,14 @@ startup (normally .emacs) file:
    (require 'bitmap)
 
 
-What's bitmap-mule?
+What's BITMAP-MULE?
 ===================
 
-  bitmap-mule is a package to use bitmap in MULE or Emacs/mule.
+  BITMAP-MULE is a package to use bitmap in MULE or Emacs/mule.
 
-  bitmap-mule has following modules:
+  BITMAP-MULE has following modules:
 
-    - bitmap.el:	kernel of bitmap-mule
+    - bitmap.el:	kernel of BITMAP-MULE
     - bitmap-bi.el:	functions for Emacs 20.2 or earlier
     - bitmap-ci.el:	functions for Emacs 20.3 or later
     - bm-utils.el:	utility functions.
@@ -33,8 +33,6 @@ What's bitmap-mule?
     - x-face-18.el:	X-Face decoder for Emacs 18
     - gnus-bitmap.el:	Gnus/gnus related functions
     - vm-bitmap.el:	VM related functions
-
-    - font/bmp16-etl.bdf:	font for BITMAP 8x16
 
   The following image files will be integrated into gnus-bitmap.el at
   the complile time.
@@ -57,8 +55,6 @@ Installation
   APEL package is available from:
 
 	ftp://ftp.m17n.org/pub/mule/apel/
-
-  Fonts for BITMAP 8x16 and the other size are included in this package.
 
   uncompface program is included in compface package which is available
   from:
@@ -100,7 +96,7 @@ Installation
   For example, if PREFIX=/usr/local is specified, it will create the
   following directory:
 
-	/usr/local/share/emacs/site-lisp/bitmap/ --- bitmap-mule
+	/usr/local/share/emacs/site-lisp/bitmap/ --- BITMAP-MULE
 
   You can specify site-lisp directory, for example
 

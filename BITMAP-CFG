@@ -1,6 +1,6 @@
 ;;; -*-Emacs-Lisp-*-
 
-;; BITMAP-CFG: installation setting about bitmap-mule.
+;; BITMAP-CFG: installation setting about BITMAP-MULE.
 
 ;;; Code:
 
@@ -35,7 +35,7 @@
 (defvar PREFIX install-prefix)
 ;;(setq PREFIX "~/")
 
-;; Please specify prefix for ``bitmap-mule'' [optional]
+;; Please specify prefix for ``BITMAP-MULE'' [optional]
 (setq BITMAP_PREFIX "bitmap")
 
 

@@ -13,10 +13,10 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/12/15
+;; Revised: 2001/02/02
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
-;; This file is part of bitmap-mule.
+;; This file is part of BITMAP-MULE.
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
