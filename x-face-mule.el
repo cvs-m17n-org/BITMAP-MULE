@@ -193,16 +193,10 @@ STRING should be given if the last search was by `string-match' on STRING.
   :group 'news
   :group 'mail)
 
-(defcustom x-face-mule-uncompface-program
-  (cond ((eq system-type 'windows-nt)	"uncompface.exe")
-	(t				"uncompface"))
+(defcustom uncompface-program "uncompface"
   "Program for decoding X-Face string to UNIX Icon."
   :group 'x-face-mule
   :type 'string)
-
-;; Compatibility.
-(defvar uncompface-program (symbol-value 'x-face-mule-uncompface-program))
-(make-obsolete-variable 'uncompface-program 'x-face-mule-uncompface-program)
 
 (defcustom x-face-mule-highlight-x-face-position 'from
   "This variable says where X-Face is shown.
@@ -465,7 +459,7 @@ get hung up with it."
     (insert string)
     (as-binary-process
      (call-process-region (point-min) (point-max)
-			  x-face-mule-uncompface-program t t nil))
+			  uncompface-program t t nil))
     (buffer-string)))
 
 (defun x-face-mule-convert-vector-to-rectangle (vector)
@@ -722,12 +716,12 @@ just the headers of the article."
 			   (1+ end);; Include the last newline.
 			   x-face-mule-hidden-properties))))
 
-;; Compatibility.
+;; Compatibility.  It will be deleted in the future.
 (define-obsolete-function-alias
-  (function x-face-decode-message-header)
-  (function x-face-mule-x-face-decode-message-header))
+  (function x-face-mule-x-face-decode-message-header)
+  (function x-face-decode-message-header))
 
-(defun x-face-mule-x-face-decode-message-header (&optional beg end)
+(defun x-face-decode-message-header (&optional beg end)
   "Decode and show X-Face."
   (save-restriction
     (narrow-to-region (goto-char (or beg (point-min)))
