@@ -6,7 +6,7 @@
 ;; Author: Hiroshi Ueno <jl07715@yamato.ibm.co.jp>
 ;;	   MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Version:
-;;	$Id: x-face-mule.el,v 1.2 1996-08-01 06:33:53 morioka Exp $
+;;	$Id: x-face-mule.el,v 1.3 1996-08-01 06:35:59 morioka Exp $
 ;; Keywords: X-Face, bitmap, MULE
 
 ;; This file is part of tl (Tiny Library).
@@ -32,7 +32,7 @@
 
 (defvar uncompface-program "uncompface")
 
-(defun bitmap-decode-x-face ()
+(defun x-face-decode-message-header ()
   (save-restriction
     (rfc822/narrow-to-header)
     (goto-char (point-min))
