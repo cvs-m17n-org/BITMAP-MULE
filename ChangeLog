@@ -1,3 +1,9 @@
+2000-04-17  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bm-utils.el (bitmap-full-mailbox-data): Don't use `concat'.
+	(bitmap-empty-mailbox-data): Ditto.
+	(bitmap-load-average-data): Ditto.
+
 2000-04-16  KOSEKI Yoshinori  <kose@yk.NetLaputa.ne.jp>
 
 	* x-face-mule.el (x-face-mule-BBDB-buffer): Add save-excursion.
