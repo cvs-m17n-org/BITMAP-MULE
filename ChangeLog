@@ -1,3 +1,14 @@
+1999-10-26  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* vm-bitmap.el (vm-smiley-display): New function.
+	(TopLevel): Autoload "smiley-mule" for `smiley-toggle-buffer'.
+
+	* gnus-bitmap.el (gnus-smiley-display): New function.
+	(TopLevel): Autoload "smiley-mule" for `smiley-toggle-buffer'.
+
+	* smiley-mule.el (smiley-toggle-buffer): New function.
+	(smiley-face-bitmap-list): Fix typo.
+
 1999-10-25  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* smiley-mule.el (smiley-encode-buffer): Add doc string and
