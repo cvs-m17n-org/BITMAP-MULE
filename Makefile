@@ -4,7 +4,7 @@
 
 PACKAGE	= bitmap-mule
 API	= 8
-RELEASE	= 4
+RELEASE	= 5
 BITMAP_FONTS	= bitmap-fonts-1.0
 
 TAR	= tar
