@@ -28,8 +28,9 @@
 
 (require 'emu)
 
-(define-charset nil 'bitmap
-  [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
+(if (not (memq 'bitmap charset-list))
+    (define-charset nil 'bitmap
+      [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"]))
 
 ;; Avoid byte compile warning
 (eval-when-compile
@@ -43,70 +44,126 @@
 	0)))
 
 (if window-system
-    (mapcar (lambda (fontset)
-	      (let ((size (fontset-pixel-size fontset)))
-		(cond
-		 ((= size 12)
-		  (set-fontset-font
-		   fontset 'bitmap
-		   "-etl-fixed-medium-r-*--12-*-100-100-m-*-bitmap.6x12-0"))
-		 ((= size 14)
-		  (set-fontset-font
-		   fontset 'bitmap
-		   "-etl-fixed-medium-r-*--14-*-100-100-m-*-bitmap.7x14-0"))
-		 ((= size 16)
-		  (set-fontset-font
-		   fontset 'bitmap
-		   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"))
-		 ((= size 20)
-		  (set-fontset-font
-		   fontset 'bitmap
-		   "-etl-fixed-medium-r-*--20-*-100-100-m-*-bitmap.10x20-0"))
-		 ((= size 24)
-		  (set-fontset-font
-		   fontset 'bitmap
-		   "-etl-fixed-medium-r-*--24-*-100-100-m-*-bitmap.12x24-0"))
-		 (t
-		  (set-fontset-font
-		   fontset 'bitmap
-		   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")))))
-	    (fontset-list)))
+    (let ((fontsets (fontset-list))
+	  fontset size)
+      (while fontsets
+	(setq fontset (car fontsets)
+	      fontsets (cdr fontsets)
+	      size (fontset-pixel-size fontset))
+	(cond
+	 ((eq size 12)
+	  (set-fontset-font
+	   fontset 'bitmap
+	   "-etl-fixed-medium-r-*--12-*-100-100-m-*-bitmap.6x12-0"))
+	 ((eq size 14)
+	  (set-fontset-font
+	   fontset 'bitmap
+	   "-etl-fixed-medium-r-*--14-*-100-100-m-*-bitmap.7x14-0"))
+	 ((eq size 16)
+	  (set-fontset-font
+	   fontset 'bitmap
+	   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"))
+	 ((eq size 20)
+	  (set-fontset-font
+	   fontset 'bitmap
+	   "-etl-fixed-medium-r-*--20-*-100-100-m-*-bitmap.10x20-0"))
+	 ((eq size 24)
+	  (set-fontset-font
+	   fontset 'bitmap
+	   "-etl-fixed-medium-r-*--24-*-100-100-m-*-bitmap.12x24-0"))
+	 (t
+	  (set-fontset-font
+	   fontset 'bitmap
+	   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"))))))
 
 ;; Block (all bits set) character
 (defvar bitmap-block (make-char 'bitmap 32 33))
 
-(defun bitmap-compose (hex)
-  "Return a string of composite characters which represents BITMAP-PATTERN.
-BITMAP-PATTERN is a string of hexa decimal for 8x16 dot-pattern.
-For example the pattern \"0081814242242442111124244242818100\" is
- for a bitmap of shape something like 'X' character."
-  (let* ((len (/ (length hex) 2))
-	 (cmpstr "")
-	 (buf (make-string 16 bitmap-block))
-	 block-flag i j row code c1 c2)
-    (setq i 0 j 0 block-flag t)
+;; Space (all bits cleared) character
+(defvar bitmap-space (make-char 'bitmap 32 32))
+
+(eval-when-compile
+  (defmacro bitmap-pad-string (string padding right)
+    `(if ,right
+	 (concat ,string (make-string ,padding ?\ ))
+       (concat (make-string ,padding ?\ ) ,string))))
+
+(eval-when-compile
+  (defmacro bitmap-rotate-string (string length rotation left)
+    `(if (<= (+ ,length ,rotation) 16)
+	 (bitmap-pad-string ,string ,rotation ,left)
+       (let ((string ,string)
+	     (rotation ,rotation))
+	 (if (< ,length 16)
+	     (setq string (bitmap-pad-string string (- 16 ,length) ,left)
+		   rotation (+ rotation ,length -16)))
+	 (if ,left
+	     (concat (substring string rotation)
+		     (substring string 0 rotation))
+	   (setq rotation (- 16 rotation))
+	   (concat (substring string rotation)
+		   (substring string 0 rotation)))))))
+
+(defun bitmap-compose (hex &optional rotation)
+  "Return a string of composite characters which represents the bitmap-
+pattern HEX.  HEX is a string of hexa decimal for 8x16 dot-pattern(s).
+For example, the pattern \"00818142422424181824244242818100\" is for
+a bitmap of shape something like 'X' character.
+
+Elements of each character will be rotated left by the number ROTATION,
+if it is specified, before composing.  If ROTATION is negative, rotating
+is actually to the right.  It is useful to make a different string even
+though which has the same representation."
+  (let ((len (/ (length hex) 2))
+	(cmpstr "")
+	(buf (make-string 16 bitmap-block))
+	(block-flag t)
+	(i 0)
+	(j 0)
+	left row code)
+    (if (numberp rotation)
+	(progn
+	  (setq left (natnump rotation)
+		rotation (% (abs rotation) 16))
+	  (if (zerop rotation)
+	      (setq rotation nil))))
     (while (< i len)
       (setq row (read-hexa (substring hex (* i 2) (+ (* i 2) 2))))
       (if block-flag
-	  (setq block-flag (= row 255)))
-      (if (/= row 0)
-	  (progn
-	    (setq code (+ (* (% i 16) 255) row -1))
-	    (setq c1 (+ (/ code 96) 33)
-		  c2 (+ (% code 96) 32))
-	    (sset buf j (make-char 'bitmap c1 c2))
-	    (setq j (1+ j))))
+	  (setq block-flag (eq row 255)))
+      (if (zerop row)
+	  nil
+	(setq code (+ (* (% i 16) 255) row -1))
+	(sset buf j (make-char 'bitmap (+ (/ code 96) 33) (+ (% code 96) 32)))
+	(setq j (1+ j)))
       (setq i (1+ i))
-      (if (or (= (% i 16) 0) (>= i len))
+      (if (or (zerop (% i 16))
+	      (>= i len))
 	  (setq cmpstr
-		(concat cmpstr (cond ((and block-flag (= j 16))
-				      (char-to-string bitmap-block))
-				     ((= j 0)
-				      " ")
-				     ((= j 1)
-				      (substring buf 0 1))
-				     (t
-				      (compose-string (substring buf 0 j)))))
+		(concat
+		 cmpstr
+		 (if rotation
+		     (compose-string
+		      (cond ((and block-flag (eq j 16))
+			     (bitmap-pad-string (char-to-string bitmap-block)
+						rotation left))
+			    ((zerop j)
+			     (bitmap-pad-string (char-to-string bitmap-space)
+						rotation left))
+			    ((eq j 1)
+			     (bitmap-pad-string (substring buf 0 1)
+						rotation left))
+			    (t
+			     (bitmap-rotate-string (substring buf 0 j)
+						   j rotation left))))
+		   (cond ((and block-flag (eq j 16))
+			  (char-to-string bitmap-block))
+			 ((zerop j)
+			  " ")
+			 ((eq j 1)
+			  (substring buf 0 1))
+			 (t
+			  (compose-string (substring buf 0 j))))))
 		block-flag t
 		j 0)))
     cmpstr))

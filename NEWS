@@ -4,14 +4,14 @@ Copyright (C) 1999,2000 Free Software Foundation, Inc.
 * Changes in BITMAP-MULE 8.4
 ============================
 
+** Function `bitmap-compose' now has an optional arg `rotation'.
+It can make a different string even if which has the same representation.
+
 ** Rename `lprogress-display' to `progress-feedback-with-label'.
 It has been done in XEmacs 21.2.36.  The old function is now obsolete.
 
-** New function `bitmap-recompose'.
-It can make a different string even if which has the same representation.
-
-** Use of compface-1.3 package is recommended.
-This version of `uncompface' can generate XBM format directly.  It makes
+** Use of compface package v1.3 or later is recommended.
+These versions of `uncompface' can generate XBM format directly.  It makes
 X-Face-Mule display X-Face a little bit faster.
 
 ** BDF files (except for 8x16) are separated from BITMAP-MULE distribution.

@@ -6,7 +6,7 @@
 ;; Author: MORIOKA Tomohiko <tomo@m17n.org>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
-;; Revised: 2000/09/21
+;; Revised: 2000/12/13
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
 ;; This file is part of bitmap-mule.
@@ -680,59 +680,85 @@ MMMMMMMMMMMMMMMM
 ")
 
 (defvar smiley-face-bitmap-list
-  (let* ((ase3     (bitmap-compose (aref smiley-bitmap-for-ase3 0)))
-	 (ase3-1   (bitmap-recompose ase3 1))
-	 (ase2     (bitmap-compose (aref smiley-bitmap-for-ase2 0)))
-	 (ase2-1   (bitmap-recompose ase2 1))
-	 (ase      (bitmap-compose (aref smiley-bitmap-for-ase 0)))
-	 (ase-1    (bitmap-recompose ase 1))
-	 (weep     (bitmap-compose (aref smiley-bitmap-for-weep 0)))
-	 (weep-1   (bitmap-recompose weep 1))
-	 (weep-2   (bitmap-recompose weep 2))
-	 (smile    (bitmap-compose (aref smiley-bitmap-for-smile 0)))
-	 (smile-1  (bitmap-recompose smile 1))
-	 (angry    (bitmap-compose (aref smiley-bitmap-FaceAngry 0)))
-	 (goofy    (bitmap-compose (aref smiley-bitmap-FaceGoofy 0)))
-	 (goofy-1  (bitmap-recompose goofy 1))
-	 (happy    (bitmap-compose (aref smiley-bitmap-FaceHappy 0)))
-	 (ironic   (bitmap-compose (aref smiley-bitmap-FaceIronic 0)))
-	 (koed     (bitmap-compose (aref smiley-bitmap-FaceKOed 0)))
-	 (nyah     (bitmap-compose (aref smiley-bitmap-FaceNyah 0)))
-	 (sad      (bitmap-compose (aref smiley-bitmap-FaceSad 0)))
-	 (startled (bitmap-compose (aref smiley-bitmap-FaceStartled 0)))
-	 (straight (bitmap-compose (aref smiley-bitmap-FaceStraight 0)))
-	 (talking  (bitmap-compose (aref smiley-bitmap-FaceTalking 0)))
-	 (tasty    (bitmap-compose (aref smiley-bitmap-FaceTasty 0)))
-	 (winking  (bitmap-compose (aref smiley-bitmap-for-winking 0)))
-	 (wry      (bitmap-compose (aref smiley-bitmap-FaceWry 0)))
-	 (yukky    (bitmap-compose (aref smiley-bitmap-FaceYukky 0))))
-    (list
-     (vector "^_^;;;" ase3     'smiley-manga-face)
-     (vector "^^;;;"  ase3-1   'smiley-manga-face)
-     (vector "^_^;;"  ase2     'smiley-manga-face)
-     (vector "^^;;"   ase2-1   'smiley-manga-face)
-     (vector "^_^;"   ase      'smiley-manga-face)
-     (vector "^^;"    ase-1    'smiley-manga-face)
-     (vector ";_;"    weep     'smiley-manga-face)
-     (vector "T_T"    weep-1   'smiley-manga-face)
-     (vector ">_<"    weep-2   'smiley-manga-face)
-     (vector "^_^"    smile    'smiley-manga-face)
-     (vector "(^^)"   smile-1  'smiley-manga-face)
-     (vector ":-<"    angry    'smiley-face)
-     (vector ":-]"    goofy    'smiley-face)
-     (vector ":-D"    goofy-1  'smiley-face)
-     (vector ":-)"    happy    'smiley-face)
-     (vector ":-/"    ironic   'smiley-face)
-     (vector "8-|"    koed     'smiley-face)
-     (vector ":-#"    nyah     'smiley-face)
-     (vector ":-("    sad      'smiley-face)
-     (vector ":-O"    startled 'smiley-face)
-     (vector ":-|"    straight 'smiley-face)
-     (vector ":-p"    talking  'smiley-face)
-     (vector ":-d"    tasty    'smiley-face)
-     (vector ";-)"    winking  'smiley-manga-face)
-     (vector ":-V"    wry      'smiley-face)
-     (vector ":-P"    yukky    'smiley-face)))
+  (list
+   (vector "^_^;;;"
+	   (bitmap-compose (aref smiley-bitmap-for-ase3 0))
+	   'smiley-manga-face)
+   (vector "^^;;;"
+	   (bitmap-compose (aref smiley-bitmap-for-ase3 0) 1)
+	   'smiley-manga-face)
+   (vector "^_^;;"
+	   (bitmap-compose (aref smiley-bitmap-for-ase2 0))
+	   'smiley-manga-face)
+   (vector "^^;;"
+	   (bitmap-compose (aref smiley-bitmap-for-ase2 0) 1)
+	   'smiley-manga-face)
+   (vector "^_^;"
+	   (bitmap-compose (aref smiley-bitmap-for-ase 0))
+	   'smiley-manga-face)
+   (vector "^^;"
+	   (bitmap-compose (aref smiley-bitmap-for-ase 0) 1)
+	   'smiley-manga-face)
+   (vector ";_;"
+	   (bitmap-compose (aref smiley-bitmap-for-weep 0))
+	   'smiley-manga-face)
+   (vector "T_T"
+	   (bitmap-compose (aref smiley-bitmap-for-weep 0) 1)
+	   'smiley-manga-face)
+   (vector ">_<"
+	   (bitmap-compose (aref smiley-bitmap-for-weep 0) 2)
+	   'smiley-manga-face)
+   (vector "^_^"
+	   (bitmap-compose (aref smiley-bitmap-for-smile 0))
+	   'smiley-manga-face)
+   (vector "(^^)"
+	   (bitmap-compose (aref smiley-bitmap-for-smile 0) 1)
+	   'smiley-manga-face)
+   (vector ":-<"
+	   (bitmap-compose (aref smiley-bitmap-FaceAngry 0))
+	   'smiley-face)
+   (vector ":-]"
+	   (bitmap-compose (aref smiley-bitmap-FaceGoofy 0))
+	   'smiley-face)
+   (vector ":-D"
+	   (bitmap-compose (aref smiley-bitmap-FaceGoofy 0) 1)
+	   'smiley-face)
+   (vector ":-)"
+	   (bitmap-compose (aref smiley-bitmap-FaceHappy 0))
+	   'smiley-face)
+   (vector ":-/"
+	   (bitmap-compose (aref smiley-bitmap-FaceIronic 0))
+	   'smiley-face)
+   (vector "8-|"
+	   (bitmap-compose (aref smiley-bitmap-FaceKOed 0))
+	   'smiley-face)
+   (vector ":-#"
+	   (bitmap-compose (aref smiley-bitmap-FaceNyah 0))
+	   'smiley-face)
+   (vector ":-("
+	   (bitmap-compose (aref smiley-bitmap-FaceSad 0))
+	   'smiley-face)
+   (vector ":-O"
+	   (bitmap-compose (aref smiley-bitmap-FaceStartled 0))
+	   'smiley-face)
+   (vector ":-|"
+	   (bitmap-compose (aref smiley-bitmap-FaceStraight 0))
+	   'smiley-face)
+   (vector ":-p"
+	   (bitmap-compose (aref smiley-bitmap-FaceTalking 0))
+	   'smiley-face)
+   (vector ":-d"
+	   (bitmap-compose (aref smiley-bitmap-FaceTasty 0))
+	   'smiley-face)
+   (vector ";-)"
+	   (bitmap-compose (aref smiley-bitmap-for-winking 0))
+	   'smiley-manga-face)
+   (vector ":-V"
+	   (bitmap-compose (aref smiley-bitmap-FaceWry 0))
+	   'smiley-face)
+   (vector ":-P"
+	   (bitmap-compose (aref smiley-bitmap-FaceYukky 0))
+	   'smiley-face))
   "List of smiley face data.  Each element looks like [TEXT BITMAP FACE],
 where TEXT is a smiley face represented by the ordinary text, BITMAP is a
 string consists of composite bitmap characters and FACE is a face used for

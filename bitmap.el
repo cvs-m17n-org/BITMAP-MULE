@@ -213,47 +213,6 @@ of difinition of a character glyph in bdf file."
 (autoload 'lprogress-display "bm-utils")
 (make-obsolete 'lprogress-display 'progress-feedback-with-label)
 
-(defun bitmap-recompose (string rotation)
-  "Return a recomposed string of composite characters.  Each characters will
-be rotated left by the number ROTATION before recomposing.  It is useful
-to make a different string even though which has the same representation."
-  (setq rotation (% (abs rotation) 16))
-  (let ((buffer (let ((default-enable-multibyte-characters t)
-		      (default-mc-flag t))
-		  (generate-new-buffer " *bitmap-recompose*"))))
-    (prog1
-	(save-excursion
-	  (set-buffer buffer)
-	  (insert string)
-	  (goto-char (point-min))
-	  (let (chars last)
-	    (while (not (eobp))
-	      (narrow-to-region (point)
-				(progn
-				  (move-to-column (1+ (current-column)))
-				  (point)))
-	      (decompose-region (point-min) (point))
-	      (setq chars (string-width (buffer-substring (point-min)
-							  (point)))
-		    last (char-before (point)))
-	      (if (>= (- 16 chars) rotation)
-		  (insert-char last rotation)
-		(if (< chars 16)
-		    (progn
-		      (insert-char last (- 16 chars))
-		      (setq rotation (+ chars rotation -16))))
-		(goto-char (point-min))
-		(forward-char rotation)
-		(setq chars (buffer-substring (point-min) (point)))
-		(delete-region (point-min) (point))
-		(goto-char (point-max))
-		(insert chars))
-	      (compose-region (point-min) (point))
-	      (goto-char (point-max))
-	      (widen)))
-	  (buffer-string))
-      (kill-buffer buffer))))
-
 
 ;;; @ end
 ;;;

@@ -1,3 +1,17 @@
+2000-12-13  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* smiley-mule.el (smiley-face-bitmap-list): Use `bitmap-compose'
+	with the optional arg instead of `bitmap-recompose'.
+
+	* bitmap.el (bitmap-recompose): Remove.
+
+	* bitmap-ci.el (bitmap-compose): Allow the optional arg `rotation'.
+	(bitmap-rotate-string, bitmap-pad-string): New macros.
+	(bitmap-space): New variable.
+	(TopLevel): Don't use `mapcar' to set fontset fonts.
+	(TopLevel): Don't make new charset if it already exists.
+	* bitmap-bi.el: Ditto.
+
 2000-10-05  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bm-utils.el (bitmap-progress-backgrounds): Remove variable.
