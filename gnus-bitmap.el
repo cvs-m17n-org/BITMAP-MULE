@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 1999/08/24
+;; Revised: 1999/10/19
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -309,7 +309,7 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 		  (setq gnus-visible-headers
 			(format "\\(%s\\)\\|^X-Face-Img:"
 				gnus-visible-headers))))))
-	((and gnus-visible-headers (listp gnus-visible-headers))
+	((consp gnus-visible-headers)
 	 (unless (member "^X-Face:" gnus-visible-headers)
 	   (setq gnus-visible-headers
 		 (append gnus-visible-headers '("^X-Face:"))))
@@ -327,7 +327,7 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 				      (match-beginning 0))
 			   (substring gnus-ignored-headers
 				      (match-end 0)))))))
-	((and gnus-ignored-headers (listp gnus-ignored-headers))
+	((consp gnus-ignored-headers)
 	 (when (member "^X-Face:" gnus-ignored-headers)
 	   (setq gnus-ignored-headers
 		 (delete "^X-Face:" gnus-ignored-headers)))
@@ -336,16 +336,21 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 		 (delete "^X-Face-Img:" gnus-ignored-headers)))
 	 ))
 
-  ;; Pterodactyl Gnus, T-gnus 6.10.064 or later.
-  (setq gnus-treat-display-xface
-	(if (and (featurep 'running-pterodactyl-gnus-0_73-or-later); T-gnus
-		 (not x-face-mule-gnus-force-decode-headers))
-	    '(and mime head)
-	  'head)
-	gnus-treat-hide-headers 'head
-	gnus-article-x-face-command 'x-face-mule-gnus-article-display-x-face)
+  (when (boundp 'gnus-treat-display-xface)
+    (if (not (stringp gnus-article-x-face-command))
+	;; Don't touch any user options.
+	nil
+      ;; Pterodactyl Gnus, T-gnus 6.10.064 or later.
+      (setq
+       gnus-treat-display-xface
+       (if (and (featurep 'running-pterodactyl-gnus-0_73-or-later); T-gnus
+		(not x-face-mule-gnus-force-decode-headers))
+	   '(and mime head)
+	 'head)
+       gnus-treat-hide-headers 'head
+       gnus-article-x-face-command 'x-face-mule-gnus-article-display-x-face)))
 
-  ;; Advice the hiding function.
+  ;; Advise the hiding function.
   (defadvice article-hide-headers (after x-face-mule-highlight-header
 					 activate)
     "Highlight X-Face field(s) after `article-hide-headers' is done."
