@@ -8,9 +8,10 @@
 ;; Author: KORIYAMA Naohiro <kory@ba2.so-net.ne.jp>
 ;;         Katsumi Yamaoka <yamaoka@jpl.org>
 ;;         OKUNISHI -GTO- Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
+;;         KOSEKI Yoshinori <kose@yk.NetLaputa.ne.jp>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/03/15
+;; Revised: 2000/04/18
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of bitmap-mule.
@@ -50,15 +51,12 @@
 ;;	There is nothing to be done.
 ;;
 ;;    [Wanderlust]
-;;	Add the following code in your ~/.emacs:
+;;	Add the following code in your ~/.wl file:
 ;;
 ;;	(if window-system
 ;;	    (progn
 ;;	      (autoload 'x-face-decode-message-header "x-face-mule")
-;;	      (setq wl-highlight-x-face-func
-;;		    (function
-;;		     (lambda (&rest args)
-;;		       (x-face-decode-message-header))))))
+;;	      (setq wl-highlight-x-face-func 'x-face-decode-message-header)))
 ;;
 ;;    [before Mew 1.90]
 ;;	Add the following code in your ~/.emacs:
@@ -93,7 +91,7 @@
 ;;
 ;;     [BBDB]
 ;;	Add the following code in your ~/.emacs, and collect `X-Face':
-;;      
+;;
 ;;     (setq bbdb-auto-notes-alist
 ;;           (append bbdb-auto-notes-alist
 ;;                   (list (list "x-face"
@@ -214,7 +212,7 @@ STRING should be given if the last search was by `string-match' on STRING.
 
 (defgroup x-face-mule nil
   "Show X-Face inline for Emacs/Mule."
-  :prefix 'x-face-mule
+  :group 'bitmap-mule
   :group 'news
   :group 'mail)
 
@@ -889,10 +887,17 @@ just the headers of the article."
   )
 
 
-;;; BBDB 
+;;; BBDB
 ;;
 (defvar x-face-mule-BBDB-display (locate-library "bbdb")
   "*If non-nil, display X-Face")
+
+(eval-and-compile
+  (autoload 'bbdb-current-record "bbdb-com")
+  (autoload 'bbdb-record-getprop "bbdb"))
+
+;; Byte-compiler warning.
+(defvar bbdb-buffer-name)
 
 (defun x-face-mule-BBDB-buffer ()
   "Display X-Face in *BBDB* buffer."
@@ -907,7 +912,6 @@ just the headers of the article."
 (defun x-face-mule-BBDB-one-record ()
   "Display X-Face in *BBDB* one recode."
   (interactive)
-  (require 'bbdb-com) ; bbdb-current-record
   (save-excursion
     (beginning-of-line)
     (while (not (or (eobp) (bobp) (looking-at "^[^ \t\n]")))
@@ -918,17 +922,17 @@ just the headers of the article."
 	   (home (point))
 	   (i 0)
 	   buffer-read-only
-	   xfaces xface pos match-end)
+	   xfaces xface pos match-end beg)
       (when (and sfaces
 		 (re-search-forward "^[ ]+face: " nil t)
 		 (setq beg (match-beginning 0))
 		 (not (get-text-property beg 'invisible))
 		 (re-search-forward "^[ ]+[^:]+: \\|\n\n" nil t)
-		 (not (put-text-property beg (match-beginning 0) 
+		 (not (put-text-property beg (match-beginning 0)
 					 'invisible t)))
 	(goto-char home)
 	(while (string-match "[^\n]+\n?" sfaces)
-	  (and (setq xface (x-face-mule-convert-x-face-to-rectangle 
+	  (and (setq xface (x-face-mule-convert-x-face-to-rectangle
 			    (substring sfaces
 				       (match-beginning 0)
 				       (setq match-end (match-end 0)))))
@@ -947,12 +951,12 @@ just the headers of the article."
 	(forward-line)
 	(put-text-property home (point) 'intangible t)))))
 
-;;; BBDB Setup. 
+;;; BBDB Setup.
 ;;
 
 (if x-face-mule-BBDB-display
     (progn
-      (defadvice bbdb-display-records-1 
+      (defadvice bbdb-display-records-1
 	(after x-face-mule-BBDB-buffer activate) (x-face-mule-BBDB-buffer))
       (add-hook 'bbdb-list-hook 'x-face-mule-BBDB-one-record)))
 
