@@ -1,3 +1,14 @@
+1999-10-19  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* gnus-bitmap.el (gnus-bitmap-redefine): Don't touch any user
+	options if `gnus-article-x-face-command' is not a string.
+
+	* x-face-mule.el: Autoload "gnus-bitmap" for the function
+	`x-face-mule-gnus-article-display-x-face' for backward
+	compatibility.
+
+	* smiley-mule.el: Update commentary for SEMI.
+
 1999-10-01  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* gnus-bitmap.el (x-face-mule-gnus-highlight-headers-if-no-mime):
