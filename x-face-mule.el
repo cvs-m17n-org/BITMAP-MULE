@@ -13,7 +13,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2001/09/10
+;; Revised: 2001/09/20
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of BITMAP-MULE.
@@ -418,6 +418,47 @@ get hung up with it."
   (if (> emacs-major-version 19)
       'iso-2022-7bit-unix
     '*junet*unix))
+(defconst x-face-mule-most-positive-fixnum (eval '(lsh -1 -1)))
+
+
+;;; Macros.
+;;
+(defmacro x-face-mule-overlay-put (overlay &rest plist)
+  "Add PLIST, the property `priority' with the value
+`x-face-mule-most-positive-fixnum' and the property `evaporate' with
+the value t to OVERLAY."
+  (if (symbolp overlay)
+      (cond ((= 2 (length plist))
+	     (` (progn
+		  (apply (function overlay-put) (, overlay) (list (,@ plist)))
+		  (overlay-put (, overlay) 'priority
+			       x-face-mule-most-positive-fixnum)
+		  (overlay-put (, overlay) 'evaporate t))))
+	    ((and (> (length plist) 2)
+		  (zerop (% (length plist) 2)))
+	     (` (let ((plist (list (,@ plist))))
+		  (while plist
+		    (overlay-put (, overlay) (car plist) (car (cdr plist)))
+		    (setq plist (cdr (cdr plist))))
+		  (overlay-put (, overlay) 'priority
+			       x-face-mule-most-positive-fixnum)
+		  (overlay-put (, overlay) 'evaporate t)))))
+    (cond ((= 2 (length plist))
+	   (` (let ((overlay (, overlay)))
+		(apply (function overlay-put) overlay (list (,@ plist)))
+		(overlay-put overlay 'priority
+			     x-face-mule-most-positive-fixnum)
+		(overlay-put overlay 'evaporate t))))
+	  ((and (> (length plist) 2)
+		(zerop (% (length plist) 2)))
+	   (` (let ((overlay (, overlay))
+		    (plist (list (,@ plist))))
+		(while plist
+		  (overlay-put overlay (car plist) (car (cdr plist)))
+		  (setq plist (cdr (cdr plist))))
+		(overlay-put overlay 'priority
+			     x-face-mule-most-positive-fixnum)
+		(overlay-put overlay 'evaporate t)))))))
 
 
 ;;; Internal functions for cache.
@@ -511,7 +552,7 @@ get hung up with it."
 			(x-face-mule-convert-icon-to-rectangle
 			 (x-face-mule-convert-x-face-to-icon string))
 		      (setq uncompface-program-can-generate-xbm nil)
-		      (message "%s" (cadr err)))))
+		      (message "%s" (car (cdr err))))))
 	       (x-face-mule-convert-icon-to-rectangle
 		(x-face-mule-convert-x-face-to-icon string)))))
       (setq x-face-mule-cache-modified-p t)
@@ -555,9 +596,9 @@ get hung up with it."
       (let* ((line "") (k (* i 6)) (k+6 (+ k 6)))
 	(while (< k k+6)
 	  (setq line (concat line (bitmap-compose (aref vector k))))
-	  (incf k))
+	  (setq k (1+ k)))
 	(setq ret (nconc ret (list line))))
-      (incf i))
+      (setq i (1+ i)))
     ret))
 
 (defun x-face-mule-convert-icon-to-rectangle (icon)
@@ -572,12 +613,12 @@ get hung up with it."
 	  (while (< k k+6)
 	    (setq temp (buffer-substring (point) (+ (point) 2)))
 	    (aset cmp k (concat (aref cmp k) temp))
-	    (incf k)
+	    (setq k (1+ k))
 	    (setq temp (buffer-substring (+ (point) 2) (+ (point) 4)))
 	    (aset cmp k (concat (aref cmp k) temp))
-	    (incf k)
+	    (setq k (1+ k))
 	    (search-forward "0x" nil t)))
-	(incf i)))
+	(setq i (1+ i))))
     (x-face-mule-convert-vector-to-rectangle cmp)))
 
 (defun x-face-mule-x-face-insert-at-point (rectangles last)
@@ -625,7 +666,7 @@ returns the begin-point of the x-face rectangle."
 	(insert "\n           \n           ")
 	(while (< n height)
 	  (insert "\n           \n           \n           ")
-	  (incf n))
+	  (setq n (1+ n)))
 	(insert "\n")
 	(put-text-property beg (point) 'mime-view-entity mime-entity)))
      ((and (eq x-face-mule-highlight-x-face-position 'from)
@@ -650,7 +691,7 @@ returns the begin-point of the x-face rectangle."
 	    (insert "\n")
 	    (x-face-mule-insert-invisible-from)
 	    (insert "\n")
-	    (incf n))
+	    (setq n (1+ n)))
 	  (put-text-property beg (point) 'mime-view-entity mime-entity)))
        (t
 	(prog1
@@ -659,7 +700,7 @@ returns the begin-point of the x-face rectangle."
 	  (insert "\n     \n     ")
 	  (while (< n height)
 	    (insert "\n     \n     \n     ")
-	    (incf n))
+	    (setq n (1+ n)))
 	  (put-text-property beg (point) 'mime-view-entity mime-entity))))))))
 
 (defun x-face-mule-change-highlight-x-face-method-by-alist ()
@@ -692,7 +733,7 @@ returns the begin-point of the x-face rectangle."
       (goto-char beg)
       (while (re-search-forward
 	      "^X-Face: *\\(.*\\(\n[ \t].*\\)*\\)\n" end t)
-	(incf i))
+	(setq i (1+ i)))
       (setq j (if (> i 0) 1 0))
       (list 'mono i j))))
 
@@ -751,10 +792,10 @@ just the headers of the article."
 	   w)
       (goto-char (point-min))
       (let ((h 0))
-	(while (<= (incf h) height)
+	(while (<= (setq h (1+ h)) height)
 	  (setq faces-s nil)
 	  (setq w 0)
-	  (while (and (<= (incf w) width)
+	  (while (and (<= (setq w (1+ w)) width)
 		      (re-search-forward
 		       "^X-Face: *\\(.*\\(\n[ \t].*\\)*\\)\n" nil t))
 	    (setq faces-s (cons (match-string-no-properties 1) faces-s))
@@ -773,7 +814,7 @@ just the headers of the article."
 							  (point-max) height))
 		   (end-of-line 2) (point))))
 	    (setq w 0)
-	    (while (and (<= (incf w) width) faces)
+	    (while (and (<= (setq w (1+ w)) width) faces)
 	      (goto-char begin-point)
 	      (x-face-mule-x-face-insert-at-point
 	       (x-face-mule-convert-x-face-to-rectangle (pop faces))
@@ -783,14 +824,12 @@ just the headers of the article."
 (defun x-face-mule-highlight-header ()
   "Highlight inline images and hide raw X-Face fields."
   (let (start (end (point-min)))
-    (let (overlay)
-      (while (and (setq start (text-property-any
-			       end (point-max) 'x-face-mule-bitmap-image t))
-		  (setq end (text-property-not-all
-			     start (point-max) 'x-face-mule-bitmap-image t)))
-	(setq overlay (make-overlay start end))
-	(overlay-put overlay 'face x-face-mule-highlight-x-face-face)
-	(overlay-put overlay 'evaporate t)))
+    (while (and (setq start (text-property-any
+			     end (point-max) 'x-face-mule-bitmap-image t))
+		(setq end (text-property-not-all
+			   start (point-max) 'x-face-mule-bitmap-image t)))
+      (x-face-mule-overlay-put (make-overlay start end)
+			       'face x-face-mule-highlight-x-face-face))
     (setq end (point-min))
     (let ((inhibit-read-only t))
       (while (and (setq start (text-property-any
@@ -923,8 +962,15 @@ just the headers of the article."
 
 ;;; BBDB
 ;;
-(defvar x-face-mule-BBDB-display (locate-library "bbdb")
+(defvar x-face-mule-BBDB-display (and (locate-library "bbdb") t)
   "*If non-nil, display X-Faces in *BBDB* buffer.")
+
+(defvar x-face-mule-BBDB-icon (bitmap-compose "\
+0000f87c3e1f0f070205081020400000000002040810a040e0f0f87c3e1f0000")
+  "*Bitmap image used to iconified raw X-Face data.")
+
+(defvar x-face-mule-BBDB-verbose t
+  "*Non-nil makes x-face-mule-BBDB- functions talkative.")
 
 (eval-and-compile
   (autoload 'bbdb-current-record "bbdb-com")
@@ -939,18 +985,14 @@ just the headers of the article."
   (when (and x-face-mule-BBDB-display
 	     (get-buffer bbdb-buffer-name))
     (save-excursion
+      (set-buffer bbdb-buffer-name)
       (let ((inhibit-point-motion-hooks t))
-	(set-buffer bbdb-buffer-name)
 	(goto-char (point-min))
-	(while
-	    (progn
-	      (while (and (not (eobp))
-			  (or (get-text-property (point) 'intangible)
-			      (get-text-property (point)
-						 'x-face-mule-processed-mark)
-			      (memq (following-char) '(?\t ?\n ?\ ))))
-		(forward-line 1))
-	      (not (eobp)))
+	(while (progn
+		 (while (and (not (eobp))
+			     (memq (following-char) '(?\t ?\n ?\ )))
+		   (forward-line 1))
+		 (not (eobp)))
 	  (x-face-mule-BBDB-one-record t)
 	  (forward-line 1))))))
 
@@ -960,30 +1002,36 @@ means that the current position is the beginning of a record."
   (when x-face-mule-BBDB-display
     (unless beginning-of-record
       (beginning-of-line)
-      (if (looking-at "[\t\n ]*$")
-	  (while (and (not (eobp))
-		      (memq (following-char) '(?\t ?\n ?\ )))
-	    (forward-line 1))
+      (if (eolp)
+	  (progn
+	    (forward-line 1)
+	    (while (and (not (eobp))
+			(memq (following-char) '(?\t ?\n ?\ )))
+	      (forward-line 1)))
 	(while (and (not (bobp))
 		    (memq (following-char) '(?\t ?\n ?\ )))
 	  (forward-line -1))))
-    (let ((home (point))
-	  (record (bbdb-current-record))
+    (let ((record (bbdb-current-record))
 	  (inhibit-read-only t)
-	  start sfaces xface xfaces)
+	  sfaces home start xface xfaces
+	  len (i 0) j pos)
       (when (and record
 		 (setq sfaces (bbdb-record-getprop record 'face)))
-	(message "Extracting X-Face(s) for %s..." (bbdb-record-name record))
-	(while (not (looking-at "[\t ]+face:"))
-	  (forward-line 1))
-	(unless (get-text-property (point) 'invisible)
-	  (setq start (point))
-	  (while (progn
-		   (forward-line 1)
-		   (not (or (looking-at "\
-\[^\t\n ]\\|[\t ]+[^\t\n :]+:\\([\t ]\\|[\t ]*$\\)")
-			    (eobp)))))
-	  (put-text-property start (point) 'invisible t))
+	(when x-face-mule-BBDB-verbose
+	  (message "Extracting X-Face(s) for %s..." (bbdb-record-name record)))
+	(forward-line 1)
+	(setq home (point))
+	(while (and (not (and (looking-at "[\t ]+face:[\t ]+")
+			      (setq start (match-end 0))))
+		    (zerop (forward-line 1))))
+	(while (and (zerop (forward-line 1))
+		    (not (looking-at
+			  "[\t ]+[^\t\n ]+:[\t ]\\|[\t ]*$\\|[^\t\n ]"))))
+	(save-restriction
+	  (narrow-to-region start (1- (point)))
+	  (goto-char (point-min))
+	  (while (re-search-forward "[^\t\n ]+[\t\n ]*" nil t)
+	    (replace-match x-face-mule-BBDB-icon)))
 	(setq start 0)
 	(while (string-match "\\([^\t\n\v\f\r ]+\\)[\t\n\v\f\r ]*"
 			     sfaces start)
@@ -992,52 +1040,32 @@ means that the current position is the beginning of a record."
 			     (substring sfaces
 					(match-beginning 1) (match-end 1))))
 	    (setq xfaces (nconc xfaces (list xface)))))
+	(setq len (length xfaces))
 	(goto-char home)
-	(let ((len (length xfaces))
-	      (i 0)
-	      j pos overlays overlay)
-	  (if (bobp)
-	      (progn
-		(insert "\n")
-		(backward-char 1)
-		(setq overlays (overlays-at (point)))
-		(while overlays
-		  (setq overlay (car overlays)
-			overlays (cdr overlays))
-		  (move-overlay overlay
-				(1+ (overlay-start overlay))
-				(overlay-end overlay))))
-	    (backward-char 1)
-	    (when (prog1
-		      (get-text-property (point) 'invisible)
-		    (insert "\n"))
-	      (put-text-property (1- (point)) (point) 'invisible t)
-	      (put-text-property (point) (1+ (point)) 'invisible nil)))
-	  (while (> 3 i)
-	    (setq j 0)
-	    (while (> len j)
-	      (insert " ")
-	      (setq pos (point))
-	      (insert (format "%s" (nth i (nth j xfaces))))
-	      (setq overlay (make-overlay pos (point)))
-	      (overlay-put overlay 'face x-face-mule-highlight-x-face-face)
-	      (overlay-put overlay 'evaporate t)
-	      (incf j))
-	    (incf i)
-	    (when (> 3 i)
-	      (insert "\n"))))
+	(while (> 3 i)
+	  (setq j 0)
+	  (while (> len j)
+	    (insert " ")
+	    (setq pos (point))
+	    (insert (format "%s" (nth i (nth j xfaces))))
+	    (x-face-mule-overlay-put (make-overlay pos (point))
+				     'face x-face-mule-highlight-x-face-face)
+	    (setq j (1+ j)))
+	  (setq i (1+ i))
+	  (insert "\n"))
 	(forward-line 1)
-	(put-text-property home (point) 'intangible t)
-	(put-text-property (point) (1+ (point))
-			   'x-face-mule-processed-mark t)))))
+	(x-face-mule-overlay-put (make-overlay home (point))
+				 'intangible t)))))
 
 ;;; BBDB Setup.
 ;;
 
 (let (current-load-list)
   (defadvice bbdb-display-records-1 (around x-face-mule-BBDB-buffer activate)
-    "Display X-Faces in *BBDB* buffer."
-    (let ((silent (or (and (boundp 'bbdb-gag-messages)
+    "Advised by X-Face-Mule.
+Display X-Faces in *BBDB* buffer."
+    (let ((silent (or (not x-face-mule-BBDB-verbose)
+		      (and (boundp 'bbdb-gag-messages)
 			   (symbol-value 'bbdb-gag-messages))
 		      (and (boundp 'bbdb-silent-running)
 			   (symbol-value 'bbdb-silent-running)))))
@@ -1049,7 +1077,44 @@ means that the current position is the beginning of a record."
 	ad-do-it)
       (x-face-mule-BBDB-buffer)
       (unless silent
-	(message "Formatting...done")))))
+	(message "Formatting...done"))))
+
+  (defadvice bbdb-elide-all-records-internal
+    (around dont-show-x-faces-if-records-are-made-elided activate)
+    "Advised by X-Face-Mule for BBDB versions prior to 2.33.
+Don't show X-Faces if records are made elided."
+    (let ((x-face-mule-BBDB-display
+	   (cond ((not (ad-get-arg 0))
+		  (and (car (cdr (assq (bbdb-current-record)
+				       bbdb-records)))
+		       x-face-mule-BBDB-display))
+		 ((eq 0 (ad-get-arg 0)) x-face-mule-BBDB-display)
+		 (t nil)))
+	  x-face-mule-BBDB-verbose)
+      ad-do-it))
+
+  (defadvice bbdb-elide-record-internal
+    (around dont-show-x-faces-if-record-is-made-elided activate)
+    "Advised by X-Face-Mule for BBDB versions prior to 2.33.
+Don't show X-Face if a record is made elided."
+    (let ((x-face-mule-BBDB-display
+	   (cond ((not (ad-get-arg 0))
+		  (and (car (cdr (assq (bbdb-current-record)
+				       bbdb-records)))
+		       x-face-mule-BBDB-display))
+		 ((eq 0 (ad-get-arg 0)) x-face-mule-BBDB-display)
+		 (t nil)))
+	  x-face-mule-BBDB-verbose)
+      ad-do-it))
+
+  (defadvice bbdb-change-records-state-and-redisplay
+    (around dont-show-x-faces-if-records-are-made-elided activate)
+    "Advised by X-Face-Mule for BBDB versions 2.33 and later.
+Don't show X-Faces if records are made elided."
+    (let ((x-face-mule-BBDB-display (if (eq 'multi-line (ad-get-arg 0))
+					x-face-mule-BBDB-display))
+	  x-face-mule-BBDB-verbose)
+      ad-do-it)))
 
 (add-hook 'bbdb-list-hook 'x-face-mule-BBDB-one-record)
 

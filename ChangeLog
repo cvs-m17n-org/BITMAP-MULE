@@ -1,3 +1,31 @@
+2001-09-20  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (bbdb-change-records-state-and-redisplay): Advice
+	it not to show X-Face images if BBDB records are made elided.
+	(bbdb-elide-record-internal): Ditto.
+	(bbdb-elide-all-records-internal): Ditto.
+	(bbdb-display-records-1): Be silent if `x-face-mule-BBDB-verbose'
+	is nil.
+	(x-face-mule-BBDB-one-record): Use overlays instead of text
+	properties to highlight X-Face images; modify a position to show
+	X-Face images; iconify raw X-Face data instead of to hide them.
+	(x-face-mule-BBDB-buffer): Simplify.
+	(x-face-mule-BBDB-verbose): New variable.
+	(x-face-mule-BBDB-icon): New variable.
+	(x-face-mule-BBDB-display): Modify the default value to `t' or
+	nil, not a string.
+	(x-face-mule-highlight-header): Use `x-face-mule-overlay-put'.
+	(x-face-mule-x-face-decode-message-header-1,
+	x-face-mule-analyze-x-face-type,
+	x-face-mule-x-face-allocate-lines,
+	x-face-mule-convert-icon-to-rectangle,
+	x-face-mule-convert-vector-to-rectangle): Don't use `incf' or
+	`decf'.
+	(x-face-mule-convert-x-face-to-rectangle): Use `car' and `cdr'
+	instead of `cadr'.
+	(x-face-mule-overlay-put): New macro.
+	(x-face-mule-most-positive-fixnum): New constant.
+
 2001-09-10  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (bbdb-display-records-1): Don't call
