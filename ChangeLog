@@ -1,3 +1,16 @@
+2000-05-18  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el, README.en, NEWS: Use of compface-1.3 package is
+	recommended.
+
+	* compface-1.2.patch: Remove.
+
+	* README.en, NEWS: BITMAP-MULE does not support FSF Emacs 21+.
+
+	* gnus-bitmap.el (gnus-bitmap-redefine): Replace
+	`(>= emacs-major-version 20)' with `(eq emacs-major-version 20)'.
+	* bm-utils.el (Commentary): Ditto.
+
 2000-04-26  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* font/etl12x24-bitmap.bdf: Remove.

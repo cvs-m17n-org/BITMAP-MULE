@@ -12,7 +12,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/04/18
+;; Revised: 2000/05/18
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of bitmap-mule.
@@ -38,13 +38,9 @@
 
 ;; 1. Build and install `uncompface' program which is available from:
 ;;
-;;	ftp://ftp.win.ne.jp/pub/misc/compface-1.2.tar.gz
+;;	ftp://ftp.win.ne.jp/pub/misc/compface-1.3.tar.gz
 ;;
 ;;    It is one example of many.
-;;
-;; NOTE: This version of compface has a bug.  Please apply the patch
-;; named "compface-1.2.patch", which is included in the BITMAP-MULE
-;; distribution, before installing it.
 
 ;; 2. Setting up
 ;;

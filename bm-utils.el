@@ -5,7 +5,7 @@
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;;         Yoshitsugu Mito <mit@nines.nec.co.jp>
 ;; Created: 2000/03/28
-;; Revised: 2000/04/18
+;; Revised: 2000/05/18
 ;; Keywords: bitmap, lprogress-display, display-time
 
 ;; This file is part of bitmap-mule.
@@ -32,7 +32,7 @@
 ;;
 ;;	(if (and (not (featurep 'xemacs))
 ;;		 window-system
-;;		 (>= emacs-major-version 20))
+;;		 (eq emacs-major-version 20))
 ;;	    (progn
 ;;	      (require 'bm-utils)
 ;;	      (setq display-time-string-forms
@@ -50,81 +50,79 @@
 (require 'pcustom)
 (require 'bitmap)
 
-(eval-and-compile;; For old mule.
-  (defcustom bitmap-lprogress-display-textual nil
-    "If it is non-nil, progress display will be textual."
-    :type 'boolean
-    :group 'bitmap-mule)
+(defcustom bitmap-lprogress-display-textual nil
+  "If it is non-nil, progress display will be textual."
+  :type 'boolean
+  :group 'bitmap-mule)
 
-  (defvar bitmap-special-symbol-alist
-    (list '(?  . " ")
-	  (cons ?% (bitmap-compose "00000000007A4A4C4C781E3232525E00"))
-	  (cons ?- (bitmap-compose "000000000000003C7800000000000000"))
-	  (cons ?0 (bitmap-compose "007CBAC6C6C6C2800286C6C6C6BA7C00"))
-	  (cons ?1 (bitmap-compose "00000206060602000206060606020000"))
-	  (cons ?2 (bitmap-compose "007C3A060606023C7880C0C0C0B87C00"))
-	  (cons ?3 (bitmap-compose "007C3A060606023C7A060606063A7C00"))
-	  (cons ?4 (bitmap-compose "000082C6C6C6C2BC7A06060606020000"))
-	  (cons ?5 (bitmap-compose "007CB8C0C0C0C0BC7A060606063A7C00"))
-	  (cons ?6 (bitmap-compose "007CB8C0C0C0C0BC7A86C6C6C6BA7C00"))
-	  (cons ?7 (bitmap-compose "007CBAC6C6C6C2800206060606020000"))
-	  (cons ?8 (bitmap-compose "007CBAC6C6C6C2BC7A86C6C6C6BA7C00"))
-	  (cons ?9 (bitmap-compose "007CBAC6C6C6C2BC7A060606063A7C00")))
-    "Alist of char and special symbol bitmap.")
+(defvar bitmap-special-symbol-alist
+  (list '(?  . " ")
+	(cons ?% (bitmap-compose "00000000007A4A4C4C781E3232525E00"))
+	(cons ?- (bitmap-compose "000000000000003C7800000000000000"))
+	(cons ?0 (bitmap-compose "007CBAC6C6C6C2800286C6C6C6BA7C00"))
+	(cons ?1 (bitmap-compose "00000206060602000206060606020000"))
+	(cons ?2 (bitmap-compose "007C3A060606023C7880C0C0C0B87C00"))
+	(cons ?3 (bitmap-compose "007C3A060606023C7A060606063A7C00"))
+	(cons ?4 (bitmap-compose "000082C6C6C6C2BC7A06060606020000"))
+	(cons ?5 (bitmap-compose "007CB8C0C0C0C0BC7A060606063A7C00"))
+	(cons ?6 (bitmap-compose "007CB8C0C0C0C0BC7A86C6C6C6BA7C00"))
+	(cons ?7 (bitmap-compose "007CBAC6C6C6C2800206060606020000"))
+	(cons ?8 (bitmap-compose "007CBAC6C6C6C2BC7A86C6C6C6BA7C00"))
+	(cons ?9 (bitmap-compose "007CBAC6C6C6C2BC7A060606063A7C00")))
+  "Alist of char and special symbol bitmap.")
 
-  (defvar bitmap-lprogress-data-for-clear-bar
-    (list (bitmap-compose "55AA552A152A152A152A152A15AA55AA")
-	  (bitmap-compose "55AA550A050A050A050A050A05AA55AA")
-	  (bitmap-compose "55AA5502010201020102010201AA55AA"))
-    "Bitmaps for progress guage with clear bar.")
+(defvar bitmap-lprogress-data-for-clear-bar
+  (list (bitmap-compose "55AA552A152A152A152A152A15AA55AA")
+	(bitmap-compose "55AA550A050A050A050A050A05AA55AA")
+	(bitmap-compose "55AA5502010201020102010201AA55AA"))
+  "Bitmaps for progress guage with clear bar.")
 
-  (defvar bitmap-lprogress-backgrounds-for-clear-bar
-    (list (bitmap-compose "05020502050205020502050205020502")
-	  (string-to-char (bitmap-compose "55AA5500000000000000000000AA55AA"))
-	  (string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
-	  (bitmap-compose "40A040A040A040A040A040A040A040A0"))
-    "Bitmaps for progress guage background with clear bar.")
+(defvar bitmap-lprogress-backgrounds-for-clear-bar
+  (list (bitmap-compose "05020502050205020502050205020502")
+	(string-to-char (bitmap-compose "55AA5500000000000000000000AA55AA"))
+	(string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
+	(bitmap-compose "40A040A040A040A040A040A040A040A0"))
+  "Bitmaps for progress guage background with clear bar.")
 
-  (defvar bitmap-lprogress-data-for-opaque-bar
-    (list (bitmap-compose "55AA55EAF5EAF5EAF5EAF5EAF5AA55AA")
-	  (bitmap-compose "55AA55FAF5FAF5FAF5FAF5FAF5AA55AA")
-	  (bitmap-compose "55AA55FEFDFEFDFEFDFEFDFEFDAA55AA"))
-    "Bitmaps for progress guage with opaque bar.")
+(defvar bitmap-lprogress-data-for-opaque-bar
+  (list (bitmap-compose "55AA55EAF5EAF5EAF5EAF5EAF5AA55AA")
+	(bitmap-compose "55AA55FAF5FAF5FAF5FAF5FAF5AA55AA")
+	(bitmap-compose "55AA55FEFDFEFDFEFDFEFDFEFDAA55AA"))
+  "Bitmaps for progress guage with opaque bar.")
 
-  (defvar bitmap-lprogress-backgrounds-for-opaque-bar
-    (list (bitmap-compose "05020502050205020502050205020502")
-	  (string-to-char (bitmap-compose "55AA55FFFFFFFFFFFFFFFFFFFFAA55AA"))
-	  (string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
-	  (bitmap-compose "40A040A040A040A040A040A040A040A0"))
-    "Bitmaps for progress guage background with opaque bar.")
+(defvar bitmap-lprogress-backgrounds-for-opaque-bar
+  (list (bitmap-compose "05020502050205020502050205020502")
+	(string-to-char (bitmap-compose "55AA55FFFFFFFFFFFFFFFFFFFFAA55AA"))
+	(string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
+	(bitmap-compose "40A040A040A040A040A040A040A040A0"))
+  "Bitmaps for progress guage background with opaque bar.")
 
-  (defcustom bitmap-lprogress-diaplay-use-clear-bar t
-    "Non-nil means progress bar will be displayed clearly, otherwise opaquely."
-    :type (` (radio
-	      (const
-	       :format
-	       ( ,(concat
-		   "%{"
-		   (car bitmap-lprogress-backgrounds-for-clear-bar)
-		   (make-string
-		    20 (nth 1 bitmap-lprogress-backgrounds-for-clear-bar))
-		   (make-string
-		    5 (nth 2 bitmap-lprogress-backgrounds-for-clear-bar))
-		   (nth 3 bitmap-lprogress-backgrounds-for-clear-bar)
-		   "%}  "))
-	       t)
-	      (const
-	       :tag
-	       ( ,(concat
-		   (car bitmap-lprogress-backgrounds-for-opaque-bar)
-		   (make-string
-		    20 (nth 1 bitmap-lprogress-backgrounds-for-opaque-bar))
-		   (make-string
-		    5 (nth 2 bitmap-lprogress-backgrounds-for-opaque-bar))
-		   (nth 3 bitmap-lprogress-backgrounds-for-opaque-bar)
-		   nil)))))
-    :group 'bitmap-mule)
-  );; eval-and-compile
+(defcustom bitmap-lprogress-diaplay-use-clear-bar t
+  "Non-nil means progress bar will be displayed clearly, otherwise opaquely."
+  :type (` (radio
+	    (const
+	     :format
+	     ( ,(concat
+		 "%{"
+		 (car bitmap-lprogress-backgrounds-for-clear-bar)
+		 (make-string
+		  20 (nth 1 bitmap-lprogress-backgrounds-for-clear-bar))
+		 (make-string
+		  5 (nth 2 bitmap-lprogress-backgrounds-for-clear-bar))
+		 (nth 3 bitmap-lprogress-backgrounds-for-clear-bar)
+		 "%}  "))
+	     t)
+	    (const
+	     :tag
+	     ( ,(concat
+		 (car bitmap-lprogress-backgrounds-for-opaque-bar)
+		 (make-string
+		  20 (nth 1 bitmap-lprogress-backgrounds-for-opaque-bar))
+		 (make-string
+		  5 (nth 2 bitmap-lprogress-backgrounds-for-opaque-bar))
+		 (nth 3 bitmap-lprogress-backgrounds-for-opaque-bar)
+		 nil)))))
+  :group 'bitmap-mule)
 
 (defvar bitmap-lprogress-data nil)
 (defvar bitmap-lprogress-backgrounds nil)

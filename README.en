@@ -5,6 +5,9 @@ What's bitmap-mule?
 ===================
 
   bitmap-mule is a package to use bitmap in MULE or Emacs/mule.
+
+  NOTE: bitmap-mule does not support FSF Emacs 21+.
+
   bitmap-mule has following modules:
 
     - bitmap.el:	kernel of bitmap-mule
@@ -45,11 +48,7 @@ Installation
 
   uncompface program is included in compface package which is available
   from:
-	ftp://ftp.win.ne.jp/pub/misc/compface-1.2.tar.gz
-
-  Unfortunately, this version of compface has a bug.  Please apply the
-  patch named "compface-1.2.patch", which is included in the BITMAP-MULE
-  distribution, before installing it.
+	ftp://ftp.win.ne.jp/pub/misc/compface-1.3.tar.gz
 
 (1-a) Run in expanded place
 
@@ -60,7 +59,7 @@ Installation
 
   You can specify the emacs command name, for example
 
-	% make EMACS=emacs-20.5
+	% make EMACS=emacs-20.6
 
   If `EMACS=...' is omitted, EMACS=emacs is used.
 
@@ -72,7 +71,7 @@ Installation
 
   You can specify the emacs command name, for example
 
-	% make install EMACS=emacs-20.5
+	% make install EMACS=emacs-20.6
 
   If `EMACS=...' is omitted, EMACS=emacs is used.
 

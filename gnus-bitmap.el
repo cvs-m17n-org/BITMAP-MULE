@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 2000/04/18
+;; Revised: 2000/05/18
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -402,7 +402,7 @@ and splashing the startup screen with a bitmap image."
   (when (boundp 'gnus-mule-bitmap-image-file)
     (setq gnus-mule-bitmap-image-file nil))
 
-  (when (>= emacs-major-version 20)
+  (when (eq emacs-major-version 20)
     ;; Redifine the modeline identify function.
     (fset 'gnus-mode-line-buffer-identification
 	  'gnus-bitmap-mode-line-buffer-identification))
