@@ -58,7 +58,7 @@ Installation
 
   You can specify the emacs command name, for example
 
-	% make EMACS=emacs-20.6
+	% make EMACS=emacs-20.7
 
   If `EMACS=...' is omitted, EMACS=emacs is used.
 
@@ -70,7 +70,7 @@ Installation
 
   You can specify the emacs command name, for example
 
-	% make install EMACS=emacs-20.6
+	% make install EMACS=emacs-20.7
 
   If `EMACS=...' is omitted, EMACS=emacs is used.
 

@@ -4,6 +4,9 @@ Copyright (C) 1999,2000 Free Software Foundation, Inc.
 * Changes in BITMAP-MULE 8.4
 ============================
 
+** New function `bitmap-recompose'.
+It can make a different string even if which has the same representation.
+
 ** Use of compface-1.3 package is recommended.
 This version of `uncompface' can generate XBM format directly.  It makes
 X-Face-Mule display X-Face a little bit faster.

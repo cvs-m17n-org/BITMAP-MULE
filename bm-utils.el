@@ -5,7 +5,7 @@
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;;         Yoshitsugu Mito <mit@nines.nec.co.jp>
 ;; Created: 2000/03/28
-;; Revised: 2000/07/05
+;; Revised: 2000/09/21
 ;; Keywords: bitmap, lprogress-display, display-time
 
 ;; This file is part of bitmap-mule.
@@ -129,16 +129,14 @@
 
 (eval-when-compile
   (defmacro bitmap-lprogress-data ()
-    '(or bitmap-lprogress-data
-	 (if bitmap-lprogress-diaplay-use-clear-bar
-	     bitmap-lprogress-data-for-clear-bar
-	   bitmap-lprogress-data-for-opaque-bar)))
+    '(if bitmap-lprogress-diaplay-use-clear-bar
+	 bitmap-lprogress-data-for-clear-bar
+       bitmap-lprogress-data-for-opaque-bar))
 
   (defmacro bitmap-lprogress-backgrounds ()
-    '(or bitmap-lprogress-backgrounds
-	 (if bitmap-lprogress-diaplay-use-clear-bar
-	     bitmap-lprogress-backgrounds-for-clear-bar
-	   bitmap-lprogress-backgrounds-for-opaque-bar)))
+    '(if bitmap-lprogress-diaplay-use-clear-bar
+	 bitmap-lprogress-backgrounds-for-clear-bar
+       bitmap-lprogress-backgrounds-for-opaque-bar))
   )
 
 (defvar bitmap-load-average-data

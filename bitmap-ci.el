@@ -1,4 +1,4 @@
-;; bitmap-ci.el -- bitmap handler for Emacs 20.3
+;; bitmap-ci.el -- bitmap handler for Emacs 20.3 and later
 
 ;; Copyright (C) 1992 Electrotechnical Laboratory, JAPAN.
 ;; Copyright (C) 1996,1997,1998 MORIOKA Tomohiko

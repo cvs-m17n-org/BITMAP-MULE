@@ -1,3 +1,17 @@
+2000-09-21  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* smiley-mule.el (smiley-encode-buffer): Do nothing with text
+	properties.
+	(smiley-buffer): Don't add any text properties.
+	(smiley-face-bitmap-list): Use `bitmap-recompose'.
+
+	* bm-utils.el (bitmap-lprogress-backgrounds): Don't refer to the
+	variable `bitmap-lprogress-backgrounds'.
+	(bitmap-lprogress-data): Don't refer to `bitmap-lprogress-data'.
+	(bitmap-lprogress-backgrounds, bitmap-lprogress-data): Remove.
+
+	* bitmap.el (bitmap-recompose): New function.
+
 2000-09-20  Hideyuki SHIRAI  <shirai@meadowy.org>
 
 	* smiley-mule.el (smiley-buffer): Put on `invisible' and
