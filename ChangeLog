@@ -1,3 +1,11 @@
+1999-10-25  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* smiley-mule.el (smiley-encode-buffer): Add doc string and
+	autoload cookie.
+	(smiley-region): Likewise.
+	(smiley-buffer): Likewise.
+	(smiley-face-bitmap-list): Add doc string.
+
 1999-10-21  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el: (Commentary): Modify usage for Wanderlust;
