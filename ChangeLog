@@ -1,3 +1,8 @@
+1999-07-15  NAKAJI Hiroyuki  <nakaji@tutrp.tut.ac.jp>
+
+	* BITMAP-CFG (load-path): Add the directory where flim is
+	installed.
+
 1998-04-17  MORIOKA Tomohiko  <morioka@is18e0s01>
 
 	* smiley-mule.el (smiley-buffer): fixed.
