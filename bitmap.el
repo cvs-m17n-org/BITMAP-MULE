@@ -6,7 +6,7 @@
 ;; Author: Ken'ichi HANDA <handa@etl.go.jp>
 ;;         MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Version:
-;;	$Id: bitmap.el,v 7.16 1997/01/16 13:23:32 morioka Exp $
+;;	$Id: bitmap.el,v 7.17 1997/02/10 14:06:19 morioka Exp $
 ;; Keywords: bitmap, xbm, MULE
 
 ;; This file is part of bitmap-mule.
@@ -100,13 +100,16 @@ For example the pattern \"0081814242242442111124244242818100\" is
 	  (setq cmpstr
 		(concat cmpstr
 			(cond ((and block-flag (= j 64))
-			       (char-to-string bitmap-block))
+			       (char-to-string bitmap-block)
+			       )
 			      ((= j 0)
 			       " ")
-			      ((= j 1)
-			       (substring buf 0 1))
+			      ((= j 4)
+			       (substring buf 0 4)
+			       )
 			      (t
-			       (compose-string (substring buf 0 j)))))
+			       (compose-string (substring buf 0 j))
+			       )))
 		block-flag t
 		j 0)))
     cmpstr))
