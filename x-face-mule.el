@@ -10,7 +10,7 @@
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Version: 0.27
 ;; Created: 1997/10/24
-;; Revised: 1999/08/20
+;; Revised: 1999/08/24
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -818,8 +818,10 @@ just the headers of the article."
 ;;
 
 ;; gnus
-(autoload 'gnus-bitmap-redefine "gnus-bitmap")
-(eval-after-load "gnus" '(gnus-bitmap-redefine))
+(unless (boundp 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)
+  (autoload 'gnus-bitmap-redefine "gnus-bitmap")
+  (eval-after-load "gnus" '(gnus-bitmap-redefine))
+  (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))
 
 ;; VM
 (autoload 'vm-bitmap-redefine "vm-bitmap")
