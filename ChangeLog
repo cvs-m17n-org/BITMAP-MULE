@@ -1,3 +1,10 @@
+2001-08-31  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bitmap-ci.el (TopLevel): Don't use `dolist'.
+	(bitmap-use-alterable-charset-anyway): New variable; if it is
+	non-nil, use `bitmap-alterable-charset' for a substitute for the
+	charset `bitmap' unconditionally.
+
 2001-05-31  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el: Add a comment that the setting

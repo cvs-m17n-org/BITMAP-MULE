@@ -1,6 +1,21 @@
 BITMAP-MULE NEWS -- history of major-changes.
 Copyright (C) 1999, 2000, 2001 Free Software Foundation, Inc.
 
+* Changes in BITMAP-MULE 8.5
+============================
+
+** New variable `bitmap-use-alterable-charset-anyway' now controls
+whether to substitute `indian-1-column' or `tibetan-1-column' for the
+new private charset `bitmap' unconditionally.  You can load "bitmap"
+before "un-define" by setting this to non-nil.  Don't forget to set
+the value of the variable `bitmap-alterable-charset'.  For example:
+
+   (setq bitmap-alterable-charset 'indian-1-column)
+   (setq bitmap-use-alterable-charset-anyway t)
+   (require 'bitmap)
+   (require 'un-define)
+
+
 * Changes in BITMAP-MULE 8.4
 ============================
 

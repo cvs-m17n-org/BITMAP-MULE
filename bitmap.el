@@ -45,7 +45,7 @@
 	      (setq result (+ (* result 16) (- ch ?0))))
 	     ((and (<= ?a ch) (<= ch ?f))
 	      (setq result (+ (* result 16) (+ (- ch ?a) 10))))
-  	     ((and (<= ?A ch) (<= ch ?F))
+	     ((and (<= ?A ch) (<= ch ?F))
 	      (setq result (+ (* result 16) (+ (- ch ?A) 10)))))
 	(setq i (1+ i))))
     result))
