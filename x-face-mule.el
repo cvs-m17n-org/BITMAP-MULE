@@ -9,6 +9,7 @@
 ;;         Katsumi Yamaoka <yamaoka@jpl.org>
 ;;         OKUNISHI -GTO- Fujikazu <fuji0924@mbox.kyoto-inet.or.jp>
 ;;         KOSEKI Yoshinori <kose@yk.NetLaputa.ne.jp>
+;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
 ;; Revised: 2000/04/18
