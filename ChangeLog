@@ -1,3 +1,25 @@
+1999-08-20  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* po.el (po-bdf-current-encoding, po-bdf-original-buffer): Bind before
+	they are referred to.
+
+	* Makefile (invoice): New target.
+
+	* BITMAP-ELS (bitmap-modules): Add `gnus-bitmap' and `vm-bitmap'.
+
+	* vm-bitmap.el: New file separated from x-face-mule.el.
+
+	* gnus.xbm: New file which is copied from etc-0.27, invert and
+	modify a size.
+	* gnus-pointer.xbm: New file which is copied from etc-0.27 and
+	modify a size.
+	* gnus-bitmap.el: New file separated from x-face-mule.el; import
+	the splashing functions from BITMAP-DECOR 0.05.
+
+	* x-face-mule.el: Replace with a file with the same name of
+	X-Face-Mule v0.27; move gnus related functions to gnus-bitmap.el;
+	move VM related functions to vm-bitmap.el.
+
 1999-07-28  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* smiley-mule.el (smiley-manga-face, smiley-face): Use `defface'.
