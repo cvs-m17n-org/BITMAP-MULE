@@ -6,7 +6,7 @@
 ;; Author: MORIOKA Tomohiko <tomo@m17n.org>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
-;; Revised: 1999/10/26
+;; Revised: 1999/10/29
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
 ;; This file is part of bitmap-mule.
@@ -680,17 +680,17 @@ MMMMMMMMMMMMMMMM
 (defvar smiley-face-bitmap-list
   (list
    (vector "^_^;;;"
-	 (bitmap-compose (aref smiley-bitmap-for-ase3 0))
-	 'smiley-manga-face)
+	   (bitmap-compose (aref smiley-bitmap-for-ase3 0))
+	   'smiley-manga-face)
    (vector "^^;;;"
-	 (bitmap-compose (aref smiley-bitmap-for-ase3 0))
-	 'smiley-manga-face)
+	   (bitmap-compose (aref smiley-bitmap-for-ase3 0))
+	   'smiley-manga-face)
    (vector "^_^;;"
-	 (bitmap-compose (aref smiley-bitmap-for-ase2 0))
-	 'smiley-manga-face)
+	   (bitmap-compose (aref smiley-bitmap-for-ase2 0))
+	   'smiley-manga-face)
    (vector "^^;;"
-	 (bitmap-compose (aref smiley-bitmap-for-ase2 0))
-	 'smiley-manga-face)
+	   (bitmap-compose (aref smiley-bitmap-for-ase2 0))
+	   'smiley-manga-face)
    (vector "^_^;"
 	   (bitmap-compose (aref smiley-bitmap-for-ase 0))
 	   'smiley-manga-face)
@@ -762,80 +762,84 @@ highlighting the inline image.")
 ;;;###autoload
 (defun smiley-buffer ()
   "Display smiley faces in the buffer."
-  (interactive)
-  (save-excursion
-    (let ((rest smiley-face-bitmap-list)
-	  case-fold-search)
-      (while rest
-	(let ((cell (car rest)))
-	  (goto-char (point-min))
-	  (while (search-forward (aref cell 0) nil t)
-	    (let ((p0 (match-beginning 0))
-		  (bitmap (aref cell 1))
-		  )
-	      (replace-match bitmap nil 'literal)
-	      (overlay-put (make-overlay p0 (+ p0 (length bitmap)))
-			   'face (aref cell 2))
-	      )))
-	(setq rest (cdr rest))
-	))))
+  (interactive "*")
+  (if window-system
+      (save-excursion
+	(let ((rest smiley-face-bitmap-list)
+	      case-fold-search)
+	  (while rest
+	    (let ((cell (car rest)))
+	      (goto-char (point-min))
+	      (while (search-forward (aref cell 0) nil t)
+		(let ((p0 (match-beginning 0))
+		      (bitmap (aref cell 1))
+		      (text (match-string 0)))
+		  (replace-match bitmap nil 'literal)
+		  (let ((overlay (make-overlay p0 (+ p0 (length bitmap)))))
+		    (overlay-put overlay 'face (aref cell 2))
+		    (overlay-put overlay 'smiley-encoded-text text)))))
+	    (setq rest (cdr rest)))))
+    (if (interactive-p)
+	(message "You're not under window system."))))
 
 ;;;###autoload
 (defun smiley-region (beg end)
   "Display smiley faces in the region between BEG and END."
-  (interactive "r")
-  (save-restriction
-    (narrow-to-region beg end)
-    (smiley-buffer)
-    ))
+  (interactive "*r")
+  (if window-system
+      (save-restriction
+	(narrow-to-region beg end)
+	(smiley-buffer))
+    (if (interactive-p)
+	(message "You're not under window system."))))
 
 ;;;###autoload
 (defun smiley-toggle-buffer (&optional arg)
   "Toggle displaying smiley faces.
 With arg, turn displaying on if and only if arg is positive."
-  (interactive "P")
-  (save-excursion
-    (goto-char (point-min))
-    (if (and (not (and (numberp arg) (< arg 0)))
-	     (or (and (numberp arg) (> arg 0))
-		 (let (case-fold-search)
-		   (re-search-forward
-		    (mapconcat
-		     (function
-		      (lambda (cell)
-			(regexp-quote (aref cell 0))))
-		     smiley-face-bitmap-list "\\|")
-		    nil t))))
-	(smiley-buffer)
-      (smiley-encode-buffer))))
+  (interactive "*P")
+  (if window-system
+      (save-excursion
+	(goto-char (point-min))
+	(if (and (not (and (numberp arg) (< arg 0)))
+		 (or (and (numberp arg) (> arg 0))
+		     (let (case-fold-search)
+		       (re-search-forward
+			(mapconcat
+			 (function
+			  (lambda (cell)
+			    (regexp-quote (aref cell 0))))
+			 smiley-face-bitmap-list "\\|")
+			nil t))))
+	    (smiley-buffer)
+	  (smiley-encode-buffer)))
+    (if (interactive-p)
+	(message "You're not under window system."))))
 
 ;;;###autoload
 (defun smiley-encode-buffer ()
   "Encode smiley faces to ordinary text in the buffer."
-  (interactive)
-  (save-excursion
-    (let ((rest smiley-face-bitmap-list))
-      (while rest
-	(let ((cell (car rest)))
-	  (goto-char (point-min))
-	  (while (search-forward (aref cell 1) nil t)
-	    (let ((p0 (match-beginning 0))
-		  (smiley (aref cell 0))
-		  )
-	      (replace-match smiley)
-	      (let ((overlays (overlays-at p0))
-		    (p1 (+ p0 (length smiley)))
-		    o)
-		(while (and (setq o (car overlays))
-			    (if (/= (overlay-end o) p1)
-				t
-			      (delete-overlay o)
-			      nil)
-			    )
-		  (setq overlays (cdr overlays))
-		  )))))
-	(setq rest (cdr rest))
-	))))
+  (interactive "*")
+  (if window-system
+      (save-excursion
+	(let ((rest smiley-face-bitmap-list))
+	  (while rest
+	    (goto-char (point-min))
+	    (let ((cell (car rest)))
+	      (while (search-forward (aref cell 1) nil t)
+		(let ((ovls (overlays-at (match-beginning 0)))
+		      (end (match-end 0))
+		      ovl text)
+		  (while (and (null text) ovls)
+		    (setq ovl (car ovls)
+			  ovls (cdr ovls)
+			  text (and (eq end (overlay-end ovl))
+				    (overlay-get ovl 'smiley-encoded-text))))
+		  (replace-match "")
+		  (insert (or text (aref cell 0))))))
+	    (setq rest (cdr rest)))))
+    (if (interactive-p)
+	(message "You're not under window system."))))
 
 
 ;;; @ end
