@@ -1,6 +1,6 @@
 ;;; -*-Emacs-Lisp-*-
 ;;;
-;;; $Id: BITMAP-MK,v 1.1 1996-11-27 11:15:36 morioka Exp $
+;;; $Id: BITMAP-MK,v 1.2 1996-11-27 15:07:15 morioka Exp $
 ;;;
 
 (defun config-bitmap ()
@@ -15,6 +15,7 @@
     (load-file "BITMAP-CFG")
     (load-file "../emu/EMU-ELS")
     (load-file "../tl/TL-ELS")
+    (load-file "../mu/MU-ELS")
     (load-file "BITMAP-ELS")
     (princ (format "PREFIX=%s\n" PREFIX))
     ))
@@ -23,6 +24,7 @@
   (config-bitmap)
   (compile-elisp-modules emu-modules	"../emu")
   (compile-elisp-modules tl-modules	"../tl")
+  (compile-elisp-modules mu-modules	"../mu")
   (compile-elisp-modules bitmap-modules	".")
   )
 
@@ -30,6 +32,7 @@
   (config-bitmap)
   (install-elisp-modules emu-modules	"../emu" EMU_DIR)
   (install-elisp-modules tl-modules	"../tl" TL_DIR)
+  (install-elisp-modules mu-modules	"../mu" MU_DIR)
   (install-elisp-modules bitmap-modules	"./"	BITMAP_DIR)
   )
 

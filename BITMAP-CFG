@@ -1,6 +1,6 @@
 ;;; -*-Emacs-Lisp-*-
 ;;;
-;;; $Id: BITMAP-CFG,v 1.1 1996-11-27 11:15:04 morioka Exp $
+;;; $Id: BITMAP-CFG,v 1.2 1996-11-27 15:06:43 morioka Exp $
 ;;;
 
 (setq load-path (append
@@ -8,7 +8,7 @@
 			  (lambda (path)
 			    (expand-file-name path (getenv "PWD"))
 			    ))
-			 '("." "../emu" "../tl")
+			 '("." "../emu" "../tl" "../mu")
 			 )
 		 load-path))
 
@@ -23,14 +23,17 @@
 (defvar PREFIX install-prefix)
 ;;(setq PREFIX "~/")
 
-;; Please specify tl prefix [optional]
+;; Please specify prefix for ``tl'' [optional]
 ;;(setq TL_PREFIX "tl")
 (setq TL_PREFIX
       (if (string-match "XEmacs" emacs-version)
 	  "tl"
 	""))
 
-;; Please specify prefix for ``bitmap'' [optional]
+;; Please specify prefix for ``MU'' [optional]
+(setq MU_PREFIX "mu")
+
+;; Please specify prefix for ``bitmap-mule'' [optional]
 (setq BITMAP_PREFIX "bitmap")
 
 
@@ -46,7 +49,8 @@
 (setq EMU_DIR (install-detect-elisp-directory PREFIX nil
 					      'version-specific))
 
-(setq TL_DIR (expand-file-name TL_PREFIX LISPDIR))
-(setq BITMAP_DIR (expand-file-name BITMAP_PREFIX LISPDIR))
+(setq TL_DIR		(expand-file-name TL_PREFIX	LISPDIR))
+(setq MU_DIR		(expand-file-name MU_PREFIX	LISPDIR))
+(setq BITMAP_DIR	(expand-file-name BITMAP_PREFIX LISPDIR))
 
 ;;; BITMAP-CFG ends here
