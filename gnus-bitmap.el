@@ -381,14 +381,14 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 (defun gnus-bitmap-splash ()
   "Splash the startup screen.  This function have only limited use for
 `gnus-load-hook'."
-  (when gnus-bitmap-splash-image-data
+  (when (and (not (featurep 'gnus))
+	     gnus-bitmap-splash-image-data)
     (setq this-command nil);; Suppress the load time splash.
-    (if (boundp 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)
-	(eval-after-load "gnus" '(gnus-splash))
-      (eval-after-load "gnus" '(progn
-				 (gnus-bitmap-redefine)
-				 (gnus-splash)))
-      (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))))
+    (unless
+	(boundp 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)
+      (eval-after-load "gnus" (gnus-bitmap-redefine))
+      (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))
+    (eval-after-load "gnus" '(or (featurep 'gnus) (gnus-splash)))))
 
 
 (provide 'gnus-bitmap)
