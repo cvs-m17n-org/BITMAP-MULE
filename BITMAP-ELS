@@ -1,11 +1,17 @@
 ;;; -*-Emacs-Lisp-*-
 ;;;
-;;; $Id: BITMAP-ELS,v 1.1 1996-11-27 11:15:21 morioka Exp $
+;;; $Id: BITMAP-ELS,v 1.2 1998-04-17 14:08:56 morioka Exp $
 ;;;
 
 (setq bitmap-modules
-      (and (or (boundp 'MULE) running-mule-merged-emacs)
-	   '(bitmap x-face-mule smiley-mule po)
-	   ))
+      (if (featurep 'mule)
+	  (if (featurep 'xemacs)
+	      nil
+	    (cons (if (and (fboundp 'set-buffer-multibyte)
+			   (subrp (symbol-function 'set-buffer-multibyte)))
+		      'bitmap-ci
+		    'bitmap-bi)
+		  '(bitmap x-face-mule smiley-mule po)
+		  ))))
 
 ;;; BITMAP-ELS ends here
