@@ -1,0 +1,65 @@
+Thu May 22 04:42:16 1997  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* bitmap.el: Use `make-char' instead of `make-character'.
+
+
+1997-03-14  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* bitmap-mule: Version 7.17 was released.
+
+Wed Mar 12 07:38:21 1997  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* BITMAP-CFG: Variables about other modules were abolished.
+
+	* BITMAP-CFG (load-path): Add "../apel".
+
+	* BITMAP-MK: Compile and install only MU files.
+
+1997-02-10  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* bitmap.el (bitmap-compose): Fixed.
+
+
+1997-01-16  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* bitmap-mule: Version 7.16 was released.
+
+	* bitmap.el: modified for GNU MULE 19.34.91.
+
+Wed Dec 28 13:57:22 1996  Martin Buchholz   <mrb@Eng.Sun.COM>
+
+	* BITMAP-CFG: Use variable `default-directory' instead of `(getenv
+ 	"PWD")'. (cf. [tm-en:1084])
+
+
+Wed Nov 27 15:38:38 1996  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* bitmap-mule: Version 7.15 was released.
+
+	* Makefile, README.en: New file.
+
+Wed Nov 27 15:07:15 1996  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* BITMAP-MK, BITMAP-CFG: Add ../mu/.
+
+Wed Nov 27 13:44:46 1996  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* bitmap.el: Modify to share font setting code between MULE and
+ 	Emacs/mule.
+
+	* bitmap.el (charset-bitmap): Definition for Emacs/mule was
+ 	simplified.
+
+	* bitmap.el: `fontset-list' occurs error when byte-compile modules
+ 	require bitmap.
+
+	* BITMAP-MK, BITMAP-ELS, BITMAP-CFG: New file.
+
+Wed Nov 27 11:14:21 1996  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* po.el: New module.
+
+Wed Nov 27 11:10:17 1996  Kenichi Handa	<handa@etlken.etl.go.jp>
+
+	* bitmap.el (bitmap-compose): Don't compose-string for one
+ 	character. (cf. [mule-jp:6201])
