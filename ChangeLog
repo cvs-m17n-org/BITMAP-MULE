@@ -3,7 +3,7 @@
 	* BITMAP-CFG (load-path): Add the directory where flim is
 	installed.
 
-1998-04-17  MORIOKA Tomohiko  <morioka@is18e0s01>
+1998-04-17  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
 
 	* smiley-mule.el (smiley-buffer): fixed.
 
