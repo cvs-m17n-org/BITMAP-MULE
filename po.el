@@ -3,7 +3,7 @@
 ;; Copyright (C) 1996 MORIOKA Tomohiko
 
 ;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
-;; Version: $Id: po.el,v 1.2 1998-03-23 02:14:44 morioka Exp $
+;; Version: $Id: po.el,v 1.3 1999-08-23 05:15:07 yamaoka Exp $
 ;; Keywords: bitmap, bdf, MULE
 
 ;; This file is part of bitmap-mule.
@@ -51,6 +51,8 @@
     (?E . "■■■・")
     (?F . "■■■■")
     ))
+
+;;"
 
 (defun po-hex-list-to-block (hex-list)
   (mapconcat (function
@@ -130,6 +132,9 @@
 	  ))
       dest)))
 
+(defvar po-bdf-original-buffer nil)
+(defvar po-bdf-current-encoding nil)
+
 (defun po-bdf-update-char ()
   (let ((str (mapconcat (function identity)
 			(po-bdf-get-hex-vector) "\n"))
@@ -153,9 +158,6 @@
 	      (goto-char beg)
 	      (insert str)
 	      ))))))
-
-(defvar po-bdf-original-buffer nil)
-(defvar po-bdf-current-encoding nil)
 
 (defconst po-bdf-mode-map nil)
 (if po-bdf-mode-map
