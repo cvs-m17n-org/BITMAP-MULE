@@ -23,6 +23,18 @@ variable `bitmap-use-alterable-charset-anyway' to non-nil as follows:
    (require 'bitmap)
    (require 'un-define)
 
+In addition, you also need to change the font database for the ps-print
+utility if you would like to use it.  The following form is for the use
+of `tibetan-1-column', you should change it to `indian-1-column' if you
+have specified `bitmap-alterable-charset' to it.
+
+   (eval-after-load "ps-mule"
+     '(let ((elem (assq 'tibetan-1-column
+			ps-mule-font-info-database-bdf)))
+	(if elem
+	    (setcar (cdr (cdr (car (cdr elem))))
+		    '("bmp16-etl.bdf" "bitmap16.bdf")))))
+
 Note that the variable `bitmap-alterable-charset' did not exist in
 BITMAP-MULE versions earlier than 8.4, and the variable
 `bitmap-use-alterable-charset-anyway' did not exist in BITMAP-MULE
