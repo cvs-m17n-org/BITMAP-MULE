@@ -10,7 +10,8 @@
 			   (subrp (symbol-function 'set-buffer-multibyte)))
 		      'bitmap-ci
 		    'bitmap-bi)
-		  '(bitmap x-face-mule smiley-mule po)
+		  '(bitmap x-face-mule smiley-mule po
+			   gnus-bitmap vm-bitmap)
 		  ))))
 
 ;;; BITMAP-ELS ends here

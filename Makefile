@@ -48,8 +48,12 @@ tar:
 	cd /tmp; $(RM) $(PACKAGE)-$(VERSION)/ftp.in ; \
 		$(TAR) cvzf $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-$(VERSION)
 	cd /tmp; $(RM) -r $(PACKAGE)-$(VERSION)
-	sed "s/VERSION/$(VERSION)/" < ftp.in | sed "s/API/$(API)/" \
-		| sed "s/PACKAGE/$(PACKAGE)/" > ftp
+	sed -e "s/VERSION/$(VERSION)/" -e "s/API/$(API)/" \
+		-e "s/PACKAGE/$(PACKAGE)/" < ftp.in > ftp
+
+invoice:
+	sed -e "s/VERSION/$(VERSION)/" -e "s/API/$(API)/" \
+		-e "s/PACKAGE/$(PACKAGE)/" < ftp.in > ftp
 
 release:
 	-$(RM) $(ARC_DIR)/$(PACKAGE)-$(VERSION).tar.gz
