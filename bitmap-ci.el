@@ -34,6 +34,14 @@ only when there is no room for a new private charset.  It is useless for
 Emacs 21.  The valid alterable charsets for Emacs 20 are `indian-1-column'
 and `tibetan-1-column'.")
 
+(eval-when-compile
+  ;; For picking up the macro `dolist'.
+  (if (<= emacs-major-version 20)
+      (progn
+	(require 'cl)
+	;; `dolist' may be defined in egg.el, we should use the proper one.
+	(load "cl-macs" nil t))))
+
 (if (not (charsetp 'bitmap))
     (condition-case code
 	(define-charset nil 'bitmap
@@ -54,7 +62,13 @@ and `tibetan-1-column'.")
 	       (aset info 14 nil);; plist
 	       (put 'bitmap 'charset info))
 	     (put bitmap-alterable-charset 'charset nil)
-	     (declare-equiv-charset 2 96 ?0 'bitmap))
+	     (declare-equiv-charset 2 96 ?0 'bitmap)
+	     (if (and window-system
+		      (boundp 'global-fontset-alist))
+		 (dolist (elem (symbol-value 'global-fontset-alist))
+		   (setcdr elem (delete (assq bitmap-alterable-charset
+					      (cdr elem))
+					(cdr elem))))))
 	 (error "%s" (car (cdr code)))))))
 
 ;; Avoid byte compile warning

@@ -1,5 +1,11 @@
 2001-02-15  Katsumi Yamaoka   <yamaoka@jpl.org>
 
+	* bitmap-ci.el: Remove elements from `global-fontset-alist' whose
+	`car' is `eq' to the value of `bitmap-alterable-charset' if it is
+	requisitioned.
+
+2001-02-15  Katsumi Yamaoka   <yamaoka@jpl.org>
+
 	* bitmap-ci.el: Use `declare-equiv-charset' for the charset
 	`bitmap' when `bitmap-alterable-charset' is requisitioned.
 	(cf. [mule-ja:07991])
