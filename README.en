@@ -17,7 +17,10 @@ What's bitmap-mule?
     - gnus-bitmap.el:	Gnus/gnus related functions
     - vm-bitmap.el:	VM related functions
 
-    - etl8x16-bitmap.bdf: font for BITMAP 8x16
+    - font/etl8x16-bitmap.bdf:	font for BITMAP 8x16
+    - font/etl6x12-bitmap.bdf:	font for 6x12
+    - font/etl7x14-bitmap.bdf:	font for 7x14
+    - font/etl12x24-bitmap.bdf:	font for 12x24
 
   The following image files will be integrated into gnus-bitmap.el at
   the complile time.
@@ -29,20 +32,21 @@ What's bitmap-mule?
 Installation
 ============
 
-(0) before installing it, please install APEL (9.22 or later) package,
-    font for BITMAP 8x16 and uncompface program.
+(0) Before installing it, please install APEL (9.22 or later) package,
+    font for BITMAP 8x16 and uncompface program.  If you would like to
+    use 6x12, 7x14 or 12x24 size fonts, please install them as well.
 
   APEL package is available from:
 
 	ftp://ftp.m17n.org/pub/mule/apel/
 
-  Font for BITMAP 8x16 is included in this package.
+  Fonts for BITMAP 8x16 and the other size are included in this package.
 
   uncompface program is included in compface package which is available
   from:
 	ftp://ftp.win.ne.jp/pub/misc/compface-1.2.tar.gz
 
-(1-a) run in expanded place
+(1-a) Run in expanded place
 
   If you don't want to install other directories, please do only
   following:
@@ -51,11 +55,11 @@ Installation
 
   You can specify the emacs command name, for example
 
-	% make EMACS=emacs-20.4
+	% make EMACS=emacs-20.5
 
   If `EMACS=...' is omitted, EMACS=emacs is used.
 
-(1-b) make install
+(1-b) Install
 
   If you want to install other directories, please do following:
 
@@ -63,7 +67,7 @@ Installation
 
   You can specify the emacs command name, for example
 
-	% make install EMACS=emacs-20.4
+	% make install EMACS=emacs-20.5
 
   If `EMACS=...' is omitted, EMACS=emacs is used.
 

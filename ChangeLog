@@ -1,3 +1,19 @@
+1999-12-15  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* README.en, NEWS: Update for multi-size fonts.
+
+	* bitmap-bi.el: Set fontset fonts for 6x16, 7x14 and 12x24.
+
+1999-12-15  Keisuke Nishida   <kxn30@po.cwru.edu>
+
+	* bitmap-ci.el: Set fontset fonts for 6x16, 7x14 and 12x24.
+
+	* font/etl6x12-bitmap.bdf
+	* font/etl7x14-bitmap.bdf
+	* font/etl12x24-bitmap.bdf
+	* font/Makefile
+	* font/README.ja: New files.
+
 1999-11-15  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (x-face-mule-x-face-decode-message-header-1):
