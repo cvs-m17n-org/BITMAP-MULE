@@ -1,3 +1,18 @@
+2001-12-17  Sam Steingold  <sds@gnu.org>
+
+	* coding.c (DECODE_COMPOSITION_END): Fixed a typo in the last
+	patch (COMPOSING_P, not COMPOSING).
+
+2001-12-17  Richard M. Stallman  <rms@gnu.org>
+
+	* coding.c (code_convert_region): Update coding->cmp_data->char_offset
+	before calling decode_coding.
+
+	* charset.c (Fdefine_charset): Call Fupdate_coding_systems_internal.
+
+	* coding.c (DECODE_COMPOSITION_END): Check for ! COMPOSING_P (coding)
+	instead of only for COMPOSITION_DISABLED.
+
 --- emacs-21.1/src/charset.c~	Fri Jul 13 09:30:42 2001
 +++ emacs-21.1/src/charset.c	Mon Dec 17 15:33:12 2001
 @@ -710,6 +710,7 @@
