@@ -1,7 +1,7 @@
 1999-11-11  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* gnus-bitmap.el (gnus-bitmap-modeline-image-internal): Save
-	decoded xbm data instead of compsed characters in .elc file.
+	decoded xbm data instead of composed characters in .elc file.
 	(gnus-bitmap-splash-image-internal): Likewise.
 
 1999-11-10  Jun'ichi Shiono  <jun@fsas.fujitsu.co.jp>
