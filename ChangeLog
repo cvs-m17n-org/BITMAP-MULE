@@ -1,3 +1,26 @@
+1999-11-02  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (TopLevel): Don't setup for gnus nor VM under
+	Emacs v18.
+	(x-face-decode-message-header): Redifine function by `x-face-18'
+	if Emacs v18 is used.
+	(x-face-mule-save-cache-file): Don't use it under Emacs v18.
+	(x-face-mule-highlight-x-face-face): Don't set its color.
+
+	* x-face-18.el: New file for Emacs v18 which is copied from the
+	old version of x-face-mule.el.
+
+	* bitmap.el: Require `poe'.
+
+	* bitmap-bi.el (TopLevel): Use `x-set-font' instead of
+	`set-fontset-font' under Emacs v18.
+	(lc-bitmap): Don't specify the 8th arg for the function
+	`new-private-character-set' if Emacs v18 is used.
+
+	* BITMAP-ELS (bitmap-modules): Add `gnus-bitmap' and `vm-bitmap'
+	when Emacs v19 or later is used; add `x-face-18' for Emacs v18;
+	don't check for VM libraries under Emacs v18.
+
 1999-11-01  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (x-face-mule-version, x-face-mule-version-number):

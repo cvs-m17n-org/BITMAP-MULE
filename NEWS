@@ -4,7 +4,7 @@ Copyright (C) 1999 Free Software Foundation, Inc.
 * Changes in BITMAP-MULE 8.0
 
 
-** Requires APEL 9.20 or later
+** Requires APEL 9.22 or later
 
 
 ** X-Face-Mule (x-face-mule.el) has been replaced with KORIYAMA-san's version

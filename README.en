@@ -28,7 +28,7 @@ What's bitmap-mule?
 Installation
 ============
 
-(0) before installing it, please install APEL (9.20 or later) package,
+(0) before installing it, please install APEL (9.22 or later) package,
     font for BITMAP 8x16 and uncompface program.
 
   APEL package is available from:
@@ -39,7 +39,7 @@ Installation
 
   uncompface program is included in compface package which is available
   from:
-	ftp://ftp.xemacs.org/pub/xemacs/aux/compface.tar.gz
+	ftp://ftp.win.ne.jp/pub/misc/compface-1.2.tar.gz
 
 (1-a) run in expanded place
 
