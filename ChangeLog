@@ -1,4 +1,52 @@
+2000-04-18  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* BITMAP-MULE: Version 8.3 was released.
+
+2000-04-18  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* smiley-mule.el (smiley-manga-face): Add the group `bitmap-mule'.
+	(smiley-face): Ditto.
+
+	* gnus-bitmap.el (gnus-bitmap-modeline-image): Add the group
+	`bitmap-mule'.
+	(gnus-bitmap-splash-image): Ditto.
+
+	* bm-utils.el (bitmap-lprogress-display): Use the macros
+	`bitmap-lprogress-data' and `bitmap-lprogress-backgrounds' instead
+	of the variables; use `truncate-string-to-width' if it exists.
+	(bitmap-lprogress-backgrounds): New macro.
+	(bitmap-lprogress-data): New macro.
+	(bitmap-lprogress-backgrounds): Default to nil.
+	(bitmap-lprogress-data): Default to nil.
+	(bitmap-lprogress-diaplay-use-clear-bar): New user option.
+	(bitmap-lprogress-backgrounds-for-clear-bar): New variable copy
+	from `bitmap-lprogress-backgrounds'.
+	(bitmap-lprogress-data-for-clear-bar): New variable copy from
+	`bitmap-lprogress-data'.
+	(bitmap-lprogress-display-textual): Use `defcostom'.
+	(TopLevel): Require `static' and `pcostom'.
+
+	* bitmap.el (bitmap-mule): New group.
+	(TopLevel): Require `pcustom'.
+
+	* BITMAP-ELS (bitmap-modules): Don't add `bm-utils' if
+	`emacs-major-version' is less than 19.
+
+	* BITMAP-CFG: Require `poe' to pickup `add-to-list' for old mule.
+
+2000-04-18  Yoshitsugu Mito   <mit@nines.nec.co.jp>
+
+	* bm-utils.el (bitmap-lprogress-backgrounds-for-opaque-bar): New
+	variable.
+	(bitmap-lprogress-data-for-opaque-bar): New variable.
+
 2000-04-17  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (x-face-mule-BBDB-one-record): Bind `beg' as a
+	local var.; don't reauire `bbdb-com'.
+	(bbdb-buffer-name): Bind it for avoiding byte-compiler warning.
+	(TopLevel): Autoload "bbdb-com" and "bbdb".
+	(x-face-mule): Add the group `bitmap-mule'.
 
 	* bm-utils.el (bitmap-full-mailbox-data): Don't use `concat'.
 	(bitmap-empty-mailbox-data): Ditto.

@@ -4,7 +4,7 @@
 
 PACKAGE = bitmap-mule
 API	= 8
-RELEASE = 2
+RELEASE = 3
 
 TAR	= tar
 RM	= /bin/rm -f
