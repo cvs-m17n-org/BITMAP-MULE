@@ -60,23 +60,23 @@
 		fontsets (cdr fontsets)
 		size (fontset-pixel-size fontset))
 	  (cond
-	   ((= size 12)
+	   ((eq size 12)
 	    (set-fontset-font
 	     fontset lc-bitmap
 	     "-etl-fixed-medium-r-*--12-*-100-100-m-*-bitmap.6x12-0"))
-	   ((= size 14)
+	   ((eq size 14)
 	    (set-fontset-font
 	     fontset lc-bitmap
 	     "-etl-fixed-medium-r-*--14-*-100-100-m-*-bitmap.7x14-0"))
-	   ((= size 16)
+	   ((eq size 16)
 	    (set-fontset-font
 	     fontset lc-bitmap
 	     "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0"))
-	   ((= size 20)
+	   ((eq size 20)
 	    (set-fontset-font
 	     fontset lc-bitmap
 	     "-etl-fixed-medium-r-*--20-*-100-100-m-*-bitmap.10x20-0"))
-	   ((= size 24)
+	   ((eq size 24)
 	    (set-fontset-font
 	     fontset lc-bitmap
 	     "-etl-fixed-medium-r-*--24-*-100-100-m-*-bitmap.12x24-0"))
