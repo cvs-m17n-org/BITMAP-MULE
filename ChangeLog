@@ -1,3 +1,9 @@
+2001-01-30  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bitmap-ci.el: Attempt to divert `bitmap-alterable-charset' to the
+	charset `bitmap' when there is no room for a new private charset.
+	(bitmap-alterable-charset): New variable.
+
 2000-12-15  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (x-face-mule-BBDB-one-record): Fix a bug in

@@ -28,9 +28,33 @@
 
 (require 'emu)
 
-(if (not (memq 'bitmap charset-list))
-    (define-charset nil 'bitmap
-      [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"]))
+(defvar bitmap-alterable-charset nil
+  "*A symbol of a charset which will be used to a substitute for `bitmap'
+only when there is no room for a new private charset.  It is useless for
+Emacs 21.  The valid alterable charsets for Emacs 20 are `indian-1-column'
+and `tibetan-1-column'.")
+
+(if (not (charsetp 'bitmap))
+    (condition-case code
+	(define-charset nil 'bitmap
+	  [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
+      (error
+       ;; Attempt to divert `bitmap-alterable-charset' to `bitmap'.
+       (if (and (charsetp bitmap-alterable-charset)
+		(eq 2 (charset-dimension bitmap-alterable-charset))
+		(eq 1 (charset-width bitmap-alterable-charset)))
+	   (progn
+	     (setcar (memq bitmap-alterable-charset charset-list) 'bitmap)
+	     (let ((info (charset-info bitmap-alterable-charset)))
+	       (aset info 3 96);; chars
+	       (aset info 8 ?0);; iso-final-char
+	       (aset info 11 "BITMAP");; short-name
+	       (aset info 12 "BITMAP.8x16");; long-name
+	       (aset info 13 "8x16 bitmap elements");; description
+	       (aset info 14 nil);; plist
+	       (put 'bitmap 'charset info))
+	     (put bitmap-alterable-charset 'charset nil))
+	 (error "%s" (car (cdr code)))))))
 
 ;; Avoid byte compile warning
 (eval-when-compile
