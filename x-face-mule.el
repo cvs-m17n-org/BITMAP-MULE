@@ -12,7 +12,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/07/05
+;; Revised: 2000/07/26
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of bitmap-mule.
@@ -45,6 +45,17 @@
 ;; 2. Setting up
 ;;
 ;;    [SEMI-MUA, tm-MUA] i.e. cmail, gnus, mh-e, VM, etc.
+;;	There is nothing to be done if you are using tm or SEMI/WEMI
+;;	1.13 and earlier.  For the recent EMY, EMIKO or REMI, you may
+;;	have need of the following lines in your ~/.emacs file:
+;;
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'x-face-decode-message-header "x-face-mule")
+;;	      (add-hook 'mime-display-header-hook
+;;			'x-face-decode-message-header)))
+;;
+;;    [T-gnus 6.13.3 and later]
 ;;	There is nothing to be done.
 ;;
 ;;    [Wanderlust]
