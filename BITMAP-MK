@@ -1,21 +1,25 @@
 ;;; -*-Emacs-Lisp-*-
 ;;;
-;;; $Id: BITMAP-MK,v 1.3 1997-03-12 07:34:11 morioka Exp $
+;;; $Id: BITMAP-MK,v 1.4 1997-07-01 14:19:42 morioka Exp $
 ;;;
 
 (defun config-bitmap ()
-  (let (prefix)
-    (setq prefix (car command-line-args-left))
-    (and prefix
-	 (not (string-equal "NONE" prefix))
-	 (progn
-	   (defvar PREFIX prefix)
-	   (setq command-line-args-left (cdr command-line-args-left))
-	   ))
-    (load-file "BITMAP-CFG")
-    (load-file "BITMAP-ELS")
-    (princ (format "PREFIX=%s\n" PREFIX))
-    ))
+  (let (prefix lisp-dir)
+    (and (setq prefix (car command-line-args-left))
+	 (or (string-equal "NONE" prefix)
+	     (defvar PREFIX prefix)
+	     ))
+    (setq command-line-args-left (cdr command-line-args-left))
+    (and (setq lisp-dir (car command-line-args-left))
+	 (or (string-equal "NONE" lisp-dir)
+	     (defvar LISPDIR lisp-dir)
+	     ))
+    (setq command-line-args-left (cdr command-line-args-left))
+    )
+  (load-file "BITMAP-CFG")
+  (load-file "BITMAP-ELS")
+  (princ (format "PREFIX=%s\nLISPDIR=%s\n" PREFIX LISPDIR))
+  )
 
 (defun compile-bitmap ()
   (config-bitmap)
