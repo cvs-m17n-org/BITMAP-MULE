@@ -700,8 +700,8 @@ MMMMMMMMMMMMMMMM
    (vector ";_;"
 	   (bitmap-compose (aref smiley-bitmap-for-weep 0))
 	   'smiley-manga-face)
-   (vector "(T_T"
-	   (concat "(" (bitmap-compose (aref smiley-bitmap-for-weep 0)))
+   (vector "T_T"
+	   (bitmap-compose (aref smiley-bitmap-for-weep 0))
 	   'smiley-manga-face)
    (vector ">_<"
 	   (bitmap-compose (aref smiley-bitmap-for-weep 0))
