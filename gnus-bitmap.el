@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised:
+;; Revised: 1999/08/24
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -32,11 +32,14 @@
 ;;   If you would like to splash the startup screen with bitmap image,
 ;;   put the following lines in your .emacs file before gnus is loaded.
 ;;
-;;	(if window-system (require 'gnus-bitmap))
+;;	(autoload 'gnus-bitmap-splash "gnus-bitmap")
+;;	(add-hook 'gnus-load-hook 'gnus-bitmap-splash)
 ;;
-;;   Or you can inhibit the use of bitmap image as below instead.
+;;   Or you can inhibit the use of bitmap images (except for X-Face) as
+;;   follows.
 ;;
-;;	(setq gnus-bitmap-splash-image nil)
+;;	(setq gnus-bitmap-splash-image nil
+;;	      gnus-bitmap-modeline-image nil)
 
 ;;; Code:
 
@@ -192,7 +195,7 @@ bitmap image."
 (defvar gnus-visible-headers)
 (defvar last)
 (eval-when-compile
-  (fset 'gnus-bitmap-group-startup-message 'ignore)
+  (fset 'gnus-bitmap-original-gnus-group-startup-message 'ignore)
   (autoload 'gnus-indent-rigidly "gnus")
   (autoload 'gnus-summary-select-article "gnus-sum"))
 
@@ -236,7 +239,7 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 (defun gnus-bitmap-startup-message (&optional x y)
   "Insert startup message in current buffer."
   (if (null gnus-bitmap-splash-image-data)
-      (gnus-bitmap-group-startup-message x y)
+      (gnus-bitmap-original-gnus-group-startup-message x y)
     (erase-buffer)
     (insert gnus-version "\n")
     (let ((fill-column (1- (window-width))))
@@ -251,10 +254,8 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
       (gnus-indent-rigidly start (point)
 			   (/ (max (- (window-width) (or x (1- width))) 0) 2))
       (goto-char start)
-      (insert (make-string
-	       (/ (max 0
-		       (- (window-height) (count-lines start (point-max)))) 2)
-	       ?\n)))
+      (insert-char
+       ?\n (/ (max 0 (- (window-height) (count-lines start (point-max)))) 2)))
     ;; Fontify some.
     (put-text-property (point-min) (point-max) 'face 'gnus-splash-face)
     (goto-char (point-min))
@@ -324,7 +325,8 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 	     (setq gnus-ignored-headers
 		   (concat (substring gnus-ignored-headers 0
 				      (match-beginning 0))
-			   (substring gnus-ignored-headers (match-end 0)))))))
+			   (substring gnus-ignored-headers
+				      (match-end 0)))))))
 	((and gnus-ignored-headers (listp gnus-ignored-headers))
 	 (when (member "^X-Face:" gnus-ignored-headers)
 	   (setq gnus-ignored-headers
@@ -361,8 +363,8 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
     )
 
   ;; Redifine the splash function.
-  (unless (fboundp 'gnus-bitmap-group-startup-message)
-    (fset 'gnus-bitmap-group-startup-message
+  (unless (fboundp 'gnus-bitmap-original-gnus-group-startup-message)
+    (fset 'gnus-bitmap-original-gnus-group-startup-message
 	  (symbol-function 'gnus-group-startup-message)))
   (fset 'gnus-group-startup-message 'gnus-bitmap-startup-message)
   (when (boundp 'gnus-mule-bitmap-image-file)
@@ -373,6 +375,20 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
     (fset 'gnus-mode-line-buffer-identification
 	  'gnus-bitmap-mode-line-buffer-identification))
   )
+
+
+;;;###autoload
+(defun gnus-bitmap-splash ()
+  "Splash the startup screen.  This function have only limited use for
+`gnus-load-hook'."
+  (when gnus-bitmap-splash-image-data
+    (setq this-command nil);; Suppress the load time splash.
+    (if (boundp 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)
+	(eval-after-load "gnus" '(gnus-splash))
+      (eval-after-load "gnus" '(progn
+				 (gnus-bitmap-redefine)
+				 (gnus-splash)))
+      (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))))
 
 
 (provide 'gnus-bitmap)
