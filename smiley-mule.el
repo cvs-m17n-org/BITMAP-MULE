@@ -766,7 +766,7 @@ MMMMMMMMMMMMMMMM
 	    (let ((p0 (match-beginning 0))
 		  (bitmap (aref cell 1))
 		  )
-	      (replace-match bitmap)
+	      (replace-match bitmap nil 'literal)
 	      (overlay-put (make-overlay p0 (+ p0 (length bitmap)))
 			   'face (aref cell 2))
 	      )))
