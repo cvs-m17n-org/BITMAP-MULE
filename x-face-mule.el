@@ -9,7 +9,7 @@
 ;;         Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 1999/11/01
+;; Revised: 1999/11/02
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -356,11 +356,6 @@ get hung up with it."
   "X-Face face."
   :group 'x-face-mule)
 
-(unless (or (face-foreground 'x-face-mule-highlight-x-face-face)
-	    (face-background 'x-face-mule-highlight-x-face-face))
-  (set-face-foreground 'x-face-mule-highlight-x-face-face "Black")
-  (set-face-background 'x-face-mule-highlight-x-face-face "White"))
-
 
 ;;; Internal variables.
 ;;
@@ -431,7 +426,7 @@ get hung up with it."
     (message "")))
 
 ;; hooks for saving cache (for Mew, cmail, mh-e, VM, Wanderlust).
-(when window-system
+(when (and window-system (>= emacs-major-version 19))
   (mapcar
    (function (lambda (hook) (add-hook hook 'x-face-mule-save-cache-file)))
    '(mew-quit-hook cmail-quit-hook mh-quit-hook
@@ -748,6 +743,10 @@ just the headers of the article."
 		  )
 	(x-face-mule-highlight-header)))))
 
+;; Redefine `x-face-decode-message-header' for MULE 1.
+(when (<= emacs-major-version 18)
+  (require 'x-face-18))
+
 
 ;;; Commands.
 ;;
@@ -829,20 +828,22 @@ just the headers of the article."
 ;;; MUA dependencies.
 ;;
 
-;; gnus
-(autoload 'x-face-mule-gnus-article-display-x-face "gnus-bitmap")
-(when (and
-       window-system
-       (not (boundp
-	     'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)))
-  (autoload 'gnus-bitmap-redefine "gnus-bitmap")
-  (eval-after-load "gnus" '(gnus-bitmap-redefine))
-  (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))
+(when (>= emacs-major-version 19)
+  ;; gnus
+  (autoload 'x-face-mule-gnus-article-display-x-face "gnus-bitmap")
+  (when (and
+	 window-system
+	 (not (boundp
+	       'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)))
+    (autoload 'gnus-bitmap-redefine "gnus-bitmap")
+    (eval-after-load "gnus" '(gnus-bitmap-redefine))
+    (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))
 
-;; VM
-(autoload 'vm-bitmap-redefine "vm-bitmap")
-(when window-system
-  (eval-after-load "vm" '(vm-bitmap-redefine)))
+  ;; VM
+  (autoload 'vm-bitmap-redefine "vm-bitmap")
+  (when window-system
+    (eval-after-load "vm" '(vm-bitmap-redefine)))
+  )
 
 
 (provide 'x-face-mule)
