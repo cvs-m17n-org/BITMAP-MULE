@@ -6,7 +6,7 @@
 ;; Author: Ken'ichi HANDA <handa@etl.go.jp>
 ;;         MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Version:
-;;	$Id: bitmap.el,v 7.17 1997/02/10 14:06:19 morioka Exp $
+;;	$Id: bitmap.el,v 7.18 1997/05/22 04:42:16 morioka Exp $
 ;; Keywords: bitmap, xbm, MULE
 
 ;; This file is part of bitmap-mule.
@@ -53,7 +53,7 @@
 
 
 ;; Block (all bits set) character
-(defvar bitmap-block (make-character charset-bitmap 32 33))
+(defvar bitmap-block (make-char charset-bitmap 32 33))
 
 ;; Simple examples:
 ;;	(bitmap-compose "00FF00FF00FF00FF00FF00FF00FF00FF")
@@ -93,7 +93,7 @@ For example the pattern \"0081814242242442111124244242818100\" is
 	    (setq code (+ (* (% i 16) 255) row -1))
 	    (setq c1 (+ (/ code 96) 33)
 		  c2 (+ (% code 96) 32))
-	    (sset buf j (make-character charset-bitmap c1 c2))
+	    (sset buf j (make-char charset-bitmap c1 c2))
 	    (setq j (+ j bytes))))
       (setq i (1+ i))
       (if (or (= (% i 16) 0) (>= i len))
