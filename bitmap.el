@@ -31,6 +31,8 @@
 ;;	(bitmap-compose
 ;;	  "FF00FF00FF00FF00FF00FF00FF00FF00AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
 
+(require 'poe)
+
 (defun read-hexa (str)
   (let ((result 0) (i 0) (max (length str)))
     (while (< i max)
