@@ -1,16 +1,14 @@
 ;;; smiley-mule.el --- smiley faces decoder for MULE
 
-;; Copyright (C) 1996 MORIOKA Tomohiko
+;; Copyright (C) 1996,1998 MORIOKA Tomohiko
 ;; Copyright (C) 1996 Katsumi Yamaoka
 
 ;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;;         Katsumi Yamaoka <yamaoka@ga.sony.co.jp>
 ;; Created: 1996/7/26
-;; Version:
-;;	$Id: smiley-mule.el,v 3.7 1996/09/14 05:07:00 morioka Exp $
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
-;; This file is part of tl (Tiny Library).
+;; This file is part of bitmap-mule.
 
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
