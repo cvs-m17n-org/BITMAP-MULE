@@ -2,7 +2,7 @@
 
 	* x-face-mule.el (TopLevel): Don't setup for gnus nor VM under
 	Emacs v18.
-	(x-face-decode-message-header): Redifine function by `x-face-18'
+	(x-face-decode-message-header): Redefine function by `x-face-18'
 	if Emacs v18 is used.
 	(x-face-mule-save-cache-file): Don't use it under Emacs v18.
 	(x-face-mule-highlight-x-face-face): Don't set its color.
