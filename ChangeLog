@@ -1,3 +1,7 @@
+2000-01-05  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* Makefile: Update for the new CVS server.
+
 1999-12-24  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (x-face-mule-convert-x-face-to-rectangle): Use
