@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 1999/10/19
+;; Revised: 1999/10/26
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -183,6 +183,7 @@ bitmap image."
 ;;; Avoid byte compile warnings.
 ;;
 
+(defvar gnus-article-buffer)
 (defvar gnus-article-display-hook)
 (defvar gnus-article-x-face-command)
 (defvar gnus-ignored-headers)
@@ -196,6 +197,7 @@ bitmap image."
 (defvar last)
 (eval-when-compile
   (fset 'gnus-bitmap-original-gnus-group-startup-message 'ignore)
+  (autoload 'article-goto-body "gnus-art")
   (autoload 'gnus-indent-rigidly "gnus")
   (autoload 'gnus-summary-select-article "gnus-sum"))
 
@@ -381,7 +383,6 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 	  'gnus-bitmap-mode-line-buffer-identification))
   )
 
-
 ;;;###autoload
 (defun gnus-bitmap-splash ()
   "Splash the startup screen.  This function have only limited use for
@@ -394,6 +395,23 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
       (eval-after-load "gnus" (gnus-bitmap-redefine))
       (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))
     (eval-after-load "gnus" '(or (featurep 'gnus) (gnus-splash)))))
+
+(eval-and-compile (autoload 'smiley-toggle-buffer "smiley-mule"))
+
+;;;###autoload
+(defun gnus-smiley-display (&optional arg)
+  "Display \"smileys\" as small graphical icons.
+With arg, turn displaying on if and only if arg is positive."
+  (interactive "P")
+  (save-excursion
+    (set-buffer gnus-article-buffer)
+    (save-restriction
+      (widen)
+      (article-goto-body)
+      (narrow-to-region (point) (point-max))
+      (let ((inhibit-read-only t)
+	    buffer-read-only)
+	(smiley-toggle-buffer arg)))))
 
 
 (provide 'gnus-bitmap)
