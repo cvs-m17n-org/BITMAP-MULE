@@ -1,3 +1,9 @@
+2000-03-29  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bm-utils.el (bitmap-lprogress-display): Show percentage.
+	(bitmap-string-to-special-symbols): New function.
+	(bitmap-special-symbol-alist): New variable.
+
 2000-03-28  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* BITMAP-ELS (bitmap-modules): Add `bm-utils'.
