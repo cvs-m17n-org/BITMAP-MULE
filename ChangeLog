@@ -1,3 +1,12 @@
+2000-03-29  Yuuichi Teranishi  <teranisi@gohome.org>
+
+	* x-face-mule.el (x-face-mule-BBDB-one-record):
+	Put `x-face-mule-highlight-x-face-face' overlay on x-face images.
+	Require 'bbdb-com for `bbdb-current-record'.
+	Fix problem when multiple x-face was recorded.
+	Check existence of a bbdb record.
+	Eliminate needless let.
+
 2000-03-29  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bm-utils.el (bitmap-lprogress-display): Show percentage.

@@ -906,11 +906,15 @@ just the headers of the article."
 (defun x-face-mule-BBDB-one-record ()
   "Display X-Face in *BBDB* one recode."
   (interactive)
+  (require 'bbdb-com) ; bbdb-current-record
   (save-excursion
     (forward-line)
-    (let (buffer-read-only
-	  (sfaces (bbdb-record-getprop (bbdb-current-record) 'face))
-	  xfaces xface (home (point)))
+    (let* ((record (bbdb-current-record))
+	   (sfaces (and record (bbdb-record-getprop record 'face)))
+	   (home (point))
+	   (i 0)
+	   buffer-read-only
+	   xfaces xface pos match-end)
       (when (and sfaces
 		 (re-search-forward 
 		  "^[ ]+face: *\\(.*\\(\n[ ]+.*\\)*\\)\n" nil t)
@@ -919,22 +923,23 @@ just the headers of the article."
 		 (not (put-text-property (match-beginning 0)
 					 (match-end 0) 'invisible t)))
 	(goto-char home)
-	(while (string-match "[^\n]+" sfaces)
+	(while (string-match "[^\n]+\n?" sfaces)
 	  (and (setq xface (x-face-mule-convert-x-face-to-rectangle 
-			    (substring sfaces (match-beginning 0) 
-				       (match-end 0))))
+			    (substring sfaces
+				       (match-beginning 0)
+				       (setq match-end (match-end 0)))))
 	       (setq xfaces (append xfaces (list xface))))
-	  (if (< (match-end 0) (string-bytes sfaces))
-	      (setq sfaces (substring sfaces 
-			      (+ 1 (match-end 0)) (string-bytes sfaces)))
-	    (setq sfaces "")))
-	(let ((i 0))
-	  (while (> 3 i)
-	    (mapcar (lambda (x)
-		      (insert (format " %s" (nth i x))))
-		    xfaces)
-	    (insert "\n")
-	    (setq i (+ 1 i))))
+	  (setq sfaces (substring sfaces match-end)))
+	(while (> 3 i)
+	  (mapcar (lambda (x)
+		    (insert " ")
+		    (setq pos (point))
+		    (insert (format "%s" (nth i x)))
+		    (overlay-put (make-overlay pos (point))
+				 'face x-face-mule-highlight-x-face-face))
+		  xfaces)
+	  (insert "\n")
+	  (setq i (+ 1 i)))
 	(forward-line)
 	(put-text-property home (point) 'intangible t)))))
 
