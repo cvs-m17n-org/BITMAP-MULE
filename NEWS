@@ -1,6 +1,19 @@
 BITMAP-MULE NEWS -- history of major-changes.
-Copyright (C) 1999 Free Software Foundation, Inc.
+Copyright (C) 1999,2000 Free Software Foundation, Inc.
 
+* Changes in BITMAP-MULE 8.2
+============================
+
+** Bug fixes related with `gnus-bitmap'
+Don't redefine the function `gnus-group-startup-message' if the function
+`gnus-bitmap-splash' is not added to `gnus-load-hook'.
+
+** Use `-X' option of uncompafce program
+It becomes a little faster if you use compface-1.2.  However, compface-1.2
+has a bug.  Please apply the patch named "compface-1.2.patch", which is
+included in this distribution, before installing it.
+
+
 * Changes in BITMAP-MULE 8.1
 ============================
 
