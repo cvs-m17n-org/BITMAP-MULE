@@ -46,7 +46,7 @@ Installation
   from:
 	ftp://ftp.win.ne.jp/pub/misc/compface-1.2.tar.gz
 
-  Unfortunately, This version of compface has a bug.  Please apply the
+  Unfortunately, this version of compface has a bug.  Please apply the
   patch named "compface-1.2.patch", which is included in the BITMAP-MULE
   distribution, before installing it.
 
