@@ -8,9 +8,8 @@
 ;; Author: KORIYAMA Naohiro <kory@ba2.so-net.ne.jp>
 ;;         Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
-;; Version: 0.27
 ;; Created: 1997/10/24
-;; Revised: 1999/10/29
+;; Revised: 1999/11/01
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -132,10 +131,6 @@
 
 
 ;;; Code:
-
-(defconst x-face-mule-version-number "0.27")
-(defconst x-face-mule-version
-  (format "X-Face-Mule v%s" x-face-mule-version-number))
 
 (require 'bitmap)
 (eval-when-compile (require 'cl))
@@ -413,8 +408,7 @@ get hung up with it."
 	    (cache x-face-mule-x-face-to-rectangle-cache)
 	    eol data)
 	(with-temp-buffer
-	  (insert ";; This file is generated automatically by X-Face-Mule "
-		  x-face-mule-version-number ".")
+	  (insert ";; This file is generated automatically by X-Face-Mule.")
 	  (setq eol (current-column))
 	  (goto-char (point-min))
 	  (insert ";; " name)
@@ -757,12 +751,6 @@ just the headers of the article."
 
 ;;; Commands.
 ;;
-
-;;;###autoload
-(defun x-face-mule-version ()
-  "Version number of this version of X-Face-Mule."
-  (interactive)
-  (message x-face-mule-version))
 
 ;;;###autoload
 (defun x-face-mule-toggle-x-face-position (&optional arg)
