@@ -1,3 +1,9 @@
+2001-01-31  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* font/Makefile: Rename etlWxH-bitmap.bdf to bmpH-etl.bdf.
+	* font/bmp16-etl.bdf: Imported from intlfonts-1.2.
+	* font/etl8x16-bitmap.bdf: Remove.
+
 2001-01-30  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bitmap-ci.el: Attempt to divert `bitmap-alterable-charset' to the

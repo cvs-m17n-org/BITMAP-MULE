@@ -1,12 +1,12 @@
 ;;; smiley-mule.el --- smiley faces decoder for MULE
 
-;; Copyright (C) 1996,1998,1999 MORIOKA Tomohiko
-;; Copyright (C) 1996,1999,2000 Katsumi Yamaoka
+;; Copyright (C) 1996, 1998, 1999 MORIOKA Tomohiko
+;; Copyright (C) 1996, 1999, 2000, 2001 Katsumi Yamaoka
 
 ;; Author: MORIOKA Tomohiko <tomo@m17n.org>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
-;; Revised: 2000/12/13
+;; Revised: 2001/01/31
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
 ;; This file is part of bitmap-mule.
@@ -28,9 +28,6 @@
 
 ;;; Commentary:
 
-;; - How to install.
-;;   0. install bitmap.el and bitmap font (etl8x16-bitmap.bdf)
-;;   1. bytecompile this file and copy it to the apropriate directory.
 ;; - How to use.
 ;;   If you use tm, put the following lines in your .emacs file:
 ;;	(if window-system

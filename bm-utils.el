@@ -1,6 +1,6 @@
 ;; bm-utils.el -- utility functions using bitmap-mule.
 
-;; Copyright (C) 2000 Free Software Foundation, Inc.
+;; Copyright (C) 2000, 2001 Free Software Foundation, Inc.
 
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;;         Yoshitsugu Mito <mit@nines.nec.co.jp>

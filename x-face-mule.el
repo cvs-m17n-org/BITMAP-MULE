@@ -1,6 +1,7 @@
 ;; x-face-mule.el --  X-Face decoder for MULE.
 
-;; Copyright (C) 1997,1998,1999,2000 Free Software Foundation, Inc.
+;; Copyright (C) 1997, 1998, 1999, 2000, 2001
+;;        Free Software Foundation, Inc.
 
 ;; Honorary-Author: Hiroshi Ueno <jl07715@yamato.ibm.co.jp>
 ;;                  MORIOKA Tomohiko <morioka@jaist.ac.jp>

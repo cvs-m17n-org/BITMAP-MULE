@@ -1,5 +1,20 @@
 [README for bitmap-mule (English Version)]
 by MORIOKA Tomohiko
+   and Katsumi YAMAOKA
+
+IMPORTANT notice to Mule-UCS on Emacs 20 users !!
+=================================================
+If you are using Emacs 20 and Mule-UCS version **** or later, you have
+to set the value of the variable `bitmap-alterable-charset' explicitly,
+and furthermore, you have to load un-define.elc before bitmap.elc.
+The valid values for the variable `bitmap-alterable-charset' are
+`indian-1-column' and `tibetan-1-column'.  Here is an example for the
+startup (normally .emacs) file:
+
+   (require 'un-define)
+   (setq bitmap-alterable-charset 'tibetan-1-column)
+   (require 'bitmap)
+
 
 What's bitmap-mule?
 ===================
@@ -19,7 +34,7 @@ What's bitmap-mule?
     - gnus-bitmap.el:	Gnus/gnus related functions
     - vm-bitmap.el:	VM related functions
 
-    - font/etl8x16-bitmap.bdf:	font for BITMAP 8x16
+    - font/bmp16-etl.bdf:	font for BITMAP 8x16
 
   The following image files will be integrated into gnus-bitmap.el at
   the complile time.
@@ -106,10 +121,9 @@ Installation
 
 (2) More useful informations can be found at the following web sites:
 
-	http://www02.u-page.so-net.or.jp/ba2/kory/emacs/meadow.html
-	http://www.shiojiri.ne.jp/~t-ichi/meadow.html
-	http://www.NetLaputa.ne.jp/~kose/
+	http://www.NetLaputa.ne.jp/~kose/Emacs/
 	http://web.kyoto-inet.or.jp/people/fuji0924/x-face.html
+	http://www.ki.nu/software/emacs-20/x-face.shtml
 
 
 Bug reports

@@ -1,6 +1,6 @@
 このディレクトリでは bitmap-mule で使うためのいくつかの bdf フォントを
-作成します。オリジナルは etl8x16-bitmap.bdf で、それ以外のファイルは
-`bdfresize'(*1) を使って自動生成します。
+作成します。オリジナルは bmp16-etl.bdf (*1) で、それ以外のファイルは
+`bdfresize'(*2) を使って自動生成します。
 もし `bdfresize' をお持ちでないなら、既製の以下のフォントを使うことも
 できます。
 
@@ -22,4 +22,9 @@
    `make install-nogzip' とタイプする必要があります。
 
 
-(*1) ftp://ftp.cs.titech.ac.jp/pub/X11/contrib/Local/bdfresize-1.4.tar.Z
+(*1) bmp16-etl.bdf は
+     ftp://ftp.m17n.org/pub/mule/intlfonts-1.2-split/Misc.tar.gz に
+     含まれています。
+
+(*2) ftp://ftp.jaist.ac.jp/.arc10/linux/kondara/Jirai/SOURCES/bdfresize-1.5.tar.gz
+     ftp://ftp.cs.titech.ac.jp/pub/X11/contrib/Local/bdfresize-1.4.tar.Z

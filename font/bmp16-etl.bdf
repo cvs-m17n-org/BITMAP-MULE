@@ -2,14 +2,8 @@ STARTFONT 2.1
 COMMENT Font for BITMAP 8x16.
 COMMENT   Whole bitmap patterns of 8x16 can be displayed by
 COMMENT   overwriting 16 characters of this font (one char per one row).
-COMMENT Copyright (C) 1992 Electrotechnical Laboratory, JAPAN.
-COMMENT
-COMMENT This font is free; you can redistribute it and/or modify
-COMMENT it under the terms of the GNU General Public License as published by
-COMMENT the Free Software Foundation; either version 2, or (at your option)
-COMMENT any later version.
-COMMENT
 COMMENT 92.11.27 Created by K.Handa <handa@etl.go.jp>
+COMMENT This font is public domain.
 FONT -ETL-Fixed-Medium-R-Normal--16-120-100-100-M-80-BITMAP.8x16-0
 SIZE 16 100 100
 FONTBOUNDINGBOX 8 16 0 -2

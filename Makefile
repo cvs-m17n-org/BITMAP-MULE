@@ -4,7 +4,7 @@
 
 PACKAGE	= bitmap-mule
 API	= 8
-RELEASE	= 3
+RELEASE	= 4
 BITMAP_FONTS	= bitmap-fonts-1.0
 
 TAR	= tar
@@ -22,8 +22,6 @@ VERSION_SPECIFIC_LISPDIR	= NONE
 GOMI	= *.elc \
 	  *.cp *.cps *.ky *.kys *.fn *.fns *.vr *.vrs \
 	  *.pg *.pgs *.tp *.tps *.toc *.aux *.log
-FILES	= README.?? Makefile BITMAP-MK BITMAP-CFG BITMAP-ELS *.el \
-	  etl8x16-bitmap.bdf ChangeLog
 
 VERSION	= $(API).$(RELEASE)
 ARC_DIR	= /pub/elisp/bitmap
