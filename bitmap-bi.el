@@ -76,7 +76,11 @@
 	     ((= size 24)
 	      (set-fontset-font
 	       fontset lc-bitmap
-	       "-etl-fixed-medium-r-*--24-*-100-100-m-*-bitmap.12x24-0")))
+	       "-etl-fixed-medium-r-*--24-*-100-100-m-*-bitmap.12x24-0"))
+	     (t
+	      (set-fontset-font
+	       fontset lc-bitmap
+	       "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")))
 	    )))
        (fontset-list))
       ))
