@@ -84,14 +84,16 @@
 	nil)))
 
   (defmacro gnus-bitmap-xbm-to-bitmap (cmp)
-    (` (let* ((cmp (, cmp))
-	      (len (length cmp))
-	      (bitmap (bitmap-compose (aref cmp 0)))
-	      (i 1))
-	 (while (< i len)
-	   (setq bitmap (concat bitmap "\n" (bitmap-compose (aref cmp i)))
-		 i (1+ i)))
-	 bitmap)))
+    (` (let ((cmp (, cmp)))
+	 (if cmp
+	     (let ((len (length cmp))
+		   (bitmap (bitmap-compose (aref cmp 0)))
+		   (i 1))
+	       (while (< i len)
+		 (setq bitmap (concat bitmap "\n"
+				      (bitmap-compose (aref cmp i)))
+		       i (1+ i)))
+	       bitmap)))))
   )
 
 (defconst gnus-bitmap-splash-image-internal
