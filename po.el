@@ -3,7 +3,7 @@
 ;; Copyright (C) 1996 MORIOKA Tomohiko
 
 ;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
-;; Version: $Id: po.el,v 1.1 1996-11-27 11:14:21 morioka Exp $
+;; Version: $Id: po.el,v 1.2 1998-03-23 02:14:44 morioka Exp $
 ;; Keywords: bitmap, bdf, MULE
 
 ;; This file is part of bitmap-mule.
@@ -202,7 +202,7 @@
     (setq po-bdf-current-encoding
 	  (save-excursion
 	    (set-buffer orig-buf)
-	    (goto-char (point-min))
+	    ;;(goto-char (point-min))
 	    (re-search-forward "^ENCODING \\([0-9]+\\)\n" nil t)
 	    (string-to-number (buffer-substring (match-beginning 1)
 						(match-end 1)))
