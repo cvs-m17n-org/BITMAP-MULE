@@ -1,24 +1,33 @@
 ;;; -*-Emacs-Lisp-*-
-;;;
-;;; $Id: BITMAP-CFG,v 1.8 1999-07-15 03:00:12 yamaoka Exp $
-;;;
+
+;; BITMAP-CFG: installation setting about bitmap-mule.
+
+;;; Code:
 
 (defvar default-load-path load-path)
 
 (add-to-list 'load-path
 	     (expand-file-name "../../site-lisp/apel" data-directory))
+
 (add-to-list 'load-path
 	     (expand-file-name "../../site-lisp/flim" data-directory))
 
+(if (boundp 'LISPDIR)
+    (progn
+      (add-to-list 'default-load-path LISPDIR)
+      (add-to-list 'load-path LISPDIR)
+      (add-to-list 'load-path (expand-file-name "apel" LISPDIR))
+      (add-to-list 'load-path (expand-file-name "flim" LISPDIR))
+      ))
+
+(if (boundp 'VERSION_SPECIFIC_LISPDIR)
+    (add-to-list 'load-path VERSION_SPECIFIC_LISPDIR))
+
 (require 'install)
 
-(when (boundp 'LISPDIR)
-  (add-to-list 'default-load-path LISPDIR)
-  (add-to-list 'load-path LISPDIR)
-  (add-to-list 'load-path (expand-file-name "apel" LISPDIR))
-  )
+(add-latest-path "custom")
 
-(add-to-list 'load-path (expand-file-name "."))
+(add-path default-directory)
 
 
 ;;; @ Please specify prefix of install directory.
@@ -41,6 +50,9 @@
 ;; If you don't like default directory tree, please set it.
 (defvar LISPDIR (install-detect-elisp-directory PREFIX))
 ;; (setq install-default-elisp-directory "~/lib/emacs/lisp")
+
+(defvar VERSION_SPECIFIC_LISPDIR
+  (install-detect-elisp-directory PREFIX nil 'version-specific))
 
 (setq BITMAP_DIR (expand-file-name BITMAP_PREFIX LISPDIR))
 
