@@ -1,5 +1,9 @@
 1998-03-23  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
 
+	* bitmap.el: Rename 'charset-bitmap -> 'lc-bitmap again.
+
+1998-03-23  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
 	* po.el (po-bdf-edit): Edit at point.
 
 1998-03-09  Shuhei KOBAYASHI  <shuhei-k@jaist.ac.jp>
