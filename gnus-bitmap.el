@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 2000/01/17
+;; Revised: 2000/04/18
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -32,6 +32,7 @@
 ;;   If you would like to splash the startup screen with bitmap image,
 ;;   put the following lines in your .emacs file before gnus is loaded.
 ;;
+;;	;; It must be placed in .emacs file before gnus.el(c) is loaded.
 ;;	(if window-system
 ;;	    (progn
 ;;	      (autoload 'gnus-bitmap-splash "gnus-bitmap")
@@ -166,6 +167,7 @@ bitmap image is not used."
 	(lambda (symbol value)
 	  (gnus-bitmap-set-splash-image-data value)
 	  (set-default symbol value)))
+  :group 'bitmap-mule
   :group 'gnus-start)
 
 (defcustom gnus-bitmap-modeline-image 'internal
@@ -184,6 +186,7 @@ is not used."
 	(lambda (symbol value)
 	  (gnus-bitmap-set-modeline-image-data value)
 	  (set-default symbol value)))
+  :group 'bitmap-mule
   :group 'gnus-start)
 
 (static-when gnus-bitmap-broken-facility-check
