@@ -1,3 +1,10 @@
+2000-09-20  Hideyuki SHIRAI  <shirai@meadowy.org>
+
+	* smiley-mule.el (smiley-buffer): Put on `invisible' and
+	`smiley-text' properties to original face text instead of removing.
+	(smiley-encode-buffer): If exist `smiley-text' property on original
+	face text, remove its properties.
+
 2000-09-19  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* smiley-mule.el (smiley-encode-buffer): Check for a text property

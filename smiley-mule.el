@@ -6,7 +6,7 @@
 ;; Author: MORIOKA Tomohiko <tomo@m17n.org>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
-;; Revised: 2000/09/19
+;; Revised: 2000/09/20
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
 ;; This file is part of bitmap-mule.
@@ -775,23 +775,25 @@ highlighting the inline image.")
 	(save-restriction
 	  (narrow-to-region (or start (point-min)) (or end (point-max)))
 	  (let ((rest smiley-face-bitmap-list)
-		elem bitmap text overlay case-fold-search)
+		elem overlay case-fold-search)
 	    (while rest
 	      (setq elem (car rest)
 		    rest (cdr rest))
 	      (goto-char (point-min))
 	      (while (search-forward (aref elem 0) nil t)
-		(setq start (match-beginning 0)
-		      bitmap (aref elem 1)
-		      end (+ start (length bitmap))
-		      text (match-string 0))
-		(replace-match bitmap nil 'literal)
-		(add-text-properties start end
-				     (list 'smiley-original-text text
-					   'rear-nonsticky t))
-		(setq overlay (make-overlay start end))
-		(overlay-put overlay 'face (aref elem 2))
-		(overlay-put overlay 'smiley-original-text text))))))
+		(setq start (match-beginning 0))
+		(if (get-text-property start 'smiley-text)
+		    nil
+		  (add-text-properties start (point)
+				       '(invisible t smiley-text t
+						   rear-nonsticky t))
+		  (put-text-property (max (1- start) (point-min)) (point)
+				     'intangible t)
+		  (setq overlay (make-overlay (point) (progn
+							(insert (aref elem 1))
+							(point))))
+		  (overlay-put overlay 'face (aref elem 2))
+		  (overlay-put overlay 'evaporate t)))))))
     (if (interactive-p)
 	(message "You're not under window system."))))
 
@@ -838,26 +840,28 @@ With arg, turn displaying on if and only if arg is positive."
   "Encode smiley faces to ordinary text in the buffer."
   (interactive "*")
   (if window-system
-      (save-excursion
-	(let ((rest smiley-face-bitmap-list)
-	      elem text)
-	  (while rest
-	    (setq elem (car rest)
-		  rest (cdr rest))
-	    (goto-char (point-min))
-	    (while (search-forward (aref elem 1) nil t)
-	      (or (setq text (get-text-property (match-beginning 0)
-						'smiley-original-text))
-		  (let ((ovls (overlays-at (match-beginning 0)))
-			ovl)
-		    (while (and (prog1
-				    (setq ovl (car ovls))
-				  (setq ovls (cdr ovls)))
-				(not (setq text (overlay-get
-						 ovl
-						 'smiley-original-text)))))))
-	      (replace-match "")
-	      (insert (or text (aref elem 0)))))))
+      (progn
+	(let ((start (point-min))
+	      end)
+	  (while (setq start (text-property-any start (point-max)
+						'smiley-text t))
+	    (setq end (or (text-property-not-all start (point-max)
+						 'smiley-text t)
+			  (point-max)))
+	    (remove-text-properties start end '(invisible nil smiley-text nil
+							  rear-nonsticky nil))
+	    (put-text-property (max (1- start) (point-min)) end
+			       'intangible nil)
+	    (setq start end)))
+	(save-excursion
+	  (let ((rest smiley-face-bitmap-list)
+		elem)
+	    (while rest
+	      (setq elem (car rest)
+		    rest (cdr rest))
+	      (goto-char (point-min))
+	      (while (search-forward (aref elem 1) nil t)
+		(replace-match ""))))))
     (if (interactive-p)
 	(message "You're not under window system."))))
 
