@@ -1,5 +1,8 @@
 2000-07-05  Katsumi Yamaoka   <yamaoka@jpl.org>
 
+	* x-face-mule.el (x-face-mule-save-cache-file,
+	x-face-mule-load-cache-file): Don't use them under Emacs 21+.
+
 	* bm-utils.el (bitmap-lprogress-diaplay-use-clear-bar): Use
 	`bitmap-make-string' instead of `make-string' for composite string.
 	(bitmap-string-to-special-symbols): Don't use `mapconcat' for
