@@ -226,7 +226,7 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 	     window-system
 	     (eq major-mode 'gnus-article-mode)
 	     (memq x-face-mule-highlight-x-face-position '(from x-face)))
-    (x-face-mule-x-face-decode-message-header)))
+    (x-face-decode-message-header)))
 
 
 ;;; Splash the startup screen.
