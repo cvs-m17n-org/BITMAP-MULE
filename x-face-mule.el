@@ -1,10 +1,12 @@
 ;; x-face-mule.el -- X-Face decoder for MULE.
 
+;; Copyright (C) 1996 UENO Hiroshi
 ;; Copyright (C) 1996 MORIOKA Tomohiko
 
-;; Author: MORIOKA Tomohiko <morioka@jaist.ac.jp>
+;; Author: Hiroshi Ueno <jl07715@yamato.ibm.co.jp>
+;;	   MORIOKA Tomohiko <morioka@jaist.ac.jp>
 ;; Version:
-;;	$Id: x-face-mule.el,v 1.1 1996-08-01 06:26:24 morioka Exp $
+;;	$Id: x-face-mule.el,v 1.2 1996-08-01 06:33:53 morioka Exp $
 ;; Keywords: X-Face, bitmap, MULE
 
 ;; This file is part of tl (Tiny Library).
@@ -28,7 +30,7 @@
 (require 'tl-822)
 (require 'bitmap)
 
-(defvar bitmap-uncompface-program "uncompface")
+(defvar uncompface-program "uncompface")
 
 (defun bitmap-decode-x-face ()
   (save-restriction
@@ -47,7 +49,7 @@
 	    (narrow-to-region p end)
 	    (delete-region p beg)
 	    (call-process-region p (point-max)
-				 bitmap-uncompface-program t t nil)
+				 uncompface-program t t nil)
 	    (let (i k k+6 cmp temp)
 	      (goto-char (point-min))
 	      (search-forward "0x" nil t)
