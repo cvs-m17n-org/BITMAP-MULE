@@ -1,18 +1,30 @@
 ;;; -*-Emacs-Lisp-*-
 ;;;
-;;; $Id: BITMAP-CFG,v 1.6 1997-03-12 07:38:21 morioka Exp $
+;;; $Id: BITMAP-CFG,v 1.7 1997-07-01 14:18:42 morioka Exp $
 ;;;
 
-(setq load-path (append
-		 (mapcar (function
-			  (lambda (path)
-			    (expand-file-name path default-directory)
-			    ))
-			 '("." "../emu" "../apel" "../mu" "../tl")
-			 )
-		 load-path))
+(defvar default-load-path load-path)
+;; (setq load-path (append
+;;                  (mapcar (function
+;;                           (lambda (path)
+;;                             (expand-file-name path default-directory)
+;;                             ))
+;;                          '("." "../emu" "../apel" "../mu" "../tl")
+;;                          )
+;;                  load-path))
+
+(add-to-list 'load-path
+	     (expand-file-name "../../site-lisp/apel" data-directory))
+
+(when (boundp 'LISPDIR)
+  (add-to-list 'default-load-path LISPDIR)
+  (add-to-list 'load-path LISPDIR)
+  (add-to-list 'load-path (expand-file-name "apel" LISPDIR))
+  )
 
 (require 'install)
+
+(add-to-list 'load-path (expand-file-name "."))
 
 
 ;;; @ Please specify prefix of install directory.
@@ -36,6 +48,6 @@
 (defvar LISPDIR (install-detect-elisp-directory PREFIX))
 ;; (setq install-default-elisp-directory "~/lib/emacs/lisp")
 
-(setq BITMAP_DIR	(expand-file-name BITMAP_PREFIX LISPDIR))
+(setq BITMAP_DIR (expand-file-name BITMAP_PREFIX LISPDIR))
 
 ;;; BITMAP-CFG ends here
