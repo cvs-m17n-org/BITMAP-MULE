@@ -32,12 +32,12 @@
 
 (defun compile-bitmap ()
   (config-bitmap)
-  (compile-elisp-modules bitmap-modules	".")
+  (compile-elisp-modules bitmap-modules-to-compile ".")
   )
 
 (defun install-bitmap ()
   (config-bitmap)
-  (install-elisp-modules bitmap-modules	"./"	BITMAP_DIR)
+  (install-elisp-modules bitmap-modules "./" BITMAP_DIR)
   )
 
 ;;; BITMAP-MK ends here
