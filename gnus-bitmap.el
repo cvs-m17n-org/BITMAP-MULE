@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 1999/10/26
+;; Revised: 1999/10/29
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -145,7 +145,7 @@ it will be occurred under Mule 2.3 based on Emacs 19.34 using custom-1.9962."
 (defcustom gnus-bitmap-splash-image 'internal
   "If it is the symbol `internal', use the internal image for splashing
 the startup screen.  It can also be a name of XBM file.  If it is nil,
-don't use bitmap image."
+bitmap image is not used."
   :type (list 'radio
 	      (list 'const :tag
 		    (concat "Internal image\n"
@@ -162,8 +162,8 @@ don't use bitmap image."
 (defcustom gnus-bitmap-modeline-image 'internal
   "If it is the symbol `internal', use the internal image for displaying
 a nifty image in the modeline.  It can also be a name of XBM file.  If it
-is nil or the value of `emacs-major-version' is less than 20, don't use
-bitmap image."
+is nil or the value of `emacs-major-version' is less than 20, bitmap image
+is not used."
   :type (list 'radio
 	      (list 'const :tag
 		    (concat "Internal image ["
@@ -207,27 +207,28 @@ bitmap image."
 ;;; X-Face functions.
 ;;
 
+;;;###autoload
 (defun x-face-mule-gnus-article-display-x-face (&rest args)
   "Decode and show X-Face.  The buffer is expected to be narrowed to just the
 headers of the article.  If `gnus-article-x-face-command' is set to the
 symbol of this function, gnus will call it for each X-Face fields.  So we
 set the bound variable `last' to T in order to make good use of time."
-  (let ((x-face-mule-highlight-x-face-style
-	 (if (and (eq x-face-mule-highlight-x-face-style 'xmas)
-		  (memq this-command
-			'(gnus-summary-toggle-mime)))
-	     'default
-	   x-face-mule-highlight-x-face-style))
-	x-face-mule-preserve-original-from-field)
-    (x-face-mule-x-face-decode-message-header-1)
-    (x-face-mule-highlight-header)
-    (setq last t)))
+  (when window-system
+    (let ((x-face-mule-highlight-x-face-style
+	   (if (and (eq x-face-mule-highlight-x-face-style 'xmas)
+		    (memq this-command
+			  '(gnus-summary-toggle-mime)))
+	       'default
+	     x-face-mule-highlight-x-face-style))
+	  x-face-mule-preserve-original-from-field)
+      (x-face-mule-x-face-decode-message-header-1)
+      (x-face-mule-highlight-header)))
+  (setq last t))
 
 (defun x-face-mule-gnus-highlight-headers-if-no-mime ()
   "Decode and show X-Face even if `gnus-show-mime' is nil.  It is
 controlled by the value of `x-face-mule-gnus-force-decode-headers'."
   (when (and x-face-mule-gnus-force-decode-headers
-	     window-system
 	     (eq major-mode 'gnus-article-mode)
 	     (memq x-face-mule-highlight-x-face-position '(from x-face)))
     (x-face-decode-message-header)))
@@ -290,7 +291,8 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 	   'gnus-summary-mode
 	   (function (lambda () (gnus-summary-select-article nil t))))
 
-(add-hook 'gnus-exit-gnus-hook 'x-face-mule-save-cache-file)
+(when window-system
+  (add-hook 'gnus-exit-gnus-hook 'x-face-mule-save-cache-file))
 
 (defun gnus-bitmap-redefine ()
   "Redifine variables and functions for the use of bitmap-mule."
@@ -389,7 +391,8 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 (defun gnus-bitmap-splash ()
   "Splash the startup screen.  This function have only limited use for
 `gnus-load-hook'."
-  (when (and (not (featurep 'gnus))
+  (when (and window-system
+	     (not (featurep 'gnus))
 	     gnus-bitmap-splash-image-data)
     (setq this-command nil);; Suppress the load time splash.
     (unless
@@ -405,15 +408,18 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
   "Display \"smileys\" as small graphical icons.
 With arg, turn displaying on if and only if arg is positive."
   (interactive "P")
-  (save-excursion
-    (set-buffer gnus-article-buffer)
-    (save-restriction
-      (widen)
-      (article-goto-body)
-      (narrow-to-region (point) (point-max))
-      (let ((inhibit-read-only t)
-	    buffer-read-only)
-	(smiley-toggle-buffer arg)))))
+  (if window-system
+      (save-excursion
+	(set-buffer gnus-article-buffer)
+	(save-restriction
+	  (widen)
+	  (article-goto-body)
+	  (narrow-to-region (point) (point-max))
+	  (let ((inhibit-read-only t)
+		buffer-read-only)
+	    (smiley-toggle-buffer arg))))
+    (when (interactive-p)
+      (message "You're not under window system."))))
 
 
 (provide 'gnus-bitmap)
