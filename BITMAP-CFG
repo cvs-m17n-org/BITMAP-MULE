@@ -1,28 +1,22 @@
 ;;; -*-Emacs-Lisp-*-
 ;;;
-;;; $Id: BITMAP-CFG,v 1.7 1997-07-01 14:18:42 morioka Exp $
+;;; $Id: BITMAP-CFG,v 1.8 1999-07-15 03:00:12 yamaoka Exp $
 ;;;
 
 (defvar default-load-path load-path)
-;; (setq load-path (append
-;;                  (mapcar (function
-;;                           (lambda (path)
-;;                             (expand-file-name path default-directory)
-;;                             ))
-;;                          '("." "../emu" "../apel" "../mu" "../tl")
-;;                          )
-;;                  load-path))
 
 (add-to-list 'load-path
 	     (expand-file-name "../../site-lisp/apel" data-directory))
+(add-to-list 'load-path
+	     (expand-file-name "../../site-lisp/flim" data-directory))
+
+(require 'install)
 
 (when (boundp 'LISPDIR)
   (add-to-list 'default-load-path LISPDIR)
   (add-to-list 'load-path LISPDIR)
   (add-to-list 'load-path (expand-file-name "apel" LISPDIR))
   )
-
-(require 'install)
 
 (add-to-list 'load-path (expand-file-name "."))
 
