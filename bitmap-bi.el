@@ -27,17 +27,25 @@
 ;; Code:
 
 (require 'emu)
+(eval-when-compile (require 'static))
 
-(cond ((boundp 'MULE)
-       (defvar lc-bitmap
-	 (new-private-character-set 2 1 3 0 ?0 0 "BITMAP 8x16" "bitmap")
-	 "Leading character for BITMAP.8x16.")
-       )
-      (t
-       (define-charset nil 'bitmap
-	 [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
-       (defconst lc-bitmap 'bitmap)
-       ))
+(static-cond
+ ((boundp 'MULE)
+  (defvar lc-bitmap
+    (new-private-character-set 2 1 3 0 ?0 0 "BITMAP 8x16" "bitmap")
+    "Leading character for BITMAP.8x16.")
+  )
+ (t
+  (define-charset nil 'bitmap
+    [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
+  (defconst lc-bitmap 'bitmap)
+  ))
+
+;; Avoid byte compile warning
+(eval-when-compile
+  (autoload 'fontset-list "fontset");; for Emacs 20.1 or later
+  (autoload 'read-hexa "bitmap")
+  )
 
 (if window-system
     (mapcar (lambda (fontset)
