@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 1999/10/29
+;; Revised: 1999/11/01
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -71,20 +71,29 @@
 
 (eval-when-compile
   (defmacro gnus-bitmap-splash-image-internal ()
-    (if (file-exists-p "gnus.xbm")
-	(progn
-	  (message "  ++ composing internal image for splashing...")
-	  (gnus-bitmap-xbm-to-bitmap "gnus.xbm"))
-      (byte-compile-warn "Warning: file \"gnus.xbm\" not found.")
-      nil))
+    (let ((file (expand-file-name "gnus.xbm"
+				  (if (string-match "/tm/$" default-directory)
+				      "../bitmap-mule/";; tm-8
+				    "./"))))
+      (if (file-exists-p file)
+	  (progn
+	    (message "  ++ composing internal image for splashing...")
+	    (gnus-bitmap-xbm-to-bitmap file))
+	(byte-compile-warn "Warning: file \"gnus.xbm\" not found.")
+	nil)))
 
   (defmacro gnus-bitmap-modeline-image-internal ()
-    (if (file-exists-p "gnus-pointer.xbm")
-	(progn
-	  (message "  ++ composing internal image for modeline identifier...")
-	  (gnus-bitmap-xbm-to-bitmap "gnus-pointer.xbm"))
-      (byte-compile-warn "Warning: file \"gnus-pointer.xbm\" not found.")
-      nil))
+    (let ((file (expand-file-name "gnus-pointer.xbm"
+				  (if (string-match "/tm/$" default-directory)
+				      "../bitmap-mule/";; tm-8
+				    "./"))))
+      (if (file-exists-p file)
+	  (progn
+	    (message
+	     "  ++ composing internal image for modeline identifier...")
+	    (gnus-bitmap-xbm-to-bitmap file))
+	(byte-compile-warn "Warning: file \"gnus-pointer.xbm\" not found.")
+	nil)))
   )
 
 (defconst gnus-bitmap-splash-image-internal
