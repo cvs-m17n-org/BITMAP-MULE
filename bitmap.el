@@ -54,12 +54,20 @@
   (cond ((and (fboundp 'set-buffer-multibyte)
 	      (subrp (symbol-function 'set-buffer-multibyte)))
 	 ;; for Emacs 20.3 or later
-	 (require 'bitmap-ci)
-	 )
+	 (require 'bitmap-ci))
 	(t
 	 ;; for MULE 1.*, MULE 2.*, Emacs 20.1 and 20.2
-	 (require 'bitmap-bi)
-	 )))
+	 (require 'bitmap-bi))))
+
+(defun bitmap-make-string (length init)
+  "Return a new string of length LENGTH, with each element being INIT.
+LENGTH must be an integer and INIT must be a string."
+  (let ((n length)
+	(s ""))
+    (while (> n 0)
+      (setq s (concat s init)
+	    n (1- n)))
+    s))
 
 
 ;;; @ BDF
@@ -100,8 +108,7 @@ of difinition of a character glyph in bdf file."
     (while (< i *hex-len*)
       (aset *cmp* i (bitmap-compose (aref *hex* i)))
       (setq i (1+ i)))
-    *cmp*
-    ))
+    *cmp*))
 
 
 ;;; @ XBM
@@ -133,8 +140,7 @@ of difinition of a character glyph in bdf file."
 	(aset temp 1 (aref hexa-string (aref reverse-bit (/ c 16))))
 	(setq i (1+ i)
 	      i2 i2+2
-	      i2+2 (+ i2+2 2))
-	)
+	      i2+2 (+ i2+2 2)))
       (setq j (1+ j)
 	    xbm (cdr xbm)))
     (setq i 0)
@@ -176,14 +182,11 @@ of difinition of a character glyph in bdf file."
 	      (setq i (1+ i))
 	      )
 	    (setq dest (cons line dest)
-		  j (1+ j))
-	    ))
-	(cons width (cons height (nreverse dest)))
-	))))
+		  j (1+ j))))
+	(cons width (cons height (nreverse dest)))))))
 
 (defun bitmap-read-xbm-file (file)
-  (bitmap-read-xbm-buffer (find-file-noselect (expand-file-name file)))
-  )
+  (bitmap-read-xbm-buffer (find-file-noselect (expand-file-name file))))
 
 (defun bitmap-insert-xbm-buffer (buffer)
   "Insert xbm bitmap from BUFFER. Very slow! [bitmap.el]"
@@ -200,9 +203,7 @@ of difinition of a character glyph in bdf file."
   (let ((buf (find-file-noselect (expand-file-name file))))
     (bitmap-insert-xbm-buffer buf)
     (or no-kill
-	(kill-buffer buf)
-	)
-    ))
+	(kill-buffer buf))))
 
 
 ;;; @ utilities

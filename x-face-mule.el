@@ -12,7 +12,7 @@
 ;;         Yuuichi Teranishi <teranisi@gohome.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 2000/05/31
+;; Revised: 2000/07/05
 ;; Keywords: X-Face, bitmap, Emacs, MULE, BBDB
 
 ;; This file is part of bitmap-mule.
@@ -161,8 +161,7 @@
       (if (memq 'free-vars byte-compile-warnings)
 	  (setq byte-compile-bound-variables
 		(cons (nth 1 (nth 1 form)) byte-compile-bound-variables)))
-      form)
-    )
+      form))
 
   ;; Bind functions defined by `defun-maybe'.
   (put 'defun-maybe 'byte-hunk-handler 'byte-compile-file-form-defun-maybe)
@@ -173,8 +172,7 @@
 	      (cons (cons (nth 1 form)
 			  (cons 'lambda (cdr (cdr form))))
 		    byte-compile-function-environment)))
-    form)
-  )
+    form))
 
 (defun-maybe match-string-no-properties (num &optional string)
   "Return string of text matched by last search, without text properties.
@@ -308,8 +306,7 @@ A format is like this:
 					  (emh-show))
 					 ((fboundp (quote tm-mh-e/show))
 					  (tm-mh-e/show))
-					 (t (mh-show-msg nil))))))
-   )
+					 (t (mh-show-msg nil)))))))
   "Alist for refreshing message-buffer.
 Format:
 \    '((MAJOR-MODE . (FUNCTION ARGS)))"
@@ -742,8 +739,7 @@ just the headers of the article."
 	      (x-face-mule-x-face-insert-at-point
 	       (x-face-mule-convert-x-face-to-rectangle (pop faces))
 	       (< (length faces) width)))))
-	(x-face-mule-insert-original-from-field)
-	))))
+	(x-face-mule-insert-original-from-field)))))
 
 (defun x-face-mule-highlight-header ()
   "Highlight inline images and hide raw X-Face fields."
@@ -789,8 +785,7 @@ just the headers of the article."
 		  (and (boundp 'vm-message-pointer)
 		       (fboundp
 			'x-face-mule-original-vm-energize-headers-and-xfaces)
-		       vm-message-pointer)
-		  )
+		       vm-message-pointer))
 	(x-face-mule-highlight-header)))))
 
 ;; Redefine `x-face-decode-message-header' for MULE 1.
@@ -887,8 +882,7 @@ just the headers of the article."
 
   ;; VM
   (autoload 'vm-bitmap-redefine "vm-bitmap")
-  (eval-after-load "vm" '(vm-bitmap-redefine))
-  )
+  (eval-after-load "vm" '(vm-bitmap-redefine)))
 
 
 ;;; BBDB

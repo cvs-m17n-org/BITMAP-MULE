@@ -33,9 +33,14 @@
 
 ;; Avoid byte compile warning
 (eval-when-compile
-  (autoload 'fontset-list "fontset");; for Emacs 20.1 or later
-  (autoload 'read-hexa "bitmap")
-  )
+  (autoload 'fontset-list "fontset");; for Emacs 20
+  (autoload 'read-hexa "bitmap"))
+
+(if (> emacs-major-version 20)
+    (defun fontset-pixel-size (fontset)
+      (if (string-match "-\\([0-9]+\\)-" fontset)
+	  (string-to-number (match-string 1 fontset))
+	0)))
 
 (if window-system
     (mapcar (lambda (fontset)
@@ -64,10 +69,8 @@
 		 (t
 		  (set-fontset-font
 		   fontset 'bitmap
-		   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")))
-		))
-	    (fontset-list))
-  )
+		   "-etl-fixed-medium-r-*--16-*-100-100-m-*-bitmap.8x16-0")))))
+	    (fontset-list)))
 
 ;; Block (all bits set) character
 (defvar bitmap-block (make-char 'bitmap 32 33))
@@ -96,18 +99,14 @@ For example the pattern \"0081814242242442111124244242818100\" is
       (setq i (1+ i))
       (if (or (= (% i 16) 0) (>= i len))
 	  (setq cmpstr
-		(concat cmpstr
-			(cond ((and block-flag (= j 16))
-			       (char-to-string bitmap-block)
-			       )
-			      ((= j 0)
-			       " ")
-			      ((= j 1)
-			       (substring buf 0 1)
-			       )
-			      (t
-			       (compose-string (substring buf 0 j))
-			       )))
+		(concat cmpstr (cond ((and block-flag (= j 16))
+				      (char-to-string bitmap-block))
+				     ((= j 0)
+				      " ")
+				     ((= j 1)
+				      (substring buf 0 1))
+				     (t
+				      (compose-string (substring buf 0 j)))))
 		block-flag t
 		j 0)))
     cmpstr))

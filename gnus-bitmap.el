@@ -6,7 +6,7 @@
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 2000/05/18
+;; Revised: 2000/07/05
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -94,8 +94,7 @@
 		 (setq bitmap (concat bitmap "\n"
 				      (bitmap-compose (aref cmp i)))
 		       i (1+ i)))
-	       bitmap)))))
-  )
+	       bitmap))))))
 
 (defconst gnus-bitmap-splash-image-internal
   (gnus-bitmap-xbm-to-bitmap (gnus-bitmap-splash-image-internal)))
@@ -127,8 +126,7 @@ it will be occurred under Mule 2.3 based on Emacs 19.34 using custom-1.9962."
 	      (cond ((eq 'internal arg)
 		     gnus-bitmap-modeline-image-internal)
 		    ((and (stringp arg) (file-exists-p arg))
-		     (gnus-bitmap-xbm-to-bitmap arg)))))
-      )
+		     (gnus-bitmap-xbm-to-bitmap arg))))))
   (defmacro gnus-bitmap-set-splash-image-data (arg)
     (` (setq gnus-bitmap-splash-image-data
 	     (cond ((eq 'internal (, arg))
@@ -140,8 +138,7 @@ it will be occurred under Mule 2.3 based on Emacs 19.34 using custom-1.9962."
 	     (cond ((eq 'internal (, arg))
 		    gnus-bitmap-modeline-image-internal)
 		   ((and (stringp (, arg)) (file-exists-p (, arg)))
-		    (gnus-bitmap-xbm-to-bitmap (, arg)))))))
-  )
+		    (gnus-bitmap-xbm-to-bitmap (, arg))))))))
 
 
 ;;; Options.
@@ -354,8 +351,7 @@ and splashing the startup screen with a bitmap image."
 		 (delete "^X-Face:" gnus-ignored-headers)))
 	 (when (member "^X-Face-Img:" gnus-ignored-headers)
 	   (setq gnus-ignored-headers
-		 (delete "^X-Face-Img:" gnus-ignored-headers)))
-	 ))
+		 (delete "^X-Face-Img:" gnus-ignored-headers)))))
 
   (when (boundp 'gnus-treat-display-xface)
     (if (not (stringp gnus-article-x-face-command))
@@ -385,8 +381,7 @@ and splashing the startup screen with a bitmap image."
 		       gnus-article-display-hook)))
     (remove-hook 'gnus-article-display-hook 'gnus-article-display-x-face)
     (add-hook 'gnus-article-display-hook
-	      'x-face-mule-gnus-highlight-headers-if-no-mime 'append)
-    )
+	      'x-face-mule-gnus-highlight-headers-if-no-mime 'append))
 
   ;; Redifine the splash function.
   (when splash
@@ -402,11 +397,10 @@ and splashing the startup screen with a bitmap image."
   (when (boundp 'gnus-mule-bitmap-image-file)
     (setq gnus-mule-bitmap-image-file nil))
 
-  (when (eq emacs-major-version 20)
+  (when (>= emacs-major-version 20)
     ;; Redifine the modeline identify function.
     (fset 'gnus-mode-line-buffer-identification
-	  'gnus-bitmap-mode-line-buffer-identification))
-  )
+	  'gnus-bitmap-mode-line-buffer-identification)))
 
 ;;;###autoload
 (defun gnus-bitmap-splash ()

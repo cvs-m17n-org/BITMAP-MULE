@@ -5,7 +5,7 @@
 ;; Author: Katsumi Yamaoka <yamaoka@jpl.org>
 ;;         Yoshitsugu Mito <mit@nines.nec.co.jp>
 ;; Created: 2000/03/28
-;; Revised: 2000/05/18
+;; Revised: 2000/07/05
 ;; Keywords: bitmap, lprogress-display, display-time
 
 ;; This file is part of bitmap-mule.
@@ -32,7 +32,7 @@
 ;;
 ;;	(if (and (not (featurep 'xemacs))
 ;;		 window-system
-;;		 (eq emacs-major-version 20))
+;;		 (>= emacs-major-version 20))
 ;;	    (progn
 ;;	      (require 'bm-utils)
 ;;	      (setq display-time-string-forms
@@ -79,8 +79,8 @@
 
 (defvar bitmap-lprogress-backgrounds-for-clear-bar
   (list (bitmap-compose "05020502050205020502050205020502")
-	(string-to-char (bitmap-compose "55AA5500000000000000000000AA55AA"))
-	(string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
+	(bitmap-compose "55AA5500000000000000000000AA55AA")
+	(bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA")
 	(bitmap-compose "40A040A040A040A040A040A040A040A0"))
   "Bitmaps for progress guage background with clear bar.")
 
@@ -92,8 +92,8 @@
 
 (defvar bitmap-lprogress-backgrounds-for-opaque-bar
   (list (bitmap-compose "05020502050205020502050205020502")
-	(string-to-char (bitmap-compose "55AA55FFFFFFFFFFFFFFFFFFFFAA55AA"))
-	(string-to-char (bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA"))
+	(bitmap-compose "55AA55FFFFFFFFFFFFFFFFFFFFAA55AA")
+	(bitmap-compose "55AA55AA55AA55AA55AA55AA55AA55AA")
 	(bitmap-compose "40A040A040A040A040A040A040A040A0"))
   "Bitmaps for progress guage background with opaque bar.")
 
@@ -102,26 +102,26 @@
   :type (` (radio
 	    (const
 	     :format
-	     ( ,(concat
+	     (, (concat
 		 "%{"
 		 (car bitmap-lprogress-backgrounds-for-clear-bar)
-		 (make-string
+		 (bitmap-make-string
 		  20 (nth 1 bitmap-lprogress-backgrounds-for-clear-bar))
-		 (make-string
+		 (bitmap-make-string
 		  5 (nth 2 bitmap-lprogress-backgrounds-for-clear-bar))
 		 (nth 3 bitmap-lprogress-backgrounds-for-clear-bar)
 		 "%}  "))
 	     t)
 	    (const
 	     :tag
-	     ( ,(concat
+	     (, (concat
 		 (car bitmap-lprogress-backgrounds-for-opaque-bar)
-		 (make-string
+		 (bitmap-make-string
 		  20 (nth 1 bitmap-lprogress-backgrounds-for-opaque-bar))
-		 (make-string
+		 (bitmap-make-string
 		  5 (nth 2 bitmap-lprogress-backgrounds-for-opaque-bar))
-		 (nth 3 bitmap-lprogress-backgrounds-for-opaque-bar)
-		 nil)))))
+		 (nth 3 bitmap-lprogress-backgrounds-for-opaque-bar)))
+	     nil)))
   :group 'bitmap-mule)
 
 (defvar bitmap-lprogress-data nil)
@@ -165,10 +165,11 @@
 
 (defun bitmap-string-to-special-symbols (string)
   "Convert STRING to a special symbols."
-  (mapconcat (function (lambda (char)
-			 (or (cdr (assq char bitmap-special-symbol-alist))
-			     (char-to-string char))))
-	     string ""))
+  (apply 'concat
+	 (mapcar (function (lambda (char)
+			     (or (cdr (assq char bitmap-special-symbol-alist))
+				 (char-to-string char))))
+		 string)))
 
 (defun bitmap-lprogress-display (label fmt &optional value &rest args)
   "Print a progress gauge and message in the echo area.
@@ -204,12 +205,13 @@ the same as to `format'.  [XEmacs 21.2.32 emulating function]"
 		       "...")))
 		   (t msg))
 	     (car (bitmap-lprogress-backgrounds))
-	     (make-string (/ val 4) (nth 1 (bitmap-lprogress-backgrounds)))
+	     (bitmap-make-string (/ val 4)
+				 (nth 1 (bitmap-lprogress-backgrounds)))
 	     (if (zerop (% val 4))
 		 ""
 	       (nth (1- (% val 4)) (bitmap-lprogress-data)))
-	     (make-string (- 25 (/ (+ 3 val) 4))
-			  (nth 2 (bitmap-lprogress-backgrounds)))
+	     (bitmap-make-string (- 25 (/ (+ 3 val) 4))
+				 (nth 2 (bitmap-lprogress-backgrounds)))
 	     (nth 3 (bitmap-lprogress-backgrounds))
 	     (bitmap-string-to-special-symbols (format "%3d%%" value))))))
     (message "")))

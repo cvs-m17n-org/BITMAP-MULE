@@ -1,3 +1,20 @@
+2000-07-05  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* bm-utils.el (bitmap-lprogress-diaplay-use-clear-bar): Use
+	`bitmap-make-string' instead of `make-string' for composite string.
+	(bitmap-string-to-special-symbols): Don't use `mapconcat' for
+	composite string.
+	(bitmap-lprogress-backgrounds-for-opaque-bar,
+	bitmap-lprogress-backgrounds-for-clear-bar): Don't convert
+	composite string to char.
+
+	* bitmap.el (bitmap-make-string): New function.
+
+	* bitmap-ci.el (fontset-pixel-size): Redefine the function when
+	Emacs 21+ is used.
+
+	* README.en, NEWS: Take back an announcement about FSF Emacs 21+.
+
 2000-05-31  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* x-face-mule.el (x-face-mule-convert-x-face-to-rectangle): Set
