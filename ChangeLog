@@ -1,3 +1,19 @@
+1999-08-24  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule..el (TopLevel): Don't add `gnus-bitmap-redefine' to
+	`after-load-alist' if the variable
+	`gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded' is
+	bound.
+
+	* gnus-bitmap.el (gnus-bitmap-splash): New function.  The variable
+	`gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded' is
+	set t.
+	(gnus-bitmap-startup-message): Use `insert-char' instead of
+	`insert'.
+	(gnus-bitmap-original-gnus-group-startup-message): Rename from
+	`gnus-bitmap-group-startup-message'.
+	(How to use): Update for the use of `gnus-load-hook'.
+
 1999-08-20  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* po.el (po-bdf-current-encoding, po-bdf-original-buffer): Bind before
