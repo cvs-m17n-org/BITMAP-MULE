@@ -1,3 +1,8 @@
+1999-11-15  Katsumi Yamaoka   <yamaoka@jpl.org>
+
+	* x-face-mule.el (x-face-mule-x-face-decode-message-header-1):
+	Protect against the wrong number of X-Face fields.
+
 1999-11-11  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* gnus-bitmap.el (gnus-bitmap-xbm-to-bitmap): Protect against the

@@ -9,7 +9,7 @@
 ;;         Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Maintainer: Katsumi Yamaoka <yamaoka@jpl.org>
 ;; Created: 1997/10/24
-;; Revised: 1999/11/02
+;; Revised: 1999/11/15
 ;; Keywords: X-Face, bitmap, Emacs, MULE
 
 ;; This file is part of bitmap-mule.
@@ -669,8 +669,9 @@ just the headers of the article."
 	(while (<= (incf h) height)
 	  (setq faces-s nil)
 	  (setq w 0)
-	  (while (<= (incf w) width)
-	    (re-search-forward "^X-Face: *\\(.*\\(\n[ \t].*\\)*\\)\n" nil t)
+	  (while (and (<= (incf w) width)
+		      (re-search-forward
+		       "^X-Face: *\\(.*\\(\n[ \t].*\\)*\\)\n" nil t))
 	    (setq faces-s (cons (match-string-no-properties 1) faces-s))
 	    (when (or (eq x-face-mule-delete-x-face-field 'always)
 		      (eq x-face-mule-delete-x-face-field col-type))
@@ -687,7 +688,7 @@ just the headers of the article."
 							  (point-max) height))
 		   (end-of-line 2) (point))))
 	    (setq w 0)
-	    (while (<= (incf w) width)
+	    (while (and (<= (incf w) width) faces)
 	      (goto-char begin-point)
 	      (x-face-mule-x-face-insert-at-point
 	       (x-face-mule-convert-x-face-to-rectangle (pop faces))
