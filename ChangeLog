@@ -1,3 +1,11 @@
+1998-04-17  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
+
+	* bitmap-ci.el, bitmap-bi.el, BITMAP-ELS: Add bitmap-bi.el and
+	bitmap-ci.el.
+
+	* bitmap.el: Separate byte-indexing Emacs depended definitions to
+	bitmap-bi.el.
+
 1998-03-23  MORIOKA Tomohiko  <morioka@jaist.ac.jp>
 
 	* bitmap.el: Rename 'charset-bitmap -> 'lc-bitmap again.
