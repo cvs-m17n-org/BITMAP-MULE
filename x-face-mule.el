@@ -30,85 +30,86 @@
 ;; Free Software Foundation, Inc., 59 Temple Place - Suite 330,
 ;; Boston, MA 02111-1307, USA.
 
-;;; Usage.
-;;
+;;; Commentary:
+
+;; - How to use
 
 ;; 1. Build and install `uncompface' program which is available from:
-
+;;
 ;;	ftp://ftp.xemacs.org/pub/xemacs/aux/compface.tar.gz
-
+;;
 ;;    It is one example of many.
 
 ;; 2. Setting up
-
+;;
 ;;    [SEMI-MUA, tm-MUA] i.e. cmail, gnus, mh-e, VM, etc.
 ;;	There is nothing to be done.
-
+;;
 ;;    [Wanderlust]
 ;;	Add the following code in your ~/.emacs:
-
+;;
 ;;	(setq wl-highlight-x-face-func
 ;;	      'x-face-mule-x-face-decode-message-header)
 ;;	(require 'x-face-mule)
-
+;;
 ;;    [before Mew 1.90]
 ;;	Add the following code in your ~/.emacs:
-
+;;
 ;;	(add-hook 'mew-summary-display-message-filter-hook ;; 1.90
 ;;		  'x-face-mule-x-face-decode-message-header)
 ;;	(add-hook 'mew-message-hook ;; 1.70 or older
 ;;		  'x-face-mule-x-face-decode-message-header)
 ;;	(require 'x-face-mule)
-
+;;
 ;;    [Mew 1.92]
 ;;	Add the following code in your ~/.emacs:
-
+;;
 ;;	(setq mew-opt-highlight-x-face t)
 ;;	(setq mew-opt-highlight-x-face-function
 ;;	      'x-face-mule-x-face-decode-message-header)
 ;;	(require 'x-face-mule)
-
+;;
 ;;    [Mew 1.93 or later]
 ;;	Add the following code in your ~/.emacs:
-
+;;
 ;;	(setq mew-use-highlight-x-face t)
 ;;	(setq mew-use-highlight-x-face-function
 ;;	      'x-face-mule-x-face-decode-message-header)
 ;;	(require 'x-face-mule)
 
 ;; 3. Customization
-
+;;
 ;;    * If you don't want to show X-Face at "From:" field,
 ;;	add the following code in your ~/.emacs:
-
+;;
 ;;	(setq x-face-mule-highlight-x-face-position 'x-face)
-
+;;
 ;;	and you can show X-Face at "X-Face:" field.
-
+;;
 ;;    * If you want to show X-Face like XEmacs style,
 ;;	add the following code in ~/.eamcs:
-
+;;
 ;;	(setq x-face-mule-highlight-x-face-style 'xmas)
-
+;;
 ;;	But, this feature won't work well on some MUA...
 ;;
 ;;    * Other features, please read this file...
 
 ;; 4. User commands
-
+;;
 ;; `x-face-mule-toggle-x-face-position'
 ;;	toggle show position.  from->x-face->nil->from...
-
+;;
 ;; `x-face-mule-toggle-x-face-style'
 ;;	toggle show style.  default->xmas->default->...
 
 ;; 5. Known bugs & todo
-
+;;
 ;;    * same x-face saved in cache file.
 
 ;; 6. Thanks to the following people have contributed many patches
 ;;    and suggestions:
-
+;;
 ;; OKUNISHI Fujikazu   <fuji0924@mbox.kyoto-inet.or.jp>
 ;; Yuuichi Teranishi   <teranisi@gohome.org>
 ;; TSUMURA Tomoaki     <tsumura@kuis.kyoto-u.ac.jp>
