@@ -6,6 +6,7 @@
 ;; Author: MORIOKA Tomohiko <tomo@m17n.org>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;; Created: 1996/7/26
+;; Revised: 1999/10/19
 ;; Keywords: smiley, face-mark, MULE, bitmap, xbm, fun
 
 ;; This file is part of bitmap-mule.
@@ -31,14 +32,22 @@
 ;;   0. install bitmap.el and bitmap font (etl8x16-bitmap.bdf)
 ;;   1. bytecompile this file and copy it to the apropriate directory.
 ;; - How to use.
-;;   If you use tm, please put following to your ~/.emacs:
-;;	(and window-system
-;;	     (progn
-;;	       (autoload 'smiley-buffer "smiley-mule" nil t)
-;;             (autoload 'smiley-encode-buffer "smiley-mule" nil t)  
-;;	       (add-hook 'mime-viewer/plain-text-preview-hook 'smiley-buffer)
-;;	       (add-hook 'mime-editor/translate-hook 'smiley-encode-buffer)
-;;	       ))
+;;   If you use tm, put the following lines in your .emacs file:
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'smiley-buffer "smiley-mule" nil t)
+;;	      (autoload 'smiley-encode-buffer "smiley-mule" nil t)
+;;	      (add-hook 'mime-viewer/plain-text-preview-hook 'smiley-buffer)
+;;	      (add-hook 'mime-editor/translate-hook 'smiley-encode-buffer)
+;;	      ))
+;;   Or if you use SEMI, use the following lines instead:
+;;	(if window-system
+;;	    (progn
+;;	      (autoload 'smiley-buffer "smiley-mule" nil t)
+;;	      (autoload 'smiley-encode-buffer "smiley-mule" nil t)
+;;	      (add-hook 'mime-display-text/plain-hook 'smiley-buffer)
+;;	      (add-hook 'mime-edit-translate-hook 'smiley-encode-buffer)
+;;	      ))
 ;;   Of course, it may be available for other hooks to filter messages.
 
 ;;; Code:
