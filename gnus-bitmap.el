@@ -1,12 +1,12 @@
 ;; gnus-bitmap.el -- bitmap utilities for gnus.
 
-;; Copyright (C) 1999 Free Software Foundation, Inc.
+;; Copyright (C) 1999,2000 Free Software Foundation, Inc.
 
 ;; Author: KORIYAMA Naohiro <kory@ba2.so-net.ne.jp>
 ;;         Katsumi Yamaoka  <yamaoka@jpl.org>
 ;;         Tatsuya Ichikawa <ichikawa@erc.epson.com>
 ;; Created: 1999/08/20
-;; Revised: 1999/11/11
+;; Revised: 2000/01/17
 ;; Keywords: bitmap, x-face, splash, gnus
 
 ;; This file is part of bitmap-mule.
@@ -210,6 +210,7 @@ is not used."
   (fset 'gnus-bitmap-original-gnus-group-startup-message 'ignore)
   (autoload 'article-goto-body "gnus-art")
   (autoload 'gnus-indent-rigidly "gnus")
+  (autoload 'gnus-splash "gnus")
   (autoload 'gnus-summary-select-article "gnus-sum"))
 
 
@@ -303,8 +304,10 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 (when window-system
   (add-hook 'gnus-exit-gnus-hook 'x-face-mule-save-cache-file))
 
-(defun gnus-bitmap-redefine ()
-  "Redifine variables and functions for the use of bitmap-mule."
+(defun gnus-bitmap-redefine (&optional splash)
+  "Redifine variables and functions for the use of bitmap-mule.  If SPLASH
+is non-nil, the function `gnus-group-startup-message' is also redefined
+and splashing the startup screen with a bitmap image."
   (require 'gnus-art)
   (setq gnus-strict-mime nil)
 
@@ -383,10 +386,16 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
     )
 
   ;; Redifine the splash function.
-  (unless (fboundp 'gnus-bitmap-original-gnus-group-startup-message)
-    (fset 'gnus-bitmap-original-gnus-group-startup-message
-	  (symbol-function 'gnus-group-startup-message)))
-  (fset 'gnus-group-startup-message 'gnus-bitmap-startup-message)
+  (when splash
+    (unless (fboundp 'gnus-bitmap-original-gnus-group-startup-message)
+      (fset 'gnus-bitmap-original-gnus-group-startup-message
+	    (symbol-function 'gnus-group-startup-message)))
+    (fset 'gnus-group-startup-message 'gnus-bitmap-startup-message)
+    ;; Splash the screen when `gnus' is being loaded.
+    (unless (featurep 'gnus)
+      (gnus-splash)))
+
+  ;; Invalidate the old style splashing feature.
   (when (boundp 'gnus-mule-bitmap-image-file)
     (setq gnus-mule-bitmap-image-file nil))
 
@@ -398,17 +407,17 @@ controlled by the value of `x-face-mule-gnus-force-decode-headers'."
 
 ;;;###autoload
 (defun gnus-bitmap-splash ()
-  "Splash the startup screen.  This function have only limited use for
-`gnus-load-hook'."
+  "Splash the startup screen.  This function has only limited use for
+`gnus-load-hook' which should be set before `gnus' is loaded."
   (when (and window-system
 	     (not (featurep 'gnus))
 	     gnus-bitmap-splash-image-data)
-    (setq this-command nil);; Suppress the load time splash.
-    (unless
-	(boundp 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded)
-      (eval-after-load "gnus" (gnus-bitmap-redefine))
-      (set 'gnus-bitmap-redefine-will-be-evaluated-after-gnus-is-loaded t))
-    (eval-after-load "gnus" '(or (featurep 'gnus) (gnus-splash)))))
+    ;; Suppress splashing with an ascii picture.
+    (setq this-command nil)
+    (let ((fns (cdr (assoc "gnus" after-load-alist))))
+      (if fns
+	  (put-alist 'gnus-bitmap-redefine '(t) fns)
+	(eval-after-load "gnus" '(gnus-bitmap-redefine 'splash))))))
 
 (eval-and-compile (autoload 'smiley-toggle-buffer "smiley-mule"))
 
