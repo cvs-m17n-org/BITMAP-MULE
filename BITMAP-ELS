@@ -6,17 +6,19 @@
       (if (featurep 'mule)
 	  (if (featurep 'xemacs)
 	      nil
-	    (cons (if (and (fboundp 'set-buffer-multibyte)
-			   (subrp (symbol-function 'set-buffer-multibyte)))
-		      'bitmap-ci
-		    'bitmap-bi)
-		  '(bitmap x-face-mule smiley-mule po
-			   gnus-bitmap vm-bitmap)
-		  ))))
+	    (append (if (and (fboundp 'set-buffer-multibyte)
+			     (subrp (symbol-function 'set-buffer-multibyte)))
+			'(bitmap-ci)
+		      '(bitmap-bi))
+		    '(bitmap x-face-mule smiley-mule po)
+		    (if (>= emacs-major-version 19)
+			'(gnus-bitmap vm-bitmap)
+		      '(x-face-18))))))
 
 (setq bitmap-modules-to-compile (copy-sequence bitmap-modules))
 
-(or (module-installed-p 'vm-macro)
+(or (<= emacs-major-version 18)
+    (module-installed-p 'vm-macro)
     (module-installed-p 'vm/vm-macro)
     (module-installed-p 'vm-misc)
     (module-installed-p 'vm/vm-misc)
