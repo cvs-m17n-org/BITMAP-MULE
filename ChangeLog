@@ -1,3 +1,9 @@
+2000-04-16  KOSEKI Yoshinori  <kose@yk.NetLaputa.ne.jp>
+
+	* x-face-mule.el (x-face-mule-BBDB-buffer): Add save-excursion.
+	(x-face-mule-BBDB-one-record): Add moving `name' position.
+	Fix, field (following `face: field') invisible problem.
+
 2000-03-31  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* bm-utils.el (bitmap-load-average-to-bitmap): New function.

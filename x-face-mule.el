@@ -900,14 +900,18 @@ just the headers of the article."
   (if (and x-face-mule-BBDB-display
 	   (get-buffer bbdb-buffer-name)
 	   (set-buffer bbdb-buffer-name))
-      (while (re-search-forward "^[^ \t\n]" nil t)
-	(x-face-mule-BBDB-one-record))))
+      (save-excursion
+	(while (re-search-forward "^[^ \t\n]" nil t)
+	  (x-face-mule-BBDB-one-record)))))
 
 (defun x-face-mule-BBDB-one-record ()
   "Display X-Face in *BBDB* one recode."
   (interactive)
   (require 'bbdb-com) ; bbdb-current-record
   (save-excursion
+    (beginning-of-line)
+    (while (not (or (eobp) (bobp) (looking-at "^[^ \t\n]")))
+      (forward-line -1))
     (forward-line)
     (let* ((record (bbdb-current-record))
 	   (sfaces (and record (bbdb-record-getprop record 'face)))
@@ -916,12 +920,12 @@ just the headers of the article."
 	   buffer-read-only
 	   xfaces xface pos match-end)
       (when (and sfaces
-		 (re-search-forward 
-		  "^[ ]+face: *\\(.*\\(\n[ ]+.*\\)*\\)\n" nil t)
-		 (not (get-text-property (match-beginning 0)
-					 'invisible))
-		 (not (put-text-property (match-beginning 0)
-					 (match-end 0) 'invisible t)))
+		 (re-search-forward "^[ ]+face: " nil t)
+		 (setq beg (match-beginning 0))
+		 (not (get-text-property beg 'invisible))
+		 (re-search-forward "^[ ]+[^:]+: \\|\n\n" nil t)
+		 (not (put-text-property beg (match-beginning 0) 
+					 'invisible t)))
 	(goto-char home)
 	(while (string-match "[^\n]+\n?" sfaces)
 	  (and (setq xface (x-face-mule-convert-x-face-to-rectangle 
