@@ -31,6 +31,12 @@
 (define-charset nil 'bitmap
   [2 96 1 0 ?0 0 "BITMAP" "BITMAP.8x16" "8x16 bitmap elements"])
 
+;; Avoid byte compile warning
+(eval-when-compile
+  (autoload 'fontset-list "fontset");; for Emacs 20.1 or later
+  (autoload 'read-hexa "bitmap")
+  )
+
 (if window-system
     (mapcar (lambda (fontset)
 	      (if (= (fontset-pixel-size fontset) 16)
