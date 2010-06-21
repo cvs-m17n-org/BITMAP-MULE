@@ -1,3 +1,9 @@
+2010-06-21  Katsumi Yamaoka  <yamaoka@jpl.org>
+
+	* BITMAP-CFG: Provide function definition of add-to-list if loading
+	poe fails because it isn't in standard directory maybe; add emu sub-
+	directory to load-path when LISPDIR is specified.
+
 2003-08-25  Katsumi Yamaoka   <yamaoka@jpl.org>
 
 	* gnus-bitmap.el (gnus-treat-display-x-face): Bind it when
